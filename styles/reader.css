@@ -51,6 +51,10 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   border-right: 1px solid #ddd;
 }
 
+.width100 {
+  width: 100% !important;
+}
+
 .article .document .surface.content {
   position: absolute;
   top: 0px;

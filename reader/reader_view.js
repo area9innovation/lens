@@ -18,6 +18,7 @@ var ReaderView = function(readerCtrl) {
 
   this.readerCtrl = readerCtrl;
   this.doc = this.readerCtrl.getDocument();
+  this.isRightColumn = readerCtrl.isRightColumn;
 
   this.$el.addClass('article');
   this.$el.addClass(this.doc.schema.id); // Substance article or lens article?
@@ -114,43 +115,50 @@ ReaderView.Prototype = function() {
     // Prepare doc view
     // --------
 
-    frag.appendChild(this.contentView.render().el);
+    var contentViewHtml = this.contentView.render().el;
+
+    if (this.isRightColumn) {
+      // Prepare panel toggles
+      // --------
+
+      var panelToggles = $$('.context-toggles');
+      panelToggles.appendChild(this.tocView.getToggleControl());
+      this.tocView.on('toggle', this._onClickPanel);
+      _.each(this.readerCtrl.panels, function(panel) {
+        var panelView = this.panelViews[panel.getName()];
+        var toggleEl = panelView.getToggleControl();
+        panelToggles.appendChild(toggleEl);
+        panelView.on('toggle', this._onClickPanel);
+      }, this);
+
+
+      // Prepare panel views
+      // -------
+
+      // Wrap everything within resources view
+      var resourcesViewEl = $$('.resources');
+      resourcesViewEl.appendChild(this.tocView.render().el);
+      _.each(this.readerCtrl.panels, function(panel) {
+        var panelView = this.panelViews[panel.getName()];
+        // console.log('Rendering panel "%s"', name);
+        resourcesViewEl.appendChild(panelView.render().el);
+      }, this);
+
+      var menuBar = $$('.menu-bar');
+
+      menuBar.appendChild(panelToggles);
+      resourcesViewEl.appendChild(menuBar);
+      frag.appendChild(resourcesViewEl);
+    } else {
+      $(contentViewHtml).addClass('width100');
+    }
+
+    frag.appendChild(contentViewHtml);
 
     // Scrollbar cover
     // This is only there to cover the content panel's scrollbar in Firefox.
     var scrollbarCover = $$('.scrollbar-cover');
     this.contentView.el.appendChild(scrollbarCover);
-
-    // Prepare panel toggles
-    // --------
-
-    var panelToggles = $$('.context-toggles');
-    panelToggles.appendChild(this.tocView.getToggleControl());
-    this.tocView.on('toggle', this._onClickPanel);
-    _.each(this.readerCtrl.panels, function(panel) {
-      var panelView = this.panelViews[panel.getName()];
-      var toggleEl = panelView.getToggleControl();
-      panelToggles.appendChild(toggleEl);
-      panelView.on('toggle', this._onClickPanel);
-    }, this);
-
-    // Prepare panel views
-    // -------
-
-    // Wrap everything within resources view
-    var resourcesViewEl = $$('.resources');
-    resourcesViewEl.appendChild(this.tocView.render().el);
-    _.each(this.readerCtrl.panels, function(panel) {
-      var panelView = this.panelViews[panel.getName()];
-      // console.log('Rendering panel "%s"', name);
-      resourcesViewEl.appendChild(panelView.render().el);
-    }, this);
-
-    var menuBar = $$('.menu-bar');
-
-    menuBar.appendChild(panelToggles);
-    resourcesViewEl.appendChild(menuBar);
-    frag.appendChild(resourcesViewEl);
 
     this.el.appendChild(frag);
 

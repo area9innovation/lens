@@ -18,7 +18,7 @@ var ReaderView = function(readerCtrl) {
 
   this.readerCtrl = readerCtrl;
   this.doc = this.readerCtrl.getDocument();
-  this.isRightColumn = readerCtrl.isRightColumn;
+  this.isResourcesPanel = readerCtrl.isResourcesPanel;
 
   this.$el.addClass('article');
   this.$el.addClass(this.doc.schema.id); // Substance article or lens article?
@@ -117,7 +117,7 @@ ReaderView.Prototype = function() {
 
     var contentViewHtml = this.contentView.render().el;
 
-    if (this.isRightColumn) {
+    if (this.isResourcesPanel) {
       // Prepare panel toggles
       // --------
 

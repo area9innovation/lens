@@ -25,8 +25,17 @@ var defaultWorkflows = require('./default_workflows');
 
 var Lens = function(config) {
   config = config || {};
+
+  config.show_resources_panel = (config.show_resources_panel !== undefined) 
+    ? config.show_resources_panel
+    : true;
+
   config.routes = config.routes || this.getRoutes();
-  config.panels = config.panels || this.getPanels();
+
+  config.panels = (config.show_resources_panel)
+    ? config.panels || this.getPanels()
+    : [];
+
   config.workflows = config.workflows || this.getWorkflows();
 
   // All available converters

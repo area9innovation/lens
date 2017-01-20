@@ -19,9 +19,7 @@ var ReaderController = function(doc, state, options) {
 
   this.panels = options.panels;
   this.contentPanel = new ContentPanel(doc);
-  this.isRightColumn = (this.options.right_column !== undefined)
-    ? this.options.right_column
-    : true;
+  this.isResourcesPanel = this.options.show_resources_panel;
 
   // create panel controllers
   this.panelCtrls = {};

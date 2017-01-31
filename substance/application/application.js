@@ -11,7 +11,7 @@ var _ = require("underscore");
 // Application abstraction suggesting strict MVC
 
 var Application = function(config) {
-  View.call(this);
+  View.call(this, config);
   this.config = config;
 };
 

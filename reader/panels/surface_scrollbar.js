@@ -155,7 +155,7 @@ Scrollbar.Prototype = function() {
 
   this.mouseDown = function(e) {
     this._mouseDown = true;
-    var y = e.pageY;
+    var y = this.eventLocalY(e);
     if (e.target !== this.visibleArea) {
       // Jump to mousedown position
       this.offset = $(this.visibleArea).height()/2;
@@ -183,7 +183,7 @@ Scrollbar.Prototype = function() {
 
   this.mouseMove = function(e) {
     if (this._mouseDown) {
-      var y = e.pageY;
+      var y = this.eventLocalY(e);
       // find offset to visible-area.top
       var scroll = (y-this.offset)*this.factor;
       this.scrollTop = this.surface.$el.scrollTop(scroll);
@@ -198,6 +198,9 @@ Scrollbar.Prototype = function() {
     }
   };
 
+  this.eventLocalY = function(e) {
+    return e.pageY - this.$el.offset().top;
+  }
 };
 
 Scrollbar.Prototype.prototype = View.prototype;

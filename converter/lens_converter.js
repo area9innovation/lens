@@ -1208,6 +1208,10 @@ NlmToLensConverter.Prototype = function() {
 
     var title = abs.querySelector("title");
 
+    if (title && title.parentNode.tagName!=='abstract') {
+      title = undefined;
+    }
+
     var heading = {
       id: state.nextId("heading"),
       type: "heading",

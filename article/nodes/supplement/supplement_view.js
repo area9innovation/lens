@@ -27,6 +27,7 @@ SupplementView.Prototype = function() {
 
     var file = $$('div.file', {
       children: [
+        $$('span', {html: this.node.getHeader() }),
         $$('a', {href: this.node.url, html: '<i class="fa fa-download"/> Download' })
       ]
     });

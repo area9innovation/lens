@@ -10,3 +10,7 @@
 .content-node.supplement .content .file a {
   font-weight: 600;
 }
+
+.content-node.supplement .content .file span {
+  padding-right: 3px; 
+}

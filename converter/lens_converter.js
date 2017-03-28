@@ -2177,6 +2177,37 @@ NlmToLensConverter.Prototype = function() {
 
       var doi = citation.querySelector("pub-id[pub-id-type='doi'], ext-link[ext-link-type='doi']");
       if(doi) citationNode.doi = "http://dx.doi.org/" + doi.textContent;
+    } else if ( citation.getAttribute('publication-type') === 'web' ) {
+
+      citationNode = {
+        "id": id,
+        "source_id": ref.getAttribute("id"),
+        "type": "citation",
+        "title": "N/A",
+        "label": "",
+        "authors": [],
+        "doi": "",
+        "source": "",
+        "volume": "",
+        "fpage": "",
+        "lpage": "",
+        "citation_urls": []
+      };
+
+      var label = ref.querySelector("label");
+      if(label) citationNode.label = label.textContent;
+
+      var comment = citation.querySelector("comment");
+      if (comment) {
+        citationNode.title = this.annotatedText(state, comment, [id, 'title'], {ignore: 'ext-link' });
+      }
+
+      var uri = citation.querySelector('ext-link[ext-link-type=uri]');
+      if( uri ) citationNode.citation_urls.push({
+        url: uri.getAttribute('xlink:href'),
+        name: uri.getAttribute('xlink:href')
+      });
+
     } else {
       console.error("FIXME: there is one of those 'mixed-citation' without any structure. Skipping ...", citation);
       return;

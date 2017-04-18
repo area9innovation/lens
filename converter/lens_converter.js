@@ -2177,6 +2177,58 @@ NlmToLensConverter.Prototype = function() {
 
       var doi = citation.querySelector("pub-id[pub-id-type='doi'], ext-link[ext-link-type='doi']");
       if(doi) citationNode.doi = "http://dx.doi.org/" + doi.textContent;
+    } else if ( citation.getAttribute('publication-type') === 'journal' ) { // relaxed
+
+      citationNode = {
+        "id": id,
+        "source_id": ref.getAttribute("id"),
+        "type": "citation",
+        "title": "",
+        "label": "",
+        "authors": [],
+        "doi": "",
+        "source": "",
+        "volume": "",
+        "fpage": "",
+        "lpage": "",
+        "citation_urls": []
+      };
+
+      var label = ref.querySelector("label");
+      if(label) citationNode.label = label.textContent;
+
+      var articleTitle = citation.querySelector("article-title");
+      if ( articleTitle ) {
+        citationNode.title = this.annotatedText(state, articleTitle, [id, 'title']);
+      } else {
+        citationNode.title = this.data(citation);
+      }
+
+      var nameElements = citation.querySelectorAll("string-name");
+      for (i = 0; i < nameElements.length; i++) {
+        citationNode.authors.push(this.getName(nameElements[i]));
+      }
+
+      nameElements = citation.querySelectorAll("bold");
+      for (i = 0; i < nameElements.length; i++) {
+        citationNode.authors.push(nameElements[i].textContent);
+      }
+
+      var source = citation.querySelector("source");
+      if (source) citationNode.source = source.textContent;
+
+      var volume = citation.querySelector("volume");
+      if (volume) citationNode.volume = volume.textContent;
+
+      var fpage = citation.querySelector("fpage");
+      if (fpage) citationNode.fpage = fpage.textContent;
+
+      var lpage = citation.querySelector("lpage");
+      if (lpage) citationNode.lpage = lpage.textContent;
+
+      var year = citation.querySelector("year");
+      if (year) citationNode.year = year.textContent;
+
     } else if ( citation.getAttribute('publication-type') === 'web' ) {
 
       citationNode = {
@@ -2223,6 +2275,16 @@ NlmToLensConverter.Prototype = function() {
     doc.show("citations", id);
 
     return citationNode;
+  };
+
+  this.data = function(node) {
+    var data = '';
+    for (var i = 0; i < node.childNodes.length; ++i) {
+      if ( node.childNodes[i].nodeType === 3 && node.childNodes[i].textContent.length > 12 ) {
+        data += node.childNodes[i].textContent;
+      }
+    }
+    return data;
   };
 
   // Article.Back

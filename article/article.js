@@ -32,6 +32,7 @@ var Article = function(options) {
       created_at: options.created_at,
       views: Article.views, // is views really needed on the instance level
       title: "",
+      subtitle: "",
       abstract: "",
       authors: []
     });
@@ -318,6 +319,14 @@ Object.defineProperties(Article.prototype, {
     },
     set: function(title) {
       this.get("document").title = title;
+    }
+  },
+  subtitle: {
+    get: function () {
+      return this.get("document").subtitle;
+    },
+    set: function(subtitle) {
+      this.get("document").subtitle = subtitle;
     }
   },
   abstract: {

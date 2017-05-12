@@ -554,6 +554,7 @@ NlmToLensConverter.Prototype = function() {
       id: "cover",
       type: "cover",
       title: docNode.title,
+      subtitle: docNode.subtitle,
       authors: [], // docNode.authors,
       abstract: docNode.abstract
     };
@@ -1154,8 +1155,13 @@ NlmToLensConverter.Prototype = function() {
         ignore: ['xref']
       });
     }
-    // Not yet supported:
-    // <subtitle> Document Subtitle, zero or one
+
+    var articleSubtitle = titleGroup.querySelector("subtitle");
+    if (articleSubtitle) {
+      doc.subtitle = this.annotatedText(state, articleSubtitle, ['document', 'subtitle'], {
+        ignore: ['xref']
+      });
+    }
   };
 
   // Note: Substance.Article supports no publications directly.

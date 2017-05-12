@@ -60,6 +60,10 @@ Cover.Prototype = function() {
     return this.document.title;
   };
 
+  this.getSubtitle = function() {
+    return this.document.subtitle;
+  };
+
 };
 
 Cover.Prototype.prototype = Document.Node.prototype;

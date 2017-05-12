@@ -565,10 +565,12 @@ NlmToLensConverter.Prototype = function() {
     _.each(docNode.authors, function(contributorId) {
       var contributor = doc.get(contributorId);
 
+      var name = contributor.name + (contributor.degrees?', ' + contributor.degrees:'');
+
       var authorsPara = {
         "id": "text_"+contributorId+"_reference",
         "type": "text",
-        "content": contributor.name
+        "content": name
       };
 
       doc.create(authorsPara);
@@ -578,7 +580,7 @@ NlmToLensConverter.Prototype = function() {
         id: state.nextId("contributor_reference"),
         type: "contributor_reference",
         path: ["text_" + contributorId + "_reference", "content"],
-        range: [0, contributor.name.length],
+        range: [0, name.length],
         target: contributorId
       };
 
@@ -673,7 +675,8 @@ NlmToLensConverter.Prototype = function() {
       deceased: false,
       emails: [],
       contribution: "",
-      members: []
+      members: [],
+      degrees: ""
     };
 
     // Extract contrib type
@@ -756,6 +759,11 @@ NlmToLensConverter.Prototype = function() {
 
     if (contrib.getAttribute("contrib-type") === "author") {
       doc.nodes.document.authors.push(id);
+    }
+
+    var degrees = contrib.querySelector("degrees");
+    if (degrees) {
+      contribNode.degrees = degrees.textContent;
     }
 
     doc.create(contribNode);

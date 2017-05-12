@@ -32,7 +32,8 @@ Contributor.type = {
     "members": ["array", "string"],
     "orcid": "string",
     "equal_contrib": ["array", "string"],
-    "competing_interests": ["array", "string"]
+    "competing_interests": ["array", "string"],
+    "degrees": "string"
   }
 };
 

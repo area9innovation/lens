@@ -29,7 +29,9 @@ ContributorView.Prototype = function() {
     // Contributor Name
     // -------
 
-    this.content.appendChild($$('.contributor-name', {text: this.node.name}));
+    var name = this.node.name + (this.node.degrees?', '+ this.node.degrees:'');
+
+    this.content.appendChild($$('.contributor-name', {text: name }));
 
     // Contributor Role
     // -------

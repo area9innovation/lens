@@ -94,6 +94,41 @@ PublicationInfoView.Prototype = function() {
       metaData.appendChild(keywordsEl);
     }
 
+    // Journal title
+    //
+
+    if (this.node.journal) {
+      var journalEl = $$('.journal', {
+        children: [
+          $$('div.label', {text: "Journal"}),
+          $$('div.value', {
+            children: [$$('span', { text: this.node.journal })]
+          })
+        ]
+      });
+      metaData.appendChild(journalEl);
+    }
+
+    // Publishing info
+    //
+
+    if (this.node.published_on) {
+      var parts = this.node.published_on.split('-');
+      var localDate = new Date(parts[0], parts[1]-1, parts[2]);
+      var pubDate = localDate.toDateString().slice(4, 16).replace(/\b0+/g, '').split(' ');
+      var pubInfo = [ this.node.published_info.volume, '(' +this.node.published_info.issue + '):', this.node.published_info.fpage].join(' ');
+
+      var journalEl = $$('.publishing', {
+        children: [
+          $$('div.label', {text: "Published"}),
+          $$('div.value', {
+            children: [$$('span', { text: [pubDate[2], pubDate[0], pubDate[1]].join(' ') + '; ' + pubInfo })]
+          })
+        ]
+      });
+      metaData.appendChild(journalEl);
+    }
+
     // DOI
     //
 

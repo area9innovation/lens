@@ -240,6 +240,11 @@ NlmToLensConverter.Prototype = function() {
     // Funding information
     var fundingInfo = this.extractFundingInfo(state, article);
 
+
+    var volume = articleMeta.querySelector("volume").textContent;
+    var issue = articleMeta.querySelector("issue").textContent;
+    var fpage = articleMeta.querySelector("fpage").textContent;
+
     // Create PublicationInfo node
     // ---------------
 
@@ -267,6 +272,7 @@ NlmToLensConverter.Prototype = function() {
       "research_organisms": [],
       // TODO: this is in the schema, but seems to be unused
       "provider": "",
+      "published_info": {volume: volume, issue: issue, fpage: fpage },
     };
 
     for (var i = 0; i < history.length; i++) {

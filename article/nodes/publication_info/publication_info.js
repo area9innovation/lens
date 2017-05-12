@@ -25,7 +25,8 @@ PublicationInfo.type = {
     "article_info": "paragraph",
     // optional
     "subject_link": "string",
-    "article_type_link": "string"
+    "article_type_link": "string",
+    "published_info": "object",
   }
 };
 

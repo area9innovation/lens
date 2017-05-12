@@ -68,7 +68,9 @@ CitationView.Prototype = function() {
       elems.push(node.publisher_location);
     }
 
-    if (node.year) {
+    if (node.relaxed_date) {
+      elems.push(node.relaxed_date);
+    } else if (node.year) {
       elems.push(node.year);
     }
 
@@ -83,7 +85,7 @@ CitationView.Prototype = function() {
     }
 
     if (pagesFrag && publisherFrag) {
-      sourceText += [pagesFrag, publisherFrag].join(", ");
+      sourceText += [publisherFrag, pagesFrag ].join(", ");
     } else {
       // One of them without a separator char
       sourceText += pagesFrag;

@@ -2188,9 +2188,6 @@ NlmToLensConverter.Prototype = function() {
       var lpage = citation.querySelector("lpage");
       if (lpage) citationNode.lpage = lpage.textContent;
 
-      var year = citation.querySelector("year");
-      if (year) citationNode.year = year.textContent;
-
       // Note: the label is child of 'ref'
       var label = ref.querySelector("label");
       if(label) citationNode.label = label.textContent;
@@ -2246,9 +2243,6 @@ NlmToLensConverter.Prototype = function() {
       var lpage = citation.querySelector("lpage");
       if (lpage) citationNode.lpage = lpage.textContent;
 
-      var year = citation.querySelector("year");
-      if (year) citationNode.year = year.textContent;
-
     } else if ( citation.getAttribute('publication-type') === 'web' ) {
 
       citationNode = {
@@ -2290,6 +2284,21 @@ NlmToLensConverter.Prototype = function() {
       //   doi: ""
       // };
     }
+
+    var year = citation.querySelector("year");
+    if (year) citationNode.year = year.textContent;
+
+    // relaxed date tags processing
+    var relaxedDate;
+    if (citationNode.year) relaxedDate = citationNode.year;
+
+    var month = citation.querySelector("month");
+    if (month) relaxedDate += ' ' + month.textContent;
+
+    var day = citation.querySelector("day");
+    if (day) relaxedDate += ' ' + day.textContent;
+
+    citationNode.relaxed_date = relaxedDate;
 
     doc.create(citationNode);
     doc.show("citations", id);

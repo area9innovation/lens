@@ -30,6 +30,7 @@ Citation.type = {
     "fpage": "string",
     "lpage": "string",
     "year": "string",
+    "relaxed_date": "string",
     "comment": "string",
     "citation_urls": ["array", "object"],
     "source_formats": ["array", "object"]

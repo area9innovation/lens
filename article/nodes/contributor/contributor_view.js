@@ -44,17 +44,25 @@ ContributorView.Prototype = function() {
     // Add Affiliations
     // -------
 
+    var this_ = this;
+
     this.content.appendChild($$('.affiliations', {
       children: _.map(this.node.getAffiliations(), function(aff) {
 
-        var affText = _.compact([
-          aff.department,
-          aff.institution,
-          aff.city,
-          aff.country
-        ]).join(', ');
+        if( aff.department ) {
+          var affText = _.compact([
+            aff.department,
+            aff.institution,
+            aff.city,
+            aff.country
+          ]).join(', ');
 
-        return $$('.affiliation', {text: affText});
+          return $$('.affiliation', {text: affText});
+        } else {
+          var annoView = this_.createTextPropertyView([aff.id, 'relaxed_text'], { classes: 'affilation'});
+
+          return annoView.render().el;
+        }
       })
     }));
 

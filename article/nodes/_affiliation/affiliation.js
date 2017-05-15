@@ -16,7 +16,8 @@ Affiliation.type = {
     "department": "string",
     "institution": "string",
     "label": "string",
-    "specific_use": "string"
+    "specific_use": "string",
+    "relaxed_text": "string",
   }
 };
 

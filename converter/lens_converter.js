@@ -646,11 +646,17 @@ NlmToLensConverter.Prototype = function() {
     // TODO: there are a lot more elements which can have this.
     var specific_use = aff.getAttribute('specific-use');
 
+    var affId = state.nextId("affiliation")
+
+    var text = this.annotatedText(state, aff, [affId, 'relaxed_text'], {
+        ignore: ['label']
+      });
+
     // TODO: this is a potential place for implementing a catch-bin
     // For that, iterate all children elements and fill into properties as needed or add content to the catch-bin
 
     var affiliationNode = {
-      id: state.nextId("affiliation"),
+      id: affId,
       type: "affiliation",
       source_id: aff.getAttribute("id"),
       label: label ? label.textContent : null,
@@ -658,7 +664,8 @@ NlmToLensConverter.Prototype = function() {
       city: city ? city.textContent : null,
       institution: institution ? institution.textContent : null,
       country: country ? country.textContent: null,
-      specific_use: specific_use || null
+      specific_use: specific_use || null,
+      relaxed_text: text || null,
     };
     doc.create(affiliationNode);
   };

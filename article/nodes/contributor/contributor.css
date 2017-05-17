@@ -51,3 +51,9 @@ Contributor
 .lens-article .content-node.contributor .contrib-data {
   margin-bottom: 12px;
 }
+
+.lens-article .content-node.contributor .contributor-name .label{
+  padding: 0px 2px 0px 2px;
+  margin-right: 2px;
+  margin-left: 2px;
+}

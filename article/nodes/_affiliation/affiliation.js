@@ -18,6 +18,7 @@ Affiliation.type = {
     "label": "string",
     "specific_use": "string",
     "relaxed_text": "string",
+    "reference_id": "affiliation_reference",
   }
 };
 

@@ -31,7 +31,9 @@ ContributorView.Prototype = function() {
 
     var name = this.node.name + (this.node.degrees?', '+ this.node.degrees:'');
 
-    this.content.appendChild($$('.contributor-name', {text: name }));
+    var contribName = $$('.contributor-name', {text: name });
+
+    this.content.appendChild(contribName);
 
     // Contributor Role
     // -------
@@ -43,8 +45,6 @@ ContributorView.Prototype = function() {
 
     // Add Affiliations
     // -------
-
-    var this_ = this;
 
     this.content.appendChild($$('.affiliations', {
       children: _.map(this.node.getAffiliations(), function(aff) {
@@ -59,9 +59,8 @@ ContributorView.Prototype = function() {
 
           return $$('.affiliation', {text: affText});
         } else {
-          var annoView = this_.createTextPropertyView([aff.id, 'relaxed_text'], { classes: 'affilation'});
-
-          return annoView.render().el;
+          contribName.appendChild($$('span.label .annotation .cross_reference', {'data-id': aff.reference_id, text: aff.label}));
+          return $$('span', {text: ''});
         }
       })
     }));

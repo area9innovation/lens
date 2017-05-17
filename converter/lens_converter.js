@@ -646,7 +646,8 @@ NlmToLensConverter.Prototype = function() {
     // TODO: there are a lot more elements which can have this.
     var specific_use = aff.getAttribute('specific-use');
 
-    var affId = state.nextId("affiliation")
+    var affId = state.nextId("affiliation");
+    var affRef = state.nextId("affiliation_reference");
 
     var text = this.annotatedText(state, aff, [affId, 'relaxed_text'], {
         ignore: ['label']
@@ -666,8 +667,20 @@ NlmToLensConverter.Prototype = function() {
       country: country ? country.textContent: null,
       specific_use: specific_use || null,
       relaxed_text: text || null,
+      reference_id: affRef,
     };
     doc.create(affiliationNode);
+    state.affiliations.push(affId);
+
+     var anno = {
+        id: affRef,
+        type: "affiliation_reference",
+        path: [affId , "relaxed_text"],
+        range: [0, affiliationNode.label.length],
+        target: affId
+      };
+
+      doc.create(anno);
   };
 
   this.contributor = function(state, contrib) {

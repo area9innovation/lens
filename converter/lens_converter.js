@@ -243,7 +243,12 @@ NlmToLensConverter.Prototype = function() {
 
     var volume = articleMeta.querySelector("volume").textContent;
     var issue = articleMeta.querySelector("issue").textContent;
-    var fpage = articleMeta.querySelector("fpage").textContent;
+
+    var fpage = '';
+    var fpageEl = articleMeta.querySelector("fpage");
+    if ( fpageEl ) {
+      fpage = articleMeta.querySelector("fpage").textContent;
+    }
 
     // Create PublicationInfo node
     // ---------------

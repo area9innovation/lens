@@ -645,7 +645,7 @@ NlmToLensConverter.Prototype = function() {
       var institution = aff.querySelector("institution");
     }
     var country = aff.querySelector("country");
-    var label = aff.querySelector("label");
+    var labelEl = aff.querySelector("label");
 
     var city = aff.querySelector("addr-line named-content[content-type=city]");
     // TODO: there are a lot more elements which can have this.
@@ -658,14 +658,28 @@ NlmToLensConverter.Prototype = function() {
         ignore: ['label']
       });
 
+    var label = '';
+    var source_id = aff.getAttribute('id');
+
+    if ( labelEl ) {
+      label = labelEl.textContent;
+    } else {
+      var sup = state.xmlDoc.querySelector('xref[ref-type=aff][rid=' +  source_id + '] sup');
+      if ( sup ) {
+        label = sup.textContent; 
+      } else if ( source_id ) {
+        label = source_id.replace( /^\D+/g, '');
+      }
+    }
+
     // TODO: this is a potential place for implementing a catch-bin
     // For that, iterate all children elements and fill into properties as needed or add content to the catch-bin
 
     var affiliationNode = {
       id: affId,
       type: "affiliation",
-      source_id: aff.getAttribute("id"),
-      label: label ? label.textContent : null,
+      source_id: source_id,
+      label: label,
       department: department ? department.textContent : null,
       city: city ? city.textContent : null,
       institution: institution ? institution.textContent : null,
@@ -677,7 +691,8 @@ NlmToLensConverter.Prototype = function() {
     doc.create(affiliationNode);
     state.affiliations.push(affId);
 
-     var anno = {
+    if ( affiliationNode.label ) {
+      var anno = {
         id: affRef,
         type: "affiliation_reference",
         path: [affId , "relaxed_text"],
@@ -686,6 +701,7 @@ NlmToLensConverter.Prototype = function() {
       };
 
       doc.create(anno);
+    }
   };
 
   this.contributor = function(state, contrib) {

@@ -59,7 +59,7 @@ ContributorView.Prototype = function() {
 
           return $$('.affiliation', {text: affText});
         } else {
-          contribName.appendChild($$('span.label .annotation .cross_reference', {'data-id': aff.reference_id, text: aff.label}));
+          if ( aff.label.length > 0 ) contribName.appendChild($$('span.label .annotation .cross_reference', {'data-id': aff.reference_id, text: aff.label}));
           return $$('span', {text: ''});
         }
       })

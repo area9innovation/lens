@@ -1750,7 +1750,7 @@ NlmToLensConverter.Prototype = function() {
       listNode.list_type = listType;
     }
 
-    var listItems = list.querySelectorAll("list-item");
+    var listItems = this.selectDirectChildren(list, "list-item");
     for (var i = 0; i < listItems.length; i++) {
       var listItem = listItems[i];
       // Note: we do not care much about what is served as items

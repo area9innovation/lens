@@ -1727,6 +1727,13 @@ NlmToLensConverter.Prototype = function() {
   // List type
   // --------
 
+  this.listTypesMap = {
+    bullet: 'bulleted',
+    ordered: 'ordered',
+    order: 'ordered',
+    simple: 'simple',
+  };
+
   this.list = function(state, list) {
     var doc = state.doc;
 
@@ -1735,12 +1742,12 @@ NlmToLensConverter.Prototype = function() {
       "source_id": list.getAttribute("id"),
       "type": "list",
       "items": [],
-      "ordered": false
+      "list_type": "simple"
     };
 
-    // TODO: better detect ordererd list types (need examples)
-    if (list.getAttribute("list-type") === "ordered") {
-      listNode.ordered = true;
+    var listType = this.listTypesMap[list.getAttribute("list-type")];
+    if ( listType ) {
+      listNode.list_type = listType;
     }
 
     var listItems = list.querySelectorAll("list-item");

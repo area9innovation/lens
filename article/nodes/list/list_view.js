@@ -22,8 +22,18 @@ ListView.Prototype = function() {
   this.render = function() {
     this.el.innerHTML = "";
 
-    var ltype = (this.node.ordered) ? "OL" : "UL";
-    this.content = document.createElement(ltype);
+    switch ( this.node.list_type ) {
+      case 'bulleted':
+        this.content = document.createElement('UL');
+        break;
+      case 'ordered':
+        this.content = document.createElement('OL');
+        break;
+      default:
+        this.content = document.createElement('UL');
+        this.content.classList.add('simple');
+        break;
+    }
     this.content.classList.add("content");
 
     var i;

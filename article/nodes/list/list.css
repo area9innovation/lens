@@ -38,3 +38,7 @@
 .content-node.list.level-3 .content {
   font-size: 17px;
 }
+
+ul.simple {
+  list-style-type: none;
+}

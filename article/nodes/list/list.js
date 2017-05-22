@@ -15,7 +15,7 @@ List.type = {
   "properties": {
     "source_id": "string",
     "items": ["array", "paragraph"],
-    "ordered": "boolean"
+    "list_type": "string"
   }
 };
 
@@ -30,7 +30,7 @@ List.description = {
     "Lists can either be numbered or bullet lists"
   ],
   "properties": {
-    "ordered": "Specifies wheter the list is ordered or not",
+    "list_type": "Specifies the list type (ordered|bulleted|simple)",
     "items": "An array of paragraph references",
   }
 };
@@ -127,6 +127,6 @@ List.Prototype.prototype = Composite.prototype;
 List.prototype = new List.Prototype();
 List.prototype.constructor = List;
 
-DocumentNode.defineProperties(List.prototype, ["items", "ordered"]);
+DocumentNode.defineProperties(List.prototype, ["items", "list_type"]);
 
 module.exports = List;

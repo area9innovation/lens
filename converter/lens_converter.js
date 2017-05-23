@@ -1742,7 +1742,8 @@ NlmToLensConverter.Prototype = function() {
       "source_id": list.getAttribute("id"),
       "type": "list",
       "items": [],
-      "list_type": "simple"
+      "list_type": "simple",
+      "labels": [],
     };
 
     var listType = this.listTypesMap[list.getAttribute("list-type")];
@@ -1753,10 +1754,14 @@ NlmToLensConverter.Prototype = function() {
     var listItems = this.selectDirectChildren(list, "list-item");
     for (var i = 0; i < listItems.length; i++) {
       var listItem = listItems[i];
+
+      var label = listItem.querySelector("label");
+      listNode.labels.push(label ? label.textContent : null );
+
       // Note: we do not care much about what is served as items
       // However, we do not have complex nodes on paragraph level
       // They will be extract as sibling items
-      var nodes = this.bodyNodes(state, util.dom.getChildren(listItem));
+      var nodes = this.bodyNodes(state, util.dom.getChildren(listItem), {ignore: ["label"]});
       for (var j = 0; j < nodes.length; j++) {
         listNode.items.push(nodes[j].id);
       }

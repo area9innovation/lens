@@ -15,7 +15,8 @@ List.type = {
   "properties": {
     "source_id": "string",
     "items": ["array", "paragraph"],
-    "list_type": "string"
+    "list_type": "string",
+    "labels": "array",
   }
 };
 
@@ -127,6 +128,6 @@ List.Prototype.prototype = Composite.prototype;
 List.prototype = new List.Prototype();
 List.prototype.constructor = List;
 
-DocumentNode.defineProperties(List.prototype, ["items", "list_type"]);
+DocumentNode.defineProperties(List.prototype, ["items", "list_type", "labels"]);
 
 module.exports = List;

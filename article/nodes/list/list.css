@@ -42,3 +42,11 @@
 ul.simple {
   list-style-type: none;
 }
+
+ul.simple li .label {
+  top: 0;
+  padding: 0;
+  float: left;
+  left: -40px;
+  width: 0;
+}

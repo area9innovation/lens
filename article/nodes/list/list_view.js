@@ -44,6 +44,7 @@ ListView.Prototype = function() {
     }
 
     // create children views
+    var labelIdx = 0;
     var children = this.node.getNodes();
     for (i = 0; i < children.length; i++) {
       var child = this.node.document.get(children[i]);
@@ -54,6 +55,15 @@ ListView.Prototype = function() {
         listEl = childView.render().el;
       } else {
         listEl = document.createElement("LI");
+
+        if ( this.node.labels[labelIdx] ) {
+          var label = document.createElement('SPAN');
+          label.classList.add('label');
+          label.innerHTML = this.node.labels[labelIdx];
+          listEl.appendChild(label);
+        }
+        ++labelIdx;
+
         listEl.appendChild(childView.render().el);
       }
       this.content.appendChild(listEl);

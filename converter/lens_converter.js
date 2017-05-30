@@ -28,7 +28,9 @@ NlmToLensConverter.Prototype = function() {
     "email": "link",
     "named-content": "",
     "inline-formula": "inline-formula",
-    "uri": "link"
+    "uri": "link",
+    "article-title": "strong",
+    "source": "emphasis",
   };
 
   this._inlineNodeTypes = {
@@ -2107,8 +2109,12 @@ NlmToLensConverter.Prototype = function() {
   // ---------
 
   this.citationTypes = {
-    "mixed-citation": true,
-    "element-citation": true
+    "mixed-citation": function(state, ref, citation) {
+      return this.mixedCitation(state, ref, citation);
+    },
+    "element-citation": function(state, ref, citation) {
+      return this.elementCitation(state, ref, citation);
+    },
   };
 
   this.refList = function(state, refList) {
@@ -2125,7 +2131,7 @@ NlmToLensConverter.Prototype = function() {
       var type = util.dom.getNodeType(child);
 
       if (this.citationTypes[type]) {
-        this.citation(state, ref, child);
+        this.citationTypes[type].call(this, state, ref, child);
       } else if (type === "label") {
         // skip the label here...
         // TODO: could we do something useful with it?
@@ -2164,20 +2170,15 @@ NlmToLensConverter.Prototype = function() {
   // </element-citation>
 
   // TODO: is implemented naively, should be implemented considering the NLM spec
-  this.citation = function(state, ref, citation) {
+  this.elementCitation = function(state, ref, citation) {
     var doc = state.doc;
     var citationNode;
     var i;
 
     var id = state.nextId("article_citation");
 
-    // TODO: we should consider to have a more structured citation type
-    // and let the view decide how to render it instead of blobbing everything here.
     var personGroup = citation.querySelector("person-group");
 
-    // HACK: we try to create a 'articleCitation' when there is structured
-    // content (ATM, when personGroup is present)
-    // Otherwise we create a mixed-citation taking the plain text content of the element
     if (personGroup) {
 
       citationNode = {
@@ -2247,96 +2248,115 @@ NlmToLensConverter.Prototype = function() {
 
       var doi = citation.querySelector("pub-id[pub-id-type='doi'], ext-link[ext-link-type='doi']");
       if(doi) citationNode.doi = "http://dx.doi.org/" + doi.textContent;
-    } else if ( citation.getAttribute('publication-type') === 'journal' ) { // relaxed
 
-      citationNode = {
-        "id": id,
-        "source_id": ref.getAttribute("id"),
-        "type": "citation",
-        "title": "",
-        "label": "",
-        "authors": [],
-        "doi": "",
-        "source": "",
-        "volume": "",
-        "fpage": "",
-        "lpage": "",
-        "citation_urls": []
-      };
+      var year = citation.querySelector("year");
+      if (year) citationNode.year = year.textContent;
 
-      var label = ref.querySelector("label");
-      if(label) citationNode.label = label.textContent;
+      // relaxed date tags processing
+      var relaxedDate;
+      if (citationNode.year) relaxedDate = citationNode.year;
 
-      var articleTitle = citation.querySelector("article-title");
-      if ( articleTitle ) {
-        citationNode.title = this.annotatedText(state, articleTitle, [id, 'title']);
-      } else {
-        citationNode.title = this.data(citation);
-      }
+      var month = citation.querySelector("month");
+      if (month) relaxedDate += ' ' + month.textContent;
 
-      var nameElements = citation.querySelectorAll("string-name");
+      var day = citation.querySelector("day");
+      if (day) relaxedDate += ' ' + day.textContent;
+
+      citationNode.relaxed_date = relaxedDate;
+
+      doc.create(citationNode);
+      doc.show("citations", id);
+
+      return citationNode;
+
+    } else {
+      console.error("FIXME: there is one of those 'element-citation' without any structure. Skipping ...", citation);
+      return;
+    }
+  };
+
+this.mixedCitation = function(state, ref, citation) {
+    var doc = state.doc;
+    var i;
+
+    var id = state.nextId("article_citation");
+
+    var citationNode = {
+      "id": id,
+      "source_id": ref.getAttribute("id"),
+      "type": "citation",
+      "title": "N/A",
+      "label": "",
+      "authors": [],
+      "doi": "",
+      "source": "",
+      "volume": "",
+      "fpage": "",
+      "lpage": "",
+      "citation_urls": []
+    };
+
+
+    var personGroup = citation.querySelector("person-group");
+
+    if (personGroup) {
+      var nameElements = personGroup.querySelectorAll("name");
       for (i = 0; i < nameElements.length; i++) {
         citationNode.authors.push(this.getName(nameElements[i]));
       }
 
-      nameElements = citation.querySelectorAll("bold");
-      for (i = 0; i < nameElements.length; i++) {
-        citationNode.authors.push(nameElements[i].textContent);
+      // Consider collab elements (treat them as authors)
+      var collabElements = personGroup.querySelectorAll("collab");
+      for (i = 0; i < collabElements.length; i++) {
+        citationNode.authors.push(collabElements[i].textContent);
       }
+    }
 
-      var source = citation.querySelector("source");
-      if (source) citationNode.source = source.textContent;
+    var source = citation.querySelector("source");
+    if (source) citationNode.source = source.textContent;
 
-      var volume = citation.querySelector("volume");
-      if (volume) citationNode.volume = volume.textContent;
-
-      var fpage = citation.querySelector("fpage");
-      if (fpage) citationNode.fpage = fpage.textContent;
-
-      var lpage = citation.querySelector("lpage");
-      if (lpage) citationNode.lpage = lpage.textContent;
-
-    } else if ( citation.getAttribute('publication-type') === 'web' ) {
-
-      citationNode = {
-        "id": id,
-        "source_id": ref.getAttribute("id"),
-        "type": "citation",
-        "title": "N/A",
-        "label": "",
-        "authors": [],
-        "doi": "",
-        "source": "",
-        "volume": "",
-        "fpage": "",
-        "lpage": "",
-        "citation_urls": []
-      };
-
-      var label = ref.querySelector("label");
-      if(label) citationNode.label = label.textContent;
-
+    var articleTitle = citation.querySelector("article-title");
+    if (articleTitle) {
+      citationNode.title = this.annotatedText(state, articleTitle, [id, 'title']);
+    } else {
       var comment = citation.querySelector("comment");
       if (comment) {
-        citationNode.title = this.annotatedText(state, comment, [id, 'title'], {ignore: 'ext-link' });
+        citationNode.title = this.annotatedText(state, comment, [id, 'title']);
+      } else {
+        // 3rd fallback -> use source
+        if (source) {
+          citationNode.title = this.annotatedText(state, source, [id, 'title']);
+        }
       }
-
-      var uri = citation.querySelector('ext-link[ext-link-type=uri]');
-      if( uri ) citationNode.citation_urls.push({
-        url: uri.getAttribute('xlink:href'),
-        name: uri.getAttribute('xlink:href')
-      });
-
-    } else {
-      console.error("FIXME: there is one of those 'mixed-citation' without any structure. Skipping ...", citation);
-      return;
-      // citationNode = {
-      //   id: id,
-      //   type: "mixed_citation",
-      //   citation: citation.textContent,
-      //   doi: ""
-      // };
     }
+
+    var volume = citation.querySelector("volume");
+    if (volume) citationNode.volume = volume.textContent;
+
+    var publisherLoc = citation.querySelector("publisher-loc");
+    if (publisherLoc) citationNode.publisher_location = publisherLoc.textContent;
+
+    var publisherName = citation.querySelector("publisher-name");
+    if (publisherName) citationNode.publisher_name = publisherName.textContent;
+
+    var fpage = citation.querySelector("fpage");
+    if (fpage) citationNode.fpage = fpage.textContent;
+
+    var lpage = citation.querySelector("lpage");
+    if (lpage) citationNode.lpage = lpage.textContent;
+
+    // Note: the label is child of 'ref'
+    var label = ref.querySelector("label");
+    if(label) citationNode.label = label.textContent;
+
+    var doi = citation.querySelector("pub-id[pub-id-type='doi'], ext-link[ext-link-type='doi']");
+    if(doi) citationNode.doi = "http://dx.doi.org/" + doi.textContent;
+
+    var uri = citation.querySelector('ext-link[ext-link-type=uri]');
+    if( uri ) citationNode.citation_urls.push({
+      url: uri.getAttribute('xlink:href'),
+      name: uri.getAttribute('xlink:href')
+    });
 
     var year = citation.querySelector("year");
     if (year) citationNode.year = year.textContent;
@@ -2352,6 +2372,8 @@ NlmToLensConverter.Prototype = function() {
     if (day) relaxedDate += ' ' + day.textContent;
 
     citationNode.relaxed_date = relaxedDate;
+
+    citationNode.relaxed_text = this.annotatedText(state, citation, [id, 'relaxed_text']);
 
     doc.create(citationNode);
     doc.show("citations", id);

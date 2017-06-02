@@ -131,6 +131,25 @@ NlmToLensConverter.Prototype = function() {
     return html;
   };
 
+  this.convertMap = {
+    '<italic>': '<i>',
+    '</italic>': '</i>',
+    '<break></break>': '<br/>',
+  };
+
+  this.convertMapRE = new RegExp(Object.keys(this.convertMap).join("|"),"gi");
+
+  this.toHtmlConvert = function(el) {
+    if (!el) return "";
+    var tmp = document.createElement("DIV");
+    tmp.appendChild(el.cloneNode(true));
+
+    var this_ = this;
+    return tmp.innerHTML.replace(this.convertMapRE, function(matched){
+      return this_.convertMap[matched];
+    });
+  };
+
   this.selectDirectChildren = function(scopeEl, selector) {
     // Note: if the ':scope' pseudo class was supported by more browsers
     // it would be the correct selector based solution.
@@ -1992,7 +2011,7 @@ NlmToLensConverter.Prototype = function() {
     // Note: using a DOM div element to create HTML
     var table = tableWrap.querySelector("table");
     if (table) {
-      tableNode.content = this.toHtml(table);
+      tableNode.content = this.toHtmlConvert(table);
     }
     this.extractTableCaption(state, tableNode, tableWrap);
 

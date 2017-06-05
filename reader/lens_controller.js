@@ -122,7 +122,7 @@ LensController.Prototype = function() {
 
     // Already loaded?
     if (this.reader) {
-      this.reader.modifyState(state);
+      if ( panel ) this.reader.modifyState(state);
     } else if (this.config.document_url === "lens_article.xml") {
       var doc = this.Article.describe();
       that.createReader(doc, state);

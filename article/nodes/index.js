@@ -35,6 +35,7 @@ module.exports = {
   "box": require("./box"),
   "cover": require("./cover"),
   "figure": require("./figure"),
+  "figure_group": require("./figure_group"),
   "caption": require("./caption"),
   "image": require("./image"),
   "webresource": require("./web_resource"),

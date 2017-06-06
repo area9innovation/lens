@@ -1394,6 +1394,14 @@ NlmToLensConverter.Prototype = function() {
   this._bodyNodes["comment"] = function(state, child) {
     return this.comment(state, child);
   };
+
+  this._bodyNodes['fig-group'] = function(state, child) {
+    return this.figureGroup(state, child);
+  };
+
+  this._bodyNodes["fig"] = function(state, child) {
+    return this.figure(state, child);
+  };
   
   // Overwirte in specific converter
   this.ignoredNode = function(/*state, node, type*/) {
@@ -1788,6 +1796,45 @@ NlmToLensConverter.Prototype = function() {
 
     doc.create(listNode);
     return listNode;
+  };
+
+
+  // <fig-group>
+
+  this.figureGroup = function(state, figureGroup) {
+    var doc = state.doc;
+    var childNodes = this.bodyNodes(state, util.dom.getChildren(figureGroup));
+
+    var figureGroupNode = {
+      type: 'figure_group',
+      id: state.nextId('figure_group'),
+      source_id: figureGroup.getAttribute('id'),
+      position: 'float',
+      orientation: 'portrait',
+      caption: null,
+      children: _.pluck(childNodes, 'id'),
+    };
+
+    var caption = figureGroup.querySelector('caption');
+    if (caption) {
+      var captionNode = this.caption(state, caption);
+      if (captionNode) figureGroupNode.caption = captionNode.id;
+    }
+
+    var position = figureGroup.getAttribute('position');
+    if (position) {
+      figureGroupNode.position = position;
+    }
+
+    var orientation = figureGroup.getAttribute('orientaton');
+    if (orientation) {
+      figureGroupNode.orientation = orientation;
+    }
+
+    figureGroup._converted = true;
+    doc.create(figureGroupNode);
+
+    return figureGroupNode;
   };
 
   // Handle <fig> element
@@ -2803,6 +2850,7 @@ this.mixedCitation = function(state, ref, citation) {
     "box": "content",
     "supplement": "figures",
     "figure": "figures",
+    "figure_group": "figures",
     "html_table": "figures",
     "video": "figures"
   };

@@ -31,6 +31,7 @@ NlmToLensConverter.Prototype = function() {
     "uri": "link",
     "article-title": "strong",
     "source": "emphasis",
+    "string-name": "",
   };
 
   this._inlineNodeTypes = {
@@ -2683,6 +2684,10 @@ this.mixedCitation = function(state, ref, citation) {
 
   this._annotationTextHandler['inline-formula'] = function(state) {
     return state.acceptText("{{inline-formula}}");
+  };
+
+  this._annotationTextHandler['string-name'] = function(state, el) {
+    return ' ' + el.querySelector('surname').textContent + ' ' +  el.querySelector('given-names').textContent;
   };
 
   this.shortenLinkLabel = function(state, linkLabel) {

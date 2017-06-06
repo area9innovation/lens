@@ -1168,7 +1168,7 @@ NlmToLensConverter.Prototype = function() {
 
     // NOTE: We previously only considered figures within <body> but since
     // appendices can also have figures we now use a gobal selector.
-    var figureElements = xmlDoc.querySelectorAll("fig, table-wrap, supplementary-material, media[mimetype=video]");
+    var figureElements = xmlDoc.querySelectorAll("fig:not([fig-type=thumb]), table-wrap, supplementary-material, media[mimetype=video]");
     var nodes = [];
     for (var i = 0; i < figureElements.length; i++) {
       var figEl = figureElements[i];
@@ -1393,10 +1393,7 @@ NlmToLensConverter.Prototype = function() {
   this._bodyNodes["comment"] = function(state, child) {
     return this.comment(state, child);
   };
-  this._bodyNodes["fig"] = function(state, child) {
-    return this.figure(state, child);
-  };
-
+  
   // Overwirte in specific converter
   this.ignoredNode = function(/*state, node, type*/) {
   };
@@ -1797,6 +1794,9 @@ NlmToLensConverter.Prototype = function() {
   //
 
   this.figure = function(state, figure) {
+    if ( figure.hasAttribute('fig-type') && figure.getAttribute('fig-type') === 'thumb' )
+      return undefined;
+
     var doc = state.doc;
 
     // Top level figure node
@@ -1804,7 +1804,7 @@ NlmToLensConverter.Prototype = function() {
       "type": "figure",
       "id": state.nextId("figure"),
       "source_id": figure.getAttribute("id"),
-      "label": "Figure",
+      "label": "",
       "url": "",
       "caption": null
     };

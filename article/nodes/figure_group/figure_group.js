@@ -13,6 +13,7 @@ FigureGroup.type = {
   parent: 'content',
   properties: {
     source_id: 'string',
+    label: 'string',
     caption: 'caption',
     position: 'string',
     orientation: 'string',
@@ -27,6 +28,7 @@ FigureGroup.description = {
   ],
   properties: {
     caption: 'A reference to a caption node that describes the figures group',
+    label: 'A group label (title)',
     position: 'Position',
     orientation: 'Orientation',
     children: "An array of content node references",
@@ -66,6 +68,9 @@ FigureGroup.Prototype = function() {
     }, this);
   };
 
+  this.getHeader = function() {
+    return this.properties.label;
+  };
 };
 
 FigureGroup.Prototype.prototype = Document.Composite.prototype;

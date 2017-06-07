@@ -1801,9 +1801,24 @@ NlmToLensConverter.Prototype = function() {
 
   // <fig-group>
 
+  this.figureGroupChildNodes = function(state, figureGroup) {
+    // ignore title in the caption
+    var prevCaptionHandler = this._bodyNodes["caption"];
+    this._bodyNodes["caption"] = function(state, child) {
+      return this.caption(state, child, true);
+    };
+
+    var childNodes = this.bodyNodes(state, util.dom.getChildren(figureGroup));
+    
+    this._bodyNodes["caption"] = prevCaptionHandler;
+
+    return childNodes;
+  }
+
   this.figureGroup = function(state, figureGroup) {
     var doc = state.doc;
-    var childNodes = this.bodyNodes(state, util.dom.getChildren(figureGroup));
+
+    var childNodes = this.figureGroupChildNodes(state, figureGroup);
 
     var figureGroupNode = {
       type: 'figure_group',
@@ -1814,6 +1829,16 @@ NlmToLensConverter.Prototype = function() {
       caption: null,
       children: _.pluck(childNodes, 'id'),
     };
+
+    var label = figureGroup.querySelector("label");
+    if (label) {
+      figureGroupNode.label = this.annotatedText(state, label, [figureGroupNode.id, 'label']);
+    } else {
+      label = figureGroup.querySelector('caption title');
+      if ( label ) {
+        figureGroupNode.label = this.annotatedText(state, label, [figureGroupNode.id, 'label']);
+      }
+    }
 
     var caption = figureGroup.querySelector('caption');
     if (caption) {
@@ -1956,7 +1981,7 @@ NlmToLensConverter.Prototype = function() {
   // Used by Figure, Table, Video, Supplement types.
   // --------
 
-  this.caption = function(state, caption) {
+  this.caption = function(state, caption, ignoreTitle=false) {
     var doc = state.doc;
 
     var captionNode = {
@@ -1969,7 +1994,7 @@ NlmToLensConverter.Prototype = function() {
 
     // Titles can be annotated, thus delegate to paragraph
     var title = caption.querySelector("title");
-    if (title) {
+    if (title && !ignoreTitle) {
       // Resolve title by delegating to the paragraph
       var node = this.paragraph(state, title);
       if (node) {

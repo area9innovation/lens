@@ -1981,7 +1981,10 @@ NlmToLensConverter.Prototype = function() {
   // Used by Figure, Table, Video, Supplement types.
   // --------
 
-  this.caption = function(state, caption, ignoreTitle=false) {
+  this.caption = function(state, caption, ignoreTitle) {
+
+    ignoreTitle = ignoreTitle || false;
+
     var doc = state.doc;
 
     var captionNode = {

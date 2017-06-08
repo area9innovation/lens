@@ -31,7 +31,11 @@ FigureView.Prototype = function() {
   this.render = function() {
     this.options.focus = this.node.referenced;
     NodeView.prototype.render.call(this);
-    this.renderHeader();
+    
+    if ( this.node.referenced ) {
+      this.renderHeader();
+    }
+    
     this.renderBody();
     return this;
   };

@@ -1881,7 +1881,11 @@ NlmToLensConverter.Prototype = function() {
       "label": "",
       "url": "",
       "caption": null,
-      referenced: state.xmlDoc.querySelector('xref[ref-type=fig][rid='+ figure.getAttribute('id') +']')?true:false,
+      referenced: 
+        (state.xmlDoc.querySelectorAll('fig xref[ref-type=fig][rid='+ figure.getAttribute('id') +']').length
+        <
+        state.xmlDoc.querySelectorAll('xref[ref-type=fig][rid='+ figure.getAttribute('id') +']').length)
+          ?true:false,
     };
 
     var labelEl = figure.querySelector("label");
@@ -2565,9 +2569,11 @@ this.mixedCitation = function(state, ref, citation) {
   // -----------
 
   this.createAnnotation = function(state, el, start, end) {
-    // do not create an annotaiton if there is no range
-    if (start === end) return;
     var type = el.tagName.toLowerCase();
+    
+    // do not create an annotaiton if there is no range or no xref
+    if (type!='xref' && start === end) return;
+
     var anno = {
       type: "annotation",
       path: _.last(state.stack).path,

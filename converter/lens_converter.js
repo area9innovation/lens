@@ -2762,7 +2762,9 @@ this.mixedCitation = function(state, ref, citation) {
   };
 
   this._annotationTextHandler['string-name'] = function(state, el) {
-    return ' ' + el.querySelector('surname').textContent + ' ' +  el.querySelector('given-names').textContent;
+    return _.reduce(el.childNodes, function(str, node) {
+      return str + ' ' + node.textContent;
+    }, '');
   };
 
   this.shortenLinkLabel = function(state, linkLabel) {

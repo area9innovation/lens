@@ -1813,7 +1813,7 @@ NlmToLensConverter.Prototype = function() {
     this._bodyNodes["caption"] = prevCaptionHandler;
 
     return childNodes;
-  }
+  };
 
   this.figureGroup = function(state, figureGroup) {
     var doc = state.doc;
@@ -1831,7 +1831,7 @@ NlmToLensConverter.Prototype = function() {
     };
 
     var label = figureGroup.querySelector("label");
-    if (label) {
+    if ( label && label.parentNode === figureGroup ) {
       figureGroupNode.label = this.annotatedText(state, label, [figureGroupNode.id, 'label']);
     } else {
       label = figureGroup.querySelector('caption title');

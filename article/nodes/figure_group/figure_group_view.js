@@ -28,9 +28,10 @@ FigureGroupView.Prototype = function() {
   };
 
   this.render = function() {
+    this.options.focus = this.node.referenced;
     NodeView.prototype.render.call(this);
     this.renderHeader();
-    this.renderChildren();
+    this.renderChildren({header: this.options.header, zoom: false});
     return this;
   };
 };

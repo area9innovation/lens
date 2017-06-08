@@ -4,6 +4,7 @@ var _ = require('underscore');
 var CompositeView = require("../composite").View;
 var $$ = require ("../../../substance/application").$$;
 var ResourceView = require('../../resource_view');
+var NodeView = require("../node").View;
 
 // Substance.Figure.View
 // ==========================================================================
@@ -27,8 +28,18 @@ FigureView.Prototype = function() {
   // =============================
   //
 
+  this.render = function() {
+    this.options.focus = this.node.referenced;
+    NodeView.prototype.render.call(this);
+    this.renderHeader();
+    this.renderBody();
+    return this;
+  };
+
   this.renderBody = function() {
-    this.content.appendChild($$('.label', {text: this.node.label}));
+    if ( !this.node.referenced ) {
+      this.content.appendChild($$('.label', {text: this.node.label}));
+    }
 
     if (this.node.url) {
       // Add graphic (img element)

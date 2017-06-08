@@ -17,4 +17,6 @@
     padding: 15px;
 }
 
-
+.fullscreen .action-toggle-resource {
+	display: none;
+}

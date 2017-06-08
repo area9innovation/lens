@@ -6,7 +6,8 @@ var $$ = require ("../substance/application").$$;
 
 var DEFAULT_OPTIONS = {
   header: false,
-  zoom: false
+  zoom: false,
+  focus: true
 };
 
 // Note: this is only a mix-in.
@@ -49,10 +50,12 @@ ResourceView.Prototype = function() {
           "html": "<i class=\"fa fa-expand\"></i> Fullscreen",
         }));
       }
-      togglesEl.appendChild($$('a.toggle-res.toggle.action-toggle-resource', {
-        "href": "#",
-        "html": "<i class=\"fa fa-eye\"></i> Focus"
-      }));
+      if (this.options.focus) {
+        togglesEl.appendChild($$('a.toggle-res.toggle.action-toggle-resource', {
+          "href": "#",
+          "html": "<i class=\"fa fa-eye\"></i> Focus"
+        }));
+      }
       headerEl.appendChild(togglesEl);
 
       this.headerEl = headerEl;

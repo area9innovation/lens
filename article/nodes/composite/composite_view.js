@@ -23,11 +23,11 @@ CompositeView.Prototype = function() {
     return this;
   };
 
-  this.renderChildren = function() {
+  this.renderChildren = function(options) {
     var children = this.node.getChildrenIds();
     // create children views
     for (var i = 0; i < children.length; i++) {
-      var childView = this.createChildView(children[i]);
+      var childView = this.createChildView(children[i], options);
       var childViewEl = childView.render().el;
       this.content.appendChild(childViewEl);
     }
@@ -55,8 +55,8 @@ CompositeView.Prototype = function() {
     return range;
   };
 
-  this.createChildView = function(nodeId) {
-    var view = this.createView(nodeId);
+  this.createChildView = function(nodeId, options) {
+    var view = this.createView(nodeId, options);
     this.childrenViews.push(view);
     return view;
   };

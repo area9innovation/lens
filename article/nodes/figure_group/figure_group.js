@@ -18,6 +18,7 @@ FigureGroup.type = {
     position: 'string',
     orientation: 'string',
     children: ['array', 'content'],
+    referenced: 'boolean',
   }
 };
 

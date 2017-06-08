@@ -39,9 +39,9 @@ NodeView.Prototype = function() {
     this.stopListening();
   };
 
-  this.createView = function(nodeId) {
+  this.createView = function(nodeId, options) {
     var childNode = this.node.document.get(nodeId);
-    var view = this.viewFactory.createView(childNode);
+    var view = this.viewFactory.createView(childNode, options);
     return view;
   };
 

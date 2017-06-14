@@ -21,7 +21,9 @@ HTMLTable.type = {
     "label": "string",
     "content": "string",
     "footers": ["array", "string"],
-    "caption": "caption"
+    "caption": "caption",
+    "table": "array",
+    "annotated_text": "array",
   }
 };
 
@@ -45,7 +47,8 @@ HTMLTable.description = {
     "title": "Full table title",
     "content": "HTML data",
     "footers": "HTMLTable footers expressed as an array strings",
-    "caption": "References a caption node, that has all the content"
+    "caption": "References a caption node, that has all the content",
+    "table": "Table representation",
   }
 };
 

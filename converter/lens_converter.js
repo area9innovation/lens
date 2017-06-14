@@ -2088,12 +2088,14 @@ NlmToLensConverter.Prototype = function() {
       // Not supported yet ... need examples
       footers: [],
       // doi: "" needed?
+      "annotated_text": [],
     };
 
     // Note: using a DOM div element to create HTML
     var table = tableWrap.querySelector("table");
     if (table) {
       tableNode.content = this.toHtmlConvert(table);
+      tableNode.table = this.tableToTable(state, table, [tableNode.id, 'annotated_text', 0], tableNode.annotated_text);
     }
     this.extractTableCaption(state, tableNode, tableWrap);
 
@@ -2111,6 +2113,34 @@ NlmToLensConverter.Prototype = function() {
     } else {
       console.error('caption node not found for', tableWrap);
     }
+  };
+
+  this.tableToTable = function(state, el, path, at) {
+    var this_ = this;
+    
+    if( el.nodeName === 'td' ) {
+      var path = path.slice();
+      path[2] = at.length;      
+      at.push(this.annotatedText(state, el, path));
+      return {
+        name: el.nodeName,
+        attributes: this.attributes(el),
+      };
+    } else {
+      return {
+        name: el.nodeName,
+        attributes: this.attributes(el),
+        childrens: _.map(el.childNodes, function(el){
+          return this_.tableToTable(state, el, path, at);
+        }),
+      };
+    }
+  };
+
+  this.attributes = function(el) {
+    return _.map(el.attributes, function(a){
+      return { name: a.nodeName, value: a.nodeValue };
+    });
   };
 
   // Formula Node Type

@@ -28,10 +28,17 @@ HTMLTableView.Prototype = function() {
     // The actual content
     // --------
     //
+    this.ATPos = 0;
 
-    var tableWrapper = $$('.table-wrapper', {
-      html: this.node.content // HTML table content
-    });
+    var tableWrapper = $$('.table-wrapper',
+      this.node.table
+      ?{
+        children: [ this.buildTable(this.node.table) ],
+      }
+      :{
+        html: this.node.content // HTML table content
+      }
+    );
 
     this.content.appendChild(tableWrapper);
 
@@ -56,6 +63,26 @@ HTMLTableView.Prototype = function() {
     this.content.appendChild(footers);
   };
 
+  this.buildTable = function(obj) {
+    var el = document.createElement(obj.name);
+
+    _.each(obj.attributes, function(a) {
+      el.setAttribute(a.name, a.value);
+    });
+
+    var this_ = this;
+    if ( obj.childrens ) {
+      obj.childrens.forEach(function(children){
+        el.appendChild(this_.buildTable(children));  
+      });
+    } else {
+      var annoView = this.createTextPropertyView([this.node.id, 'annotated_text', this.ATPos]);
+      el.appendChild(annoView.render().el);
+
+      ++this.ATPos;
+    }
+    return el;
+  };
 };
 
 HTMLTableView.Prototype.prototype = NodeView.prototype;

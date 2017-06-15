@@ -19,7 +19,6 @@ HTMLTable.type = {
   "properties": {
     "source_id": "string",
     "label": "string",
-    "content": "string",
     "footers": ["array", "string"],
     "caption": "caption",
     "table": "array",
@@ -45,10 +44,10 @@ HTMLTable.description = {
     "source_id": "string",
     "label": "Label shown in the resource header.",
     "title": "Full table title",
-    "content": "HTML data",
     "footers": "HTMLTable footers expressed as an array strings",
     "caption": "References a caption node, that has all the content",
     "table": "Table representation",
+    "annotated_text": "td/th content"
   }
 };
 
@@ -62,7 +61,6 @@ HTMLTable.example = {
   "type": "html_table",
   "label": "HTMLTable 1.",
   "title": "Lorem ipsum table",
-  "content": "<table>...</table>",
   "footers": [],
   "caption": "caption_1"
 };

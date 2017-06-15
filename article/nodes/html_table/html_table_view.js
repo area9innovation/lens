@@ -30,13 +30,8 @@ HTMLTableView.Prototype = function() {
     //
     this.ATPos = 0;
 
-    var tableWrapper = $$('.table-wrapper',
-      this.node.table
-      ?{
+    var tableWrapper = $$('.table-wrapper', {
         children: [ this.buildTable(this.node.table) ],
-      }
-      :{
-        html: this.node.content // HTML table content
       }
     );
 

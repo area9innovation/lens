@@ -51,4 +51,5 @@ module.exports = {
   "affiliation": require("./_affiliation"),
   "footnote": require("./footnote"),
   "quote": require("./quote"),
+  "break": require("./break"),
 };

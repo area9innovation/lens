@@ -32,6 +32,7 @@ NlmToLensConverter.Prototype = function() {
     "article-title": "strong",
     "source": "emphasis",
     "string-name": "",
+    "break": "break",
   };
 
   this._inlineNodeTypes = {
@@ -130,25 +131,6 @@ NlmToLensConverter.Prototype = function() {
     var html = this.toHtml(el);
     html = html.replace(/<(\/)?mml:([^>]+)>/g, "<$1$2>");
     return html;
-  };
-
-  this.convertMap = {
-    '<italic>': '<i>',
-    '</italic>': '</i>',
-    '<break></break>': '<br/>',
-  };
-
-  this.convertMapRE = new RegExp(Object.keys(this.convertMap).join("|"),"gi");
-
-  this.toHtmlConvert = function(el) {
-    if (!el) return "";
-    var tmp = document.createElement("DIV");
-    tmp.appendChild(el.cloneNode(true));
-
-    var this_ = this;
-    return tmp.innerHTML.replace(this.convertMapRE, function(matched){
-      return this_.convertMap[matched];
-    });
   };
 
   this.selectDirectChildren = function(scopeEl, selector) {
@@ -2094,7 +2076,6 @@ NlmToLensConverter.Prototype = function() {
     // Note: using a DOM div element to create HTML
     var table = tableWrap.querySelector("table");
     if (table) {
-      tableNode.content = this.toHtmlConvert(table);
       tableNode.table = this.tableToTable(state, table, [tableNode.id, 'annotated_text', 0], tableNode.annotated_text);
     }
     this.extractTableCaption(state, tableNode, tableWrap);
@@ -2118,7 +2099,7 @@ NlmToLensConverter.Prototype = function() {
   this.tableToTable = function(state, el, path, at) {
     var this_ = this;
     
-    if( el.nodeName === 'td' ) {
+    if( el.nodeName === 'td' || el.nodeName === 'th') {
       var path = path.slice();
       path[2] = at.length;      
       at.push(this.annotatedText(state, el, path));
@@ -2130,7 +2111,11 @@ NlmToLensConverter.Prototype = function() {
       return {
         name: el.nodeName,
         attributes: this.attributes(el),
-        childrens: _.map(el.childNodes, function(el){
+        childrens: _.map(
+          _.filter(el.childNodes, function(el) {
+            return el.nodeType !== Node.TEXT_NODE;
+          }), 
+          function(el){
           return this_.tableToTable(state, el, path, at);
         }),
       };
@@ -2805,6 +2790,10 @@ this.mixedCitation = function(state, ref, citation) {
     }, '');
   };
 
+  this._annotationTextHandler['break'] = function(state) {
+    return ' ';
+  };
+
   this.shortenLinkLabel = function(state, linkLabel) {
     var LINK_MAX_LENGTH = 50;
     var MARGIN = 10;
@@ -2979,10 +2968,10 @@ NlmToLensConverter.State = function(converter, xmlDoc, doc) {
   // is to use Tabuators and New Lines. At the same time, it is not possible anymore to have soft breaks within
   // a text.
 
-  var WS_LEFT = /^\s+/g;
-  var WS_LEFT_ALL = /^\s*/g;
-  var WS_RIGHT = /\s+$/g;
-   var WS_ALL = /\s+/g;
+  var WS_LEFT = /^[ \f\n\r\t\v]+/g;
+  var WS_LEFT_ALL = /^[ \f\n\r\t\v]*/g;
+  var WS_RIGHT = /[ \f\n\r\t\v]+$/g;
+   var WS_ALL = /[ \f\n\r\t\v]+/g;
   // var ALL_WS_NOTSPACE_LEFT = /^[\t\n]+/g;
   // var ALL_WS_NOTSPACE_RIGHT = /[\t\n]+$/g;
   var SPACE = " ";

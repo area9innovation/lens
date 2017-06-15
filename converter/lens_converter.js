@@ -1828,7 +1828,7 @@ NlmToLensConverter.Prototype = function() {
       orientation: 'portrait',
       caption: null,
       children: _.pluck(childNodes, 'id'),
-      referenced: state.xmlDoc.querySelector('xref[ref-type=fig][rid='+ figureGroup.getAttribute('id') +']')?true:false,
+      referenced: state.xmlDoc.querySelector('xref[rid='+ figureGroup.getAttribute('id') +']')?true:false,
     };
 
     var label = figureGroup.querySelector("label");
@@ -1882,9 +1882,9 @@ NlmToLensConverter.Prototype = function() {
       "url": "",
       "caption": null,
       referenced: 
-        (state.xmlDoc.querySelectorAll('fig xref[ref-type=fig][rid='+ figure.getAttribute('id') +']').length
+        (state.xmlDoc.querySelectorAll('fig xref[rid='+ figure.getAttribute('id') +']').length
         <
-        state.xmlDoc.querySelectorAll('xref[ref-type=fig][rid='+ figure.getAttribute('id') +']').length)
+        state.xmlDoc.querySelectorAll('xref[rid='+ figure.getAttribute('id') +']').length)
           ?true:false,
     };
 

@@ -48,6 +48,7 @@ NlmToLensConverter.Prototype = function() {
     "other": "figure_reference",
     "list": "definition_reference",
     "fn": "footnote_reference",
+    "table-fn": "footnote_reference",
   };
 
   // mapping of contrib type to human readable names

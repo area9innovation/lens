@@ -2528,6 +2528,8 @@ this.mixedCitation = function(state, ref, citation) {
 
   this.appGroup = function(state, appGroup) {
     var apps = appGroup.querySelectorAll('app');
+    if(apps.length===0) return;
+
     var doc = state.doc;
     var title = appGroup.querySelector('title');
     if (!title) {

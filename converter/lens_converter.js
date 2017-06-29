@@ -2209,7 +2209,13 @@ NlmToLensConverter.Prototype = function() {
     if (children[i].tagName.toLowerCase() === 'label') {
       footnote.label = this.annotatedText(state, children[i], [footnote.id, 'label']);
       i++;
+    } else {
+      var firstXref = state.xmlDoc.querySelector('xref[ref-type=table-fn][rid=' + footnote.source_id + ']');
+      if ( firstXref ) {
+        footnote.label = firstXref.textContent;
+      }
     }
+
     footnote.children = [];
     for (; i<children.length; i++) {
       var nodes = this.paragraphGroup(state, children[i]);

@@ -58,7 +58,7 @@ var ReaderView = function(readerCtrl) {
   // to be able to call it a last time when switching to another
   // workflow
   this.lastWorkflow = null;
-  this.lastPanel = "toc";
+  this.lastPanel = readerCtrl.currentPanel;
 
   // Events
   // --------

@@ -33,7 +33,7 @@ var ReaderController = function(doc, state, options) {
   this.state = state;
 
   // Current explicitly set panel
-  this.currentPanel = "toc";
+  this.currentPanel = state.panel;
 };
 
 ReaderController.Prototype = function() {

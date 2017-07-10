@@ -116,7 +116,7 @@ LensController.Prototype = function() {
 
     // The article view state
     var state = {
-      panel: panel || "toc",
+      panel: panel || "info",
       focussedNode: focussedNode,
       fullscreen: !!fullscreen
     };

@@ -478,6 +478,7 @@ NlmToLensConverter.Prototype = function() {
   // TODO: Maybe switch to a whitelisting approach, so we don't show
   // nonsense. See HighWire implementation
   this.__ignoreCustomMetaNames = [];
+  this.__ignoreCustomMetaNamesHeader = [];
 
   this.extractCustomMetaGroup = function(state, article) {
     var nodeIds = [];
@@ -493,17 +494,20 @@ NlmToLensConverter.Prototype = function() {
       var metaValueEl = customMetaEl.querySelector('meta-value');
 
       if (!_.include(this.__ignoreCustomMetaNames, metaNameEl.textContent)) {
-        var header = {
-          "type" : "heading",
-          "id" : state.nextId("heading"),
-          "level" : 3,
-          "content" : ""
-        };
-        header.content = this.annotatedText(state, metaNameEl, [header.id, 'content']);
-        doc.create(header);
+        if(!_.include(this.__ignoreCustomMetaNamesHeader, metaNameEl.textContent)) {
+          var header = {
+            "type" : "heading",
+            "id" : state.nextId("heading"),
+            "level" : 3,
+            "content" : ""
+          };
+          header.content = this.annotatedText(state, metaNameEl, [header.id, 'content']);
+          doc.create(header);
+          nodeIds.push(header.id);
+        }
+        
         var bodyNodes = this.paragraphGroup(state, metaValueEl);
 
-        nodeIds.push(header.id);
         nodeIds = nodeIds.concat(_.pluck(bodyNodes, 'id'));
       }
     }

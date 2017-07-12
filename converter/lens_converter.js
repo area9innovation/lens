@@ -704,7 +704,7 @@ NlmToLensConverter.Prototype = function() {
       var anno = {
         id: affRef,
         type: "affiliation_reference",
-        path: [affId , "relaxed_text"],
+        path: [affId , "label"],
         range: [0, affiliationNode.label.length],
         target: affId
       };

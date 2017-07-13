@@ -113,16 +113,30 @@ PublicationInfoView.Prototype = function() {
     //
 
     if (this.node.published_on) {
+      var dayUnknown = false;
+      
       var parts = this.node.published_on.split('-');
+      if ( parts.length < 3) {
+        parts.push(1);
+        dayUnknown = true;
+      }
+
       var localDate = new Date(parts[0], parts[1]-1, parts[2]);
       var pubDate = localDate.toDateString().slice(4, 16).replace(/\b0+/g, '').split(' ');
       var pubInfo = [ this.node.published_info.volume, '(' +this.node.published_info.issue + '):', this.node.published_info.fpage].join(' ');
 
+      var reorderedDate = [];
+      reorderedDate.push(pubDate[2]);
+      reorderedDate.push(pubDate[0]);
+      if ( !dayUnknown ) {
+        reorderedDate.push(pubDate[1]);
+      }
+      
       var journalEl = $$('.publishing', {
         children: [
           $$('div.label', {text: "Published"}),
           $$('div.value', {
-            children: [$$('span', { text: [pubDate[2], pubDate[0], pubDate[1]].join(' ') + '; ' + pubInfo })]
+            children: [$$('span', { text: reorderedDate.join(' ') + '; ' + pubInfo })]
           })
         ]
       });

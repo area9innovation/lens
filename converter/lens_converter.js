@@ -1141,12 +1141,10 @@ NlmToLensConverter.Prototype = function() {
   this.extractContributors = function(state, article) {
     // TODO: the spec says, that there may be any combination of
     // 'contrib-group', 'aff', 'aff-alternatives', and 'x'
-    // However, in the articles seen so far, these were sub-elements of 'contrib-group', which itself was single
-    var contribGroup = article.querySelector("article-meta contrib-group");
-    if (contribGroup) {
-      this.contribGroup(state, contribGroup);
-    }
-
+    var this_ =  this;
+    _.each(article.querySelectorAll("article-meta contrib-group"), function (contribGroup) {
+      this_.contribGroup(state, contribGroup);
+    });
   };
 
   // Catch-all implementation for figures et al.

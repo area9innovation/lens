@@ -50,3 +50,7 @@ ul.simple li .label {
   left: -40px;
   width: 0;
 }
+
+ul ul {
+  padding-left: 0px;
+}

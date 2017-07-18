@@ -46,13 +46,17 @@ ListView.Prototype = function() {
     // create children views
     var labelIdx = 0;
     var children = this.node.getNodes();
+    var lastEl;
     for (i = 0; i < children.length; i++) {
       var child = this.node.document.get(children[i]);
       var childView = this.viewFactory.createView(child);
 
       var listEl;
       if (child instanceof List) {
-        listEl = childView.render().el;
+        var nestedListEl = childView.render().el;
+        if( lastEl ) {
+          lastEl.appendChild(nestedListEl);
+        }
       } else {
         listEl = document.createElement("LI");
 
@@ -65,8 +69,11 @@ ListView.Prototype = function() {
         ++labelIdx;
 
         listEl.appendChild(childView.render().el);
+        lastEl = listEl;
       }
-      this.content.appendChild(listEl);
+      if ( listEl ) {
+        this.content.appendChild(listEl);
+      }
       this.childrenViews.push(childView);
     }
 

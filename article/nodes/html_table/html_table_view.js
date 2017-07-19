@@ -25,6 +25,14 @@ HTMLTableView.Prototype = function() {
 
   this.renderBody = function() {
 
+    // Display caption
+    //
+    if (this.node.caption) {
+      var captionView = this.createView(this.node.caption);
+      this.content.appendChild(captionView.render().el);
+    }
+
+
     // The actual content
     // --------
     //
@@ -46,14 +54,6 @@ HTMLTableView.Prototype = function() {
         return $$('.footer', { html: "<b>"+footer.label+"</b> " + footer.content });
       })
     });
-
-    // Display caption
-
-
-    if (this.node.caption) {
-      var captionView = this.createView(this.node.caption);
-      this.content.appendChild(captionView.render().el);
-    }
 
     this.content.appendChild(footers);
   };

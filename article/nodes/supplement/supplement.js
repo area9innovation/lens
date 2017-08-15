@@ -22,6 +22,7 @@ Supplement.type = {
     "label": "string",
     "url": "string",
     "caption": "caption", // contains the doi
+    "icon": "string",
   }
 };
 
@@ -39,7 +40,8 @@ Supplement.description = {
     "source_id": "Supplement id as it occurs in the source NLM file",
     "label": "Supplement label",
     "caption": "References a caption node, that has all the content",
-    "url": "URL of downloadable file"
+    "url": "URL of downloadable file",
+    "icon": "URL of additional icon",
   }
 };
 

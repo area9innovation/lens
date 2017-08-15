@@ -25,12 +25,27 @@ SupplementView.Prototype = function() {
 
     this.renderChildren();
 
-    var file = $$('div.file', {
-      children: [
-        $$('span', {html: this.node.getHeader() }),
-        $$('a', {href: this.node.url, html: '<i class="fa fa-download"/> Download' })
-      ]
-    });
+    var file;
+
+    if( this.node.url ) {
+          file = $$('div.file', {
+          children: [
+            $$('span', {html: this.node.getHeader() }),
+            $$('a', {
+              href: this.node.url,
+              html: (this.node.icon?'<img src="' + this.node.icon + '"/>':'<i class="fa fa-download"/>') + ' Download',
+              target: '_blank',
+            })
+          ]
+        });
+    } else {
+        file = $$('div.file', {
+        children: [
+          $$('span', {html: this.node.getHeader() }),
+        ]
+      });
+    }
+
     this.content.appendChild(file);
   };
 };

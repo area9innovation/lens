@@ -12,6 +12,8 @@ var ContributorView = function(node, viewFactory, options) {
   NodeView.call(this, node, viewFactory);
 
   // Mix-in
+  options.focus = false;
+  
   ResourceView.call(this, options);
 };
 

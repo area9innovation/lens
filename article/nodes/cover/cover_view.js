@@ -140,15 +140,6 @@ CoverView.Prototype = function() {
       this.content.appendChild(linksEl);
     }
 
-    if (pubInfo) {
-      var doi = pubInfo.doi;
-      if (doi) {
-        this.content.appendChild($$('.doi', {
-          html: 'DOI: <a href="http://dx.doi.org/'+doi+'">'+doi+'</a>'
-        }));
-      }
-    }
-
     return this;
   };
 };

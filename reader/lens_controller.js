@@ -135,6 +135,7 @@ LensController.Prototype = function() {
 
         // Determine type of resource
         if ($.isXMLDoc(data)) {
+          that.trigger("loaded:xml", data);
           doc = that.convertDocument(data);
         } else {
           if(typeof data == 'string') data = $.parseJSON(data);

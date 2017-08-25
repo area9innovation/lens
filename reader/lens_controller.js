@@ -123,6 +123,7 @@ LensController.Prototype = function() {
 
     // Already loaded?
     if (this.reader) {
+      that.trigger("loaded:doc", this.reader, this.reader.getDocument(), state);
       if ( panel ) this.reader.modifyState(state);
     } else if (this.config.document_url === "lens_article.xml") {
       var doc = this.Article.describe();
@@ -147,6 +148,7 @@ LensController.Prototype = function() {
         if (state.panel === "toc" && doc.getHeadings().length <= 2) {
           state.panel = "info";
         }
+        that.trigger("loaded:doc", null, doc, state);
         that.createReader(doc, state);
       })
       .fail(function(err) {

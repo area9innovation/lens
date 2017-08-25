@@ -237,7 +237,7 @@ ReaderView.Prototype = function() {
       focussedNode: state.focussedNode ? this.doc.get(state.focussedNode) : null
     };
 
-    var currentPanelView = state.panel === "content" ? this.contentView : this.panelViews[state.panel];
+    var currentPanelView = (state.panel === "content" || !this.isResourcesPanel) ? this.contentView : this.panelViews[state.panel];
 
     _.each(this.panelViews, function(panelView) {
       if (!panelView.isHidden()) panelView.hide();
@@ -295,7 +295,7 @@ ReaderView.Prototype = function() {
     // If not handled above, we at least show the correct panel
     if (!handled) {
       // Default implementation for states with a panel set
-      if (state.panel !== "content") {
+      if (state.panel !== "content" && this.isResourcesPanel) {
         var panelView = this.panelViews[state.panel];
         this.showPanel(state.panel);
         // if there is a resource focussed in the panel, activate the resource, and highlight all references to it in the content panel

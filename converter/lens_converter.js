@@ -1524,7 +1524,7 @@ NlmToLensConverter.Prototype = function() {
       ignore: ["title", "label"]
     }));
 
-    if (nodes.length > 0 && title) {
+    if (nodes.length > 0 || title) {
       var id = state.nextId("heading");
       var heading = {
         id: id,

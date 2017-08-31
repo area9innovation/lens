@@ -150,6 +150,7 @@ LensController.Prototype = function() {
         }
         that.trigger("loaded:doc", null, doc, state);
         that.createReader(doc, state);
+        that.trigger("created:reader", null, doc, state);
       })
       .fail(function(err) {
         that.view.startLoading("Error during loading. Please try again.");

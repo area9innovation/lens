@@ -7,7 +7,7 @@ var $$ = require ("../substance/application").$$;
 var DEFAULT_OPTIONS = {
   header: false,
   zoom: false,
-  focus: true
+  focus: false
 };
 
 // Note: this is only a mix-in.

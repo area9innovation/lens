@@ -1,5 +1,9 @@
 /* Footnote reference Node
 -------------------------------------------------------------------------------*/
+.caption .sm-expanded .footnote {
+  position: relative;
+}
+
 
 .sm-expanded .footnote {
   background: lightgray;

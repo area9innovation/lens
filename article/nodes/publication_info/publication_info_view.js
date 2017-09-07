@@ -143,6 +143,21 @@ PublicationInfoView.Prototype = function() {
       metaData.appendChild(journalEl);
     }
 
+    // DOI
+    //
+
+    if (this.node.doi) {
+      var doiEl = $$('.doi.container', {
+        children: [
+          $$('div.label', {text: "DOI"}),
+          $$('div.value', {
+            children: [$$('span', {text: this.node.doi})]
+          })
+        ]
+      });
+      metaData.appendChild(doiEl);
+    }
+
     // Related Article
     //
 

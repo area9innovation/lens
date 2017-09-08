@@ -51,7 +51,7 @@ FigureView.Prototype = function() {
           $$("a", {
             href: this.node.url,
             target: "_blank",
-            children: [$$("img", {src: this.node.url})]
+            children: [$$("span", {"data-src": this.node.url, "data-id": this.node.id})]
           })
         ]
       });

@@ -140,7 +140,7 @@ ReaderView.Prototype = function() {
       resourcesViewEl.appendChild(this.tocView.render().el);
       _.each(this.readerCtrl.panels, function(panel) {
         var panelView = this.panelViews[panel.getName()];
-        // console.log('Rendering panel "%s"', name);
+     // console.log('Rendering panel "%s"', panel.getName());
         resourcesViewEl.appendChild(panelView.render().el);
       }, this);
 
@@ -292,6 +292,8 @@ ReaderView.Prototype = function() {
       }
     }
 
+    var focussedPanelView;
+
     // If not handled above, we at least show the correct panel
     if (!handled) {
       // Default implementation for states with a panel set
@@ -307,7 +309,10 @@ ReaderView.Prototype = function() {
           }, this);
           // TODO: Jumps to wrong position esp. for figures, because content like images has not completed loading
           // at that stage. WE should make corrections afterwards
-          if (panelView.hasScrollbar()) panelView.scrollTo(state.focussedNode);
+          if (panelView.hasScrollbar()) {
+            focussedPanelView = panelView;
+            panelView.scrollTo(state.focussedNode);
+          }
         }
       } else {
         this.showPanel("toc");
@@ -319,13 +324,39 @@ ReaderView.Prototype = function() {
     // instead of visibility: hidden (caused problems with scrolling on iPad)
     // This hack should not be necessary if we can ensure that
     // - panel is shown first (so scrollbar can grab the dimensions)
-    // - whenever the contentHeight changes scrollbars should be updated
-    // - e.g. when an image completed loading
 
     self.updateScrollbars();
     _.delay(function() {
       self.updateScrollbars();
     }, 2000);
+
+    // - whenever the contentHeight changes scrollbars should be updated
+    // - e.g. when an image completed loading
+
+    var handcarWorker = function() {
+      var imageFillin = this;
+      var img = document.createElement('img');
+      var deferred = $.Deferred();
+
+      deferred.always(function(){
+        $(imageFillin).replaceWith(img);
+
+        self.updateScrollbars();
+        if ( focussedPanelView && state.focussedNode ) {
+          focussedPanelView.scrollTo(state.focussedNode);
+        }
+      });
+
+      $(img).one('load', deferred.resolve);
+
+      img.src = this.dataset.src;      
+    }
+
+    if ( focussedPanelView && state.focussedNode ) {
+      $('.surface.resource-view.figures .image-wrapper a span[data-id='+state.focussedNode+']').each(handcarWorker);
+    }
+
+    $('.surface.resource-view.figures .image-wrapper a span').each(handcarWorker);
   };
 
   this.updateScrollbars = function() {

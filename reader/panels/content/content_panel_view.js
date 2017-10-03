@@ -69,7 +69,7 @@ ContentPanelView.Prototype = function() {
 
   this.markActiveHeading = function(scrollTop) {
     // scrollTop = scrollTop - 30;
-    var contentHeight = $('.nodes').height();
+    var contentHeight = $('.panel.content.document .nodes').height();
     var tocNodes = this.getDocument().getTocNodes();
 
     var _getTocNodeElement = function(id) {

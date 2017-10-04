@@ -70,6 +70,7 @@ ContentPanelView.Prototype = function() {
   this.markActiveHeading = function(scrollTop) {
     // scrollTop = scrollTop - 30;
     var contentHeight = $('.panel.content.document .nodes').height();
+    var contentTop = $('#main').offset().top;
     var tocNodes = this.getDocument().getTocNodes();
 
     var _getTocNodeElement = function(id) {
@@ -106,7 +107,7 @@ ContentPanelView.Prototype = function() {
         }
         
         // HACK: we subtract height of menu bar so marking of active nodes stays accurate
-        var elTopOffset = $(el).offset().top - MENU_BAR_HEIGHT;
+        var elTopOffset = $(el).offset().top - MENU_BAR_HEIGHT - contentTop;
         if (elTopOffset <= 0) {
           activeNode = el.dataset.id;
           break;

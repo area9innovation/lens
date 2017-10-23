@@ -890,7 +890,7 @@ NlmToLensConverter.Prototype = function() {
         contribNode.fundings.push([fundingSourceName, awardId].join(''));
       } else if (xref.getAttribute("ref-type") === "corresp") {
         var correspId = xref.getAttribute("rid");
-        var corresp = state.xmlDoc.getElementById(correspId);
+        var corresp = state.xmlDoc.querySelector('[id="'+correspId+'"]');
         if (!corresp) return;
         // TODO: a corresp element allows *much* more than just an email
         // Thus, we are leaving this like untouched, so that it may be grabbed by extractAuthorNotes()

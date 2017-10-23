@@ -13,3 +13,9 @@
   padding: 20px 60px;
   padding-left: 100px;
 }
+
+/* for top login standalone text */
+.document .surface.content .nodes > .content-node.text {
+  padding-bottom: 0;
+  margin-bottom: -15px;
+}

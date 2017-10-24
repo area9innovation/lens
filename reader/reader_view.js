@@ -256,7 +256,12 @@ ReaderView.Prototype = function() {
       var classes = ["focussed", "highlighted"];
       // HACK: abusing addHighlight for adding the fullscreen class
       // instead I would prefer to handle such focussing explicitely in a workflow
-      if (state.fullscreen) classes.push("fullscreen");
+      if (state.fullscreen) {
+        classes.push("fullscreen");
+        $('.surface.resource-view.figures').css('-webkit-overflow-scrolling', 'auto');
+      } else {
+        $('.surface.resource-view.figures').css('-webkit-overflow-scrolling', 'touch');
+      }
       this.contentView.addHighlight(state.focussedNode, classes.concat('main-occurrence').join(' '));
       currentPanelView.addHighlight(state.focussedNode, classes.join(' '));
       currentPanelView.scrollTo(state.focussedNode);

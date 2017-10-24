@@ -322,6 +322,7 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   margin-bottom: 0px;
   margin-right: 0px;
   padding: 0px;
+  -webkit-overflow-scrolling: touch;
 }
 
 

@@ -1,3 +1,8 @@
+.surface.content .nodes > .content-node.supplement {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .content-node.supplement > .content {
   padding: 10px 20px;
 }

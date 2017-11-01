@@ -355,7 +355,7 @@ ReaderView.Prototype = function() {
       $(img).one('load', deferred.resolve);
 
       img.src = this.dataset.src;      
-    }
+    };
 
     if ( focussedPanelView && state.focussedNode ) {
       $('.surface.resource-view.figures .image-wrapper a span[data-id='+state.focussedNode+']').each(handcarWorker);

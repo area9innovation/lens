@@ -38,12 +38,25 @@ HTMLTableView.Prototype = function() {
     //
     this.ATPos = 0;
 
-    var tableWrapper = $$('.table-wrapper', {
-        children: [ this.buildTable(this.node.table) ],
-      }
-    );
+    var child;
+    var twClass;
 
-    this.content.appendChild(tableWrapper);
+    if( this.node.table ) {
+      child = this.buildTable(this.node.table);
+      twClass = '.table-wrapper';
+    } else if( this.node.image ) {
+      child = $$('img', { src: this.node.image});
+      twClass = '.image-wrapper';
+    }
+
+    if( child ) {
+      var tableWrapper = $$(twClass, {
+          children: [ child ],
+        }
+      );
+
+      this.content.appendChild(tableWrapper);
+    }
 
     // Display footers (optional)
     // --------

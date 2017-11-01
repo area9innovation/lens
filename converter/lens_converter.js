@@ -2081,6 +2081,12 @@ NlmToLensConverter.Prototype = function() {
     if (table) {
       tableNode.table = this.tableToTable(state, table, [tableNode.id, 'annotated_text', 0], tableNode.annotated_text);
     }
+
+    var image = tableWrap.querySelector("graphic");
+    if (image) {
+      tableNode.image = this.resolveURL(state, image.getAttribute('xlink:href'));
+    }
+
     this.extractTableCaption(state, tableNode, tableWrap);
 
     this.enhanceTable(state, tableNode, tableWrap);

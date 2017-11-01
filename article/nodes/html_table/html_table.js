@@ -23,6 +23,7 @@ HTMLTable.type = {
     "caption": "caption",
     "table": "array",
     "annotated_text": "array",
+    "image": "text",
   }
 };
 

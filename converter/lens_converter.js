@@ -245,9 +245,11 @@ NlmToLensConverter.Prototype = function() {
     // Funding information
     var fundingInfo = this.extractFundingInfo(state, article);
 
+    var volumeEl = articleMeta.querySelector("volume");
+    var issueEl = articleMeta.querySelector("issue");
 
-    var volume = articleMeta.querySelector("volume").textContent;
-    var issue = articleMeta.querySelector("issue").textContent;
+    var volume = volumeEl?volumeEl.textContent:'';
+    var issue = issueEl?issueEl.textContent:'';
 
     var fpage = '';
     var fpageEl = articleMeta.querySelector("fpage");

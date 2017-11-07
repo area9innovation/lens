@@ -19,3 +19,7 @@
   padding: 20px;
   overflow: auto;
 }
+
+.document .content-node.formula .MathJax_Preview img {
+  width: 80%;
+}

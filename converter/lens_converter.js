@@ -2142,7 +2142,7 @@ NlmToLensConverter.Prototype = function() {
   // Formula Node Type
   // --------
 
-  this._getFormulaData = function(formulaElement) {
+  this._getFormulaData = function(state, formulaElement) {
     var result = [];
     for (var child = formulaElement.firstElementChild; child; child = child.nextElementSibling) {
       var type = util.dom.getNodeType(child);
@@ -2151,7 +2151,7 @@ NlmToLensConverter.Prototype = function() {
         case "inline-graphic":
           result.push({
             format: 'image',
-            data: child.getAttribute('xlink:href')
+            data: this.resolveURL(state, child.getAttribute('xlink:href'))
           });
           break;
         case "svg":
@@ -2196,7 +2196,7 @@ NlmToLensConverter.Prototype = function() {
     };
     var label = formulaElement.querySelector("label");
     if (label) formulaNode.label = label.textContent;
-    var formulaData = this._getFormulaData(formulaElement, inline);
+    var formulaData = this._getFormulaData(state, formulaElement, inline);
     for (var i = 0; i < formulaData.length; i++) {
       formulaNode.format.push(formulaData[i].format);
       formulaNode.data.push(formulaData[i].data);

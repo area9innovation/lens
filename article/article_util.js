@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 var MONTH_MAPPING = {
   "1": "January",
   "2": "February",
@@ -29,6 +31,19 @@ util.formatDate = function (pubDate) {
   } else {
     return year;
   }
+};
+
+util.monthSymToNum = function (sym){
+  var num = 1;
+  _.find(MONTH_MAPPING, function(ms, idx){
+    if(ms==sym){
+      num = idx;
+      return true;
+    }
+    return false;
+  });
+
+  return num;
 };
 
 module.exports = util;

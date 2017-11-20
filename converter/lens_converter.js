@@ -5,6 +5,7 @@ var util = require("../substance/util");
 var errors = util.errors;
 var ImporterError = errors.define("ImporterError");
 var Article = require("../article");
+var articleUtil = require("../article/article_util");
 
 var NlmToLensConverter = function(options) {
   this.options = options || NlmToLensConverter.DefaultOptions;
@@ -212,10 +213,18 @@ NlmToLensConverter.Prototype = function() {
     var day = dateEl.querySelector("day");
 
     var res = [year.textContent];
-    if (month) res.push(month.textContent);
+    if (month) res.push(this.normalizeMonth(month.textContent));  
     if (day) res.push(day.textContent);
 
     return res.join("-");
+  };
+
+  this.normalizeMonth = function(month) {
+    var monthNum = parseInt(month, 10);
+    if( isNaN(monthNum) ) {
+      monthNum = articleUtil.monthSymToNum(month);
+    }
+    return monthNum;
   };
 
   this.extractPublicationInfo = function(state, article) {
@@ -1251,7 +1260,7 @@ NlmToLensConverter.Prototype = function() {
       if (type === "day") {
         day = parseInt(value, 10);
       } else if (type === "month") {
-        month = parseInt(value, 10);
+        month = this.normalizeMonth(value);
       } else if (type === "year") {
         year = parseInt(value, 10);
       }

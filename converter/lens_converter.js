@@ -2869,8 +2869,12 @@ this.mixedCitation = function(state, ref, citation) {
   // Implements resolving of relative urls
   this.enhanceFigure = function(state, node, element) {
     var graphic = element.querySelector("graphic");
-    var url = graphic.getAttribute("xlink:href");
-    node.url = this.resolveURL(state, url);
+    if( graphic ) {
+      var url = graphic.getAttribute("xlink:href");
+      node.url = this.resolveURL(state, url);
+    } else {
+      console.log('PL error: fig without graphic');
+    }
   };
 
   this.enhancePublicationInfo = function(converter, state, article) {

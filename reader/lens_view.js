@@ -64,6 +64,11 @@ LensView.Prototype = function() {
     $('body').removeClass('loading');
   };
 
+  this.errorOnLoad = function(msg) {
+      $('.spinner-wrapper .message').html(msg);
+      $('.spinner-wrapper .spinner').hide();
+  };
+
 
   // Open the reader view
   // ----------

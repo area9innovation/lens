@@ -136,21 +136,27 @@ LensController.Prototype = function() {
 
         // Determine type of resource
         if ($.isXMLDoc(data)) {
-          that.trigger("loaded:xml", data);
-          doc = that.convertDocument(data);
+          try {
+            that.trigger("loaded:xml", data);
+            doc = that.convertDocument(data);
+
+            // Extract headings
+            // TODO: this should be solved with an index on the document level
+            // This same code occurs in TOCView!
+            if (state.panel === "toc" && doc.getHeadings().length <= 2) {
+              state.panel = "info";
+            }
+            that.trigger("loaded:doc", null, doc, state);
+            that.createReader(doc, state);
+            that.trigger("created:reader", null, doc, state);
+          } catch (e) {
+            that.view.errorOnLoad("This article cannot be shown.");
+            console.error("Error on convert: " + e);
+          }
         } else {
-          if(typeof data == 'string') data = $.parseJSON(data);
-          doc = that.Article.fromSnapshot(data);
+          that.view.errorOnLoad("This article cannot be shown.");
+          console.error("Error on load: " + data);
         }
-        // Extract headings
-        // TODO: this should be solved with an index on the document level
-        // This same code occurs in TOCView!
-        if (state.panel === "toc" && doc.getHeadings().length <= 2) {
-          state.panel = "info";
-        }
-        that.trigger("loaded:doc", null, doc, state);
-        that.createReader(doc, state);
-        that.trigger("created:reader", null, doc, state);
       })
       .fail(function(err) {
         that.view.startLoading("Error during loading. Please try again.");

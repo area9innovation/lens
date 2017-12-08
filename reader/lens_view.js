@@ -66,6 +66,8 @@ LensView.Prototype = function() {
 
   this.errorOnLoad = function(msg) {
       $('.spinner-wrapper .message').html(msg);
+      $('.spinner-wrapper').css({'width':'400px', 'margin-left':'-200px'});
+      $('.spinner-wrapper .message').css({'font-size':'12pt', 'font-weight':'bold'});
       $('.spinner-wrapper .spinner').hide();
   };
 

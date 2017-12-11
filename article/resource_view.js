@@ -7,7 +7,7 @@ var $$ = require ("../substance/application").$$;
 var DEFAULT_OPTIONS = {
   header: false,
   zoom: false,
-  focus: false
+  focus: true
 };
 
 // Note: this is only a mix-in.
@@ -53,7 +53,7 @@ ResourceView.Prototype = function() {
       if (this.options.focus) {
         togglesEl.appendChild($$('a.toggle-res.toggle.action-toggle-resource', {
           "href": "#",
-          "html": "<i class=\"fa fa-eye\"></i> Focus"
+          "html": "<i class=\"fa fa-eye\"></i> Find"
         }));
       }
       headerEl.appendChild(togglesEl);

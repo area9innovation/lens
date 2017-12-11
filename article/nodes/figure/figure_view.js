@@ -29,6 +29,8 @@ FigureView.Prototype = function() {
   //
 
   this.render = function() {
+    this.options.focus = this.node.referenced;
+
     NodeView.prototype.render.call(this);
     
     if ( this.node.referenced ) {

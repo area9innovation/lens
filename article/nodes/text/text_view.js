@@ -83,7 +83,7 @@ TextView.Prototype = function() {
 
     // this splits the text and annotations into smaller pieces
     // which is necessary to generate proper HTML.
-    var fragmenter = new Fragmenter();
+    var fragmenter = new Fragmenter({'citation_reference': 100});
     fragmenter.onText = function(context, text) {
       context.appendChild(document.createTextNode(text));
     };

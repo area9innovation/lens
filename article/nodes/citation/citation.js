@@ -34,7 +34,8 @@ Citation.type = {
     "relaxed_text": "string",
     "comment": "string",
     "citation_urls": ["array", "object"],
-    "source_formats": ["array", "object"]
+    "source_formats": ["array", "object"],
+    referenced: 'boolean',
   }
 };
 

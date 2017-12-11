@@ -2273,7 +2273,8 @@ NlmToLensConverter.Prototype = function() {
       var type = util.dom.getNodeType(child);
 
       if (this.citationTypes[type]) {
-        this.citationTypes[type].call(this, state, ref, child);
+        var citation = this.citationTypes[type].call(this, state, ref, child);
+        citation.referenced = state.xmlDoc.querySelector('xref[rid='+ ref.getAttribute('id') +']')?true:false; 
       } else if (type === "label") {
         // skip the label here...
         // TODO: could we do something useful with it?

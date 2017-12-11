@@ -14,7 +14,8 @@ var CitationView = function(node, viewFactory, options) {
 
   // Mix-in
   ResourceView.call(this, options);
-
+  
+  this.options.focus = this.node.referenced;
 };
 
 

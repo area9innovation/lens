@@ -253,16 +253,17 @@ ReaderView.Prototype = function() {
 
     // Highlight the focussed node
     if (state.focussedNode) {
-      var classes = ["focussed", "highlighted"];
+      var classes = ['focussed', 'highlighted'];
       // HACK: abusing addHighlight for adding the fullscreen class
       // instead I would prefer to handle such focussing explicitely in a workflow
       if (state.fullscreen) {
-        classes.push("fullscreen");
+        classes.push('fullscreen');
         $('.surface.resource-view.figures').css('-webkit-overflow-scrolling', 'auto');
       } else {
         $('.surface.resource-view.figures').css('-webkit-overflow-scrolling', 'touch');
       }
       this.contentView.addHighlight(state.focussedNode, classes.concat('main-occurrence').join(' '));
+      classes.push('highlighted_iterator');
       currentPanelView.addHighlight(state.focussedNode, classes.join(' '));
       currentPanelView.scrollTo(state.focussedNode);
     }
@@ -309,9 +310,27 @@ ReaderView.Prototype = function() {
         if (state.focussedNode) {
           // get all references that point to the focussedNode and highlight them
           var refs = this.resources.get(state.focussedNode);
+          var refsArray = [];
           _.each(refs, function(ref) {
-            this.contentView.addHighlight(ref.id, "highlighted ");
+            this.contentView.addHighlight(ref.id, "highlighted highlighted_iterator");
+            refsArray.push(ref);
           }, this);
+
+          var view = this.contentView;
+          var hIdx = _.findIndex(refsArray, function(ref){return $(view.findNodeView(ref.id)).hasClass('highlighted_current');});
+          if(hIdx != -1) {
+            $(view.findNodeView(refsArray[hIdx].id)).removeClass('highlighted_current');
+            ++hIdx;
+            if(hIdx>=refsArray.length) {
+              hIdx = 0;
+            }
+          } else {
+            hIdx = 0;
+          }
+          view.scrollTo(refsArray[hIdx].id, true);
+          $(view.findNodeView(refsArray[hIdx].id)).addClass('highlighted_current');
+          if(hIdx==refsArray.length-1) $(panelView.findNodeView(state.focussedNode)).addClass('highlighted_last');
+
           // TODO: Jumps to wrong position esp. for figures, because content like images has not completed loading
           // at that stage. WE should make corrections afterwards
           if (panelView.hasScrollbar()) {
@@ -394,7 +413,10 @@ ReaderView.Prototype = function() {
   //
 
   this.onToggleResource = function(panel, id, element) {
-    if (element.classList.contains('highlighted')) {
+    if ( element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted_last')
+        ||
+        !element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted') ) {
+      $(element).removeClass('highlighted_last');
       this.readerCtrl.modifyState({
         panel: panel,
         focussedNode: null,

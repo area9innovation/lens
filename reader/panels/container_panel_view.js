@@ -55,7 +55,7 @@ ContainerPanelView.Prototype = function() {
     return true;
   };
 
-  this.scrollTo = function(nodeId) {
+  this.scrollTo = function(nodeId, isMiddle) {
     var n = this.findNodeView(nodeId);
     if (n) {
       var panelHeight = this.surface.$el.height();
@@ -72,7 +72,7 @@ ContainerPanelView.Prototype = function() {
         return;
       }
 
-      this.surface.$el.scrollTop(upperBound);
+      this.surface.$el.scrollTop(upperBound - (isMiddle?panelHeight/2:0));
       this.scrollbar.update();
     } else {
       console.info("ContainerPanelView.scrollTo(): Unknown resource '%s'", nodeId);

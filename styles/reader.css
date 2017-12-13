@@ -481,6 +481,10 @@ span.annotation.formula_reference, span.publication_reference {
 .content-node .contributor_reference.highlighted { background-color: #5c6570; color: white; }
 .content-node .definition_reference.highlighted { background-color: #5c6570; color: white; }
 
+/* Highlighted current states */
+.content-node .figure_reference.highlighted_current { background: rgba(145, 230, 4, 1.0); }
+.content-node .citation_reference.highlighted_current { background: rgba(11, 157, 217, 1.0); }
+
 /* Cross Reference */
 .content-node .cross_reference:hover {
   background-color: rgba(0, 0, 0, 0.10);

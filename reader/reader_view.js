@@ -417,6 +417,7 @@ ReaderView.Prototype = function() {
         ||
         !element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted') ) {
       $(element).removeClass('highlighted_last');
+      $('.highlighted_current').removeClass('highlighted_current');
       this.readerCtrl.modifyState({
         panel: panel,
         focussedNode: null,

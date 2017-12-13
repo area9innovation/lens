@@ -329,7 +329,11 @@ ReaderView.Prototype = function() {
           }
           view.scrollTo(refsArray[hIdx].id, true);
           $(view.findNodeView(refsArray[hIdx].id)).addClass('highlighted_current');
-          if(hIdx==refsArray.length-1) $(panelView.findNodeView(state.focussedNode)).addClass('highlighted_last');
+
+          var focussedNodeClass;
+          if(refsArray.length>0) focussedNodeClass='highlighted_next';
+          if(hIdx==refsArray.length-1) focussedNodeClass='highlighted_last';
+          $(panelView.findNodeView(state.focussedNode)).addClass(focussedNodeClass);
 
           // TODO: Jumps to wrong position esp. for figures, because content like images has not completed loading
           // at that stage. WE should make corrections afterwards
@@ -416,7 +420,7 @@ ReaderView.Prototype = function() {
     if ( element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted_last')
         ||
         !element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted') ) {
-      $(element).removeClass('highlighted_last');
+      $(element).removeClass('highlighted_last highlighted_next');
       $('.highlighted_current').removeClass('highlighted_current');
       this.readerCtrl.modifyState({
         panel: panel,

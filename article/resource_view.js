@@ -52,8 +52,8 @@ ResourceView.Prototype = function() {
       }
       if (this.options.focus) {
         togglesEl.appendChild($$('a.toggle-res.toggle.action-toggle-resource', {
-          "href": "#",
-          "html": "<i class=\"fa fa-eye\"></i> Find"
+          href: '#',
+          html: '<i class="fa fa-eye"></i> <span class="find_control">Find</span><span class="findnext_control">Find next</span><span class="hide_control">Hide</span>'
         }));
       }
       headerEl.appendChild(togglesEl);

@@ -302,6 +302,30 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   display: inline;
 }
 
+.article .resources .content-node .findnext_control,
+.article .resources .content-node .hide_control
+{
+  display: none;
+}
+
+.article .resources .content-node.highlighted .find_control,
+.article .resources .content-node.highlighted .find_control
+{
+  display: none;
+}
+
+.article .resources .content-node.highlighted_next .findnext_control{
+  display: inline;
+}
+
+.article .resources .content-node.highlighted_last .findnext_control{
+  display: none;
+}
+
+.article .resources .content-node.highlighted_last .hide_control{
+  display: inline;
+}
+
 
 /* Resource Fullscreen Mode
 ======================================================================= */

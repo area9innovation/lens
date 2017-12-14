@@ -428,6 +428,9 @@ ReaderView.Prototype = function() {
         fullscreen: false
       });
     } else {
+      if ( !element.classList.contains('highlighted') ) {
+        this.clearHighlightedIterators();
+      }
       this.readerCtrl.modifyState({
         panel: panel,
         focussedNode: id
@@ -435,10 +438,19 @@ ReaderView.Prototype = function() {
     }
   };
 
+  this.clearHighlightedIterators = function() {
+    $('.highlighted_last').removeClass('highlighted_last');
+    $('.highlighted_next').removeClass('highlighted_next');
+    $('.highlighted_current').removeClass('highlighted_current');
+  }
+
   // Toggle (off) a reference
   // --------
 
   this.onToggleResourceReference = function(panel, id, element) {
+    $(element).removeClass('highlighted_last highlighted_next');
+    this.clearHighlightedIterators();
+    
     if (element.classList.contains('highlighted')) {
       this.readerCtrl.modifyState({
         panel: this.lastPanel,

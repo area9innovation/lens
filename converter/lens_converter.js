@@ -2501,6 +2501,9 @@ this.mixedCitation = function(state, ref, citation) {
       name: uri.getAttribute('xlink:href')
     });
 
+    var pmid = citation.querySelector("pub-id[pub-id-type='pmid']");
+    if(pmid) citationNode.pmid = pmid.textContent;
+
     var year = citation.querySelector("year");
     if (year) citationNode.year = year.textContent;
 

@@ -142,6 +142,19 @@ CitationView.Prototype = function() {
 
       this.content.appendChild(frag);
     }
+
+    if (node.pmid) {
+      frag.appendChild($$('span.pubmed', {
+        children: [
+          $$('a', {
+            href: 'https://www.ncbi.nlm.nih.gov/pubmed/?term='+node.pmid,
+            target: '_new',
+            text: 'PubMed'
+          })
+        ]
+      }));
+      this.content.appendChild(frag);
+    }
   };
 };
 

@@ -35,6 +35,7 @@ Citation.type = {
     "comment": "string",
     "citation_urls": ["array", "object"],
     "source_formats": ["array", "object"],
+    "pmid": "string",
     referenced: 'boolean',
   }
 };

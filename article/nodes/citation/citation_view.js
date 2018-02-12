@@ -155,6 +155,20 @@ CitationView.Prototype = function() {
       }));
       this.content.appendChild(frag);
     }
+
+    if(node.title && node.title!='N/A' && node.authors.length!=0){
+      var astring = node.authors.map(function(a){return '"'+a+'"';}).join(' ');
+      frag.appendChild($$('span.googlescholar', {
+        children: [
+          $$('a', {
+            href: 'https://scholar.google.com/scholar?as_q='+ encodeURIComponent(node.title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring),
+            target: '_new',
+            text: 'GoogleScholar'
+          })
+        ]
+      }));
+      this.content.appendChild(frag);
+    }
   };
 };
 

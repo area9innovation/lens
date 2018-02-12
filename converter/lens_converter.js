@@ -2443,7 +2443,7 @@ this.mixedCitation = function(state, ref, citation) {
     var personGroup = citation.querySelector("person-group");
 
     if (personGroup) {
-      var nameElements = personGroup.querySelectorAll("name");
+      var nameElements = personGroup.querySelectorAll("string-name");
       for (i = 0; i < nameElements.length; i++) {
         citationNode.authors.push(this.getName(nameElements[i]));
       }

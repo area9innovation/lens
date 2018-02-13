@@ -157,11 +157,20 @@ CitationView.Prototype = function() {
     }
 
     if(node.title && node.title!='N/A' && node.authors.length!=0){
-      var astring = node.authors.map(function(a){return '"'+a+'"';}).join(' ');
+      // GS has 256 chars limit for search query box
+      var astring = node.authors.reduce(function(akk, a){
+        if(( akk.len + a.length + 2 + 8)<256){
+          akk.len+=(a.length + 2 + 8); // ' author:'
+          akk.astr+=' "'+a+'"';
+        }
+        return akk;
+      }
+      ,{astr:'', len:node.title.length + 12}); // 'allintitle: '
+
       frag.appendChild($$('span.googlescholar', {
         children: [
           $$('a', {
-            href: 'https://scholar.google.com/scholar?as_q='+ encodeURIComponent(node.title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring),
+            href: 'https://scholar.google.com/scholar?as_q='+ encodeURIComponent(node.title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring.astr),
             target: '_new',
             text: 'GoogleScholar'
           })

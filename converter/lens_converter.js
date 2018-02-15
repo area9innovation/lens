@@ -2440,19 +2440,16 @@ this.mixedCitation = function(state, ref, citation) {
     };
 
 
-    var personGroup = citation.querySelector("person-group");
 
-    if (personGroup) {
-      var nameElements = personGroup.querySelectorAll("string-name");
-      for (i = 0; i < nameElements.length; i++) {
-        citationNode.authors.push(this.getName(nameElements[i]));
-      }
+    var nameElements = citation.querySelectorAll("string-name");
+    for (i = 0; i < nameElements.length; i++) {
+      citationNode.authors.push(this.getName(nameElements[i]));
+    }
 
-      // Consider collab elements (treat them as authors)
-      var collabElements = personGroup.querySelectorAll("collab");
-      for (i = 0; i < collabElements.length; i++) {
-        citationNode.authors.push(collabElements[i].textContent);
-      }
+    // Consider collab elements (treat them as authors)
+    var collabElements = citation.querySelectorAll("collab");
+    for (i = 0; i < collabElements.length; i++) {
+      citationNode.authors.push(collabElements[i].textContent);
     }
 
     var source = citation.querySelector("source");

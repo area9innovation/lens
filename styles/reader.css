@@ -65,6 +65,7 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   overflow-x: hidden;
 
   /*overflow: auto;*/
+  /*height: 100%;*/
   -webkit-overflow-scrolling: touch;
 }
 

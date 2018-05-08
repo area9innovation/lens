@@ -2439,8 +2439,6 @@ this.mixedCitation = function(state, ref, citation) {
       "citation_urls": []
     };
 
-
-
     var nameElements = citation.querySelectorAll("string-name");
     for (i = 0; i < nameElements.length; i++) {
       citationNode.authors.push(this.getName(nameElements[i]));
@@ -2492,6 +2490,15 @@ this.mixedCitation = function(state, ref, citation) {
     var doi = citation.querySelector("pub-id[pub-id-type='doi'], ext-link[ext-link-type='doi']");
     if(doi) citationNode.doi = "http://dx.doi.org/" + doi.textContent;
 
+    var jbjs = citation.querySelector("pub-id[pub-id-type='jbjs']");
+    if(jbjs) {
+      citationNode.jbjs = jbjs.textContent;
+      citationNode.citation_urls.push({
+        url: jbjs.getAttribute('xlink:href'),
+        name: citationNode.jbjs
+      });
+    }  
+
     var uri = citation.querySelector('ext-link[ext-link-type=uri]');
     if( uri ) citationNode.citation_urls.push({
       url: uri.getAttribute('xlink:href'),
@@ -2516,7 +2523,7 @@ this.mixedCitation = function(state, ref, citation) {
 
     citationNode.relaxed_date = relaxedDate;
 
-    citationNode.relaxed_text = this.annotatedText(state, citation, [id, 'relaxed_text']);
+    citationNode.relaxed_text = this.annotatedText(state, citation, [id, 'relaxed_text'], { ignore: ['pub-id']});
 
     doc.create(citationNode);
     doc.show("citations", id);

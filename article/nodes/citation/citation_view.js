@@ -107,6 +107,21 @@ CitationView.Prototype = function() {
         frag.appendChild(commentView.render().el);
       }
 
+      this.content.appendChild(frag);
+    }
+
+    if (node.jbjs) {
+        frag.appendChild($$('span.jbjs', {
+          children: [
+            $$('a', {
+              href: '?'+node.citation_urls[0].url,
+              target: '_new',
+              text: node.jbjs
+            })
+          ]
+        }));
+        this.content.appendChild(frag);
+    } else {
       // Add DOI (if available)
       // -------
 
@@ -140,42 +155,40 @@ CitationView.Prototype = function() {
         frag.appendChild(citationUrlsEl);      
       }
 
-      this.content.appendChild(frag);
-    }
-
-    if (node.pmid) {
-      frag.appendChild($$('span.pubmed', {
-        children: [
-          $$('a', {
-            href: 'https://www.ncbi.nlm.nih.gov/pubmed/?term='+node.pmid,
-            target: '_new',
-            text: 'PubMed'
-          })
-        ]
-      }));
-      this.content.appendChild(frag);
-    }
-
-    if(node.title && node.title!='N/A' && node.authors.length!=0){
-      // GS has 256 chars limit for search query box
-      var astring = node.authors.reduce(function(akk, a){
-        if(( akk.len + a.length + 2 + 8)<256){
-          akk.len+=(a.length + 2 + 8); // ' author:'
-          akk.astr+=' "'+a+'"';
-        }
-        return akk;
+      if (node.pmid) {
+        frag.appendChild($$('span.pubmed', {
+          children: [
+            $$('a', {
+              href: 'https://www.ncbi.nlm.nih.gov/pubmed/?term='+node.pmid,
+              target: '_new',
+              text: 'PubMed'
+            })
+          ]
+        }));
       }
-      ,{astr:'', len:node.title.length + 12}); // 'allintitle: '
 
-      frag.appendChild($$('span.googlescholar', {
-        children: [
-          $$('a', {
-            href: 'https://scholar.google.com/scholar?as_q='+ encodeURIComponent(node.title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring.astr),
-            target: '_new',
-            text: 'GoogleScholar'
-          })
-        ]
-      }));
+      if(node.title && node.title!='N/A' && node.authors.length!=0){
+        // GS has 256 chars limit for search query box
+        var astring = node.authors.reduce(function(akk, a){
+          if(( akk.len + a.length + 2 + 8)<256){
+            akk.len+=(a.length + 2 + 8); // ' author:'
+            akk.astr+=' "'+a+'"';
+          }
+          return akk;
+        }
+        ,{astr:'', len:node.title.length + 12}); // 'allintitle: '
+
+        frag.appendChild($$('span.googlescholar', {
+          children: [
+            $$('a', {
+              href: 'https://scholar.google.com/scholar?as_q='+ encodeURIComponent(node.title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring.astr),
+              target: '_new',
+              text: 'GoogleScholar'
+            })
+          ]
+        }));
+      }
+
       this.content.appendChild(frag);
     }
   };

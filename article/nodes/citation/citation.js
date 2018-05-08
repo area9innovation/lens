@@ -36,6 +36,7 @@ Citation.type = {
     "citation_urls": ["array", "object"],
     "source_formats": ["array", "object"],
     "pmid": "string",
+    "jbjs": "string",
     referenced: 'boolean',
   }
 };

@@ -213,7 +213,7 @@ NlmToLensConverter.Prototype = function() {
     var day = dateEl.querySelector("day");
 
     var res = [year.textContent];
-    if (month) res.push(this.normalizeMonth(month.textContent));  
+    if (month) res.push(this.normalizeMonth(month.textContent));
     if (day) res.push(day.textContent);
 
     return res.join("-");
@@ -516,7 +516,7 @@ NlmToLensConverter.Prototype = function() {
           doc.create(header);
           nodeIds.push(header.id);
         }
-        
+
         var bodyNodes = this.paragraphGroup(state, metaValueEl);
 
         nodeIds = nodeIds.concat(_.pluck(bodyNodes, 'id'));
@@ -686,7 +686,7 @@ NlmToLensConverter.Prototype = function() {
     } else {
       var sup = state.xmlDoc.querySelector('xref[ref-type=aff][rid=' +  source_id + '] sup');
       if ( sup ) {
-        label = sup.textContent; 
+        label = sup.textContent;
       } else if ( source_id ) {
         label = source_id.replace( /^\D+/g, '');
       }
@@ -1398,7 +1398,7 @@ NlmToLensConverter.Prototype = function() {
   this._bodyNodes["fig"] = function(state, child) {
     return this.figure(state, child);
   };
-  
+
   // Overwirte in specific converter
   this.ignoredNode = function(/*state, node, type*/) {
   };
@@ -1806,7 +1806,7 @@ NlmToLensConverter.Prototype = function() {
     };
 
     var childNodes = this.bodyNodes(state, util.dom.getChildren(figureGroup));
-    
+
     this._bodyNodes["caption"] = prevCaptionHandler;
 
     return childNodes;
@@ -1878,7 +1878,7 @@ NlmToLensConverter.Prototype = function() {
       "label": "",
       "url": "",
       "caption": null,
-      referenced: 
+      referenced:
         (state.xmlDoc.querySelectorAll('fig xref[rid='+ figure.getAttribute('id') +']').length
         <
         state.xmlDoc.querySelectorAll('xref[rid='+ figure.getAttribute('id') +']').length)
@@ -2119,10 +2119,10 @@ NlmToLensConverter.Prototype = function() {
 
   this.tableToTable = function(state, el, path, at) {
     var this_ = this;
-    
+
     if( el.nodeName === 'td' || el.nodeName === 'th') {
       var path = path.slice();
-      path[2] = at.length;      
+      path[2] = at.length;
       at.push(this.annotatedText(state, el, path));
       return {
         name: el.nodeName,
@@ -2135,7 +2135,7 @@ NlmToLensConverter.Prototype = function() {
         childrens: _.map(
           _.filter(el.childNodes, function(el) {
             return el.nodeType !== Node.TEXT_NODE;
-          }), 
+          }),
           function(el){
           return this_.tableToTable(state, el, path, at);
         }),
@@ -2275,7 +2275,7 @@ NlmToLensConverter.Prototype = function() {
 
       if (this.citationTypes[type]) {
         var citation = this.citationTypes[type].call(this, state, ref, child);
-        citation.referenced = state.xmlDoc.querySelector('xref[rid='+ ref.getAttribute('id') +']')?true:false; 
+        citation.referenced = state.xmlDoc.querySelector('xref[rid='+ ref.getAttribute('id') +']')?true:false;
       } else if (type === "label") {
         // skip the label here...
         // TODO: could we do something useful with it?
@@ -2498,7 +2498,7 @@ this.mixedCitation = function(state, ref, citation) {
         url: jbjs.getAttribute('xlink:href'),
         name: citationNode.jbjs
       });
-    }  
+    }
 
     var uri = citation.querySelector('ext-link[ext-link-type=uri]');
     if( uri ) citationNode.citation_urls.push({
@@ -2622,7 +2622,7 @@ this.mixedCitation = function(state, ref, citation) {
 
   this.createAnnotation = function(state, el, start, end) {
     var type = el.tagName.toLowerCase();
-    
+
     // do not create an annotaiton if there is no range or no xref
     if (type!='xref' && start === end) return;
 

@@ -1,3 +1,5 @@
+THIS REPO IS A PART OF JBJS PROJECT. IT IS NEEDED FOR JBJS ELENS READER.
+
 # Lens
 
 **Lens** provides a novel way of looking at content on the web. It is designed to make life easier for researchers, reviewers, authors and readers.
@@ -65,7 +67,7 @@ Conversion is done on the client side using the browser-native DOM Parser.
 You can find the implementation of Lens Converter [here](https://github.com/elifesciences/lens/blob/master/converter/lens_converter.js). Lens Converter is meant to be customized, so publishers can develop a their own flavor easily.
 
 
-Each converter must have a method `test` that takes the XML document as well as the document url. The method is there to tell if the converter can handle the content or not. In the case of eLife we check for the `publisher-name` element in the XML. 
+Each converter must have a method `test` that takes the XML document as well as the document url. The method is there to tell if the converter can handle the content or not. In the case of eLife we check for the `publisher-name` element in the XML.
 
 
 See: [lens/converter/elife_converter.js](https://github.com/elifesciences/lens/blob/master/converter/elife_converter.js)
@@ -155,7 +157,7 @@ CustomCoverView.Prototype = function() {
 
     // Prepend
     this.content.insertBefore(introEl, this.content.firstChild);
-    
+
     return this;
   }
 };
@@ -275,7 +277,7 @@ AltmetricsView.Prototype = function() {
 
     this.controller.getAltmetrics(function(err, altmetrics) {
       if (!err) {
-        self.renderAltmetrics(altmetrics);  
+        self.renderAltmetrics(altmetrics);
       } else {
         console.error("Could not retrieve altmetrics data:", err);
       }
@@ -298,7 +300,7 @@ See: [lens-starter/src/app.js](https://github.com/elifesciences/lens-starter/blo
 var panels = Lens.getDefaultPanels();
 ```
 
-This code adds the altmetrics panel to the next to last position (before the info panel). 
+This code adds the altmetrics panel to the next to last position (before the info panel).
 
 ```js
 var altmetricsPanel = require('./panels/altmetrics');

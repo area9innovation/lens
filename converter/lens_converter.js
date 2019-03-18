@@ -1568,7 +1568,8 @@ NlmToLensConverter.Prototype = function() {
     "fig": true,
     "fig-group": true,
     "table-wrap": true,
-    "media": true
+    "media": true,
+    "inline-graphic": true
   };
 
   this.acceptedParagraphElements = {
@@ -1579,7 +1580,7 @@ NlmToLensConverter.Prototype = function() {
   };
 
   this.inlineParagraphElements = {
-    "inline-graphic": true,
+//    "inline-graphic": true,
     "inline-formula": true,
     "fn": true
   };

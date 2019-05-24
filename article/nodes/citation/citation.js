@@ -19,6 +19,7 @@ Citation.type = {
   "properties": {
     "source_id": "string",
     "title": "string",
+    "article_title": "string",
     "label": "string",
     "authors": ["array", "string"],
     "doi": "string",
@@ -53,6 +54,7 @@ Citation.description = {
   ],
   "properties": {
     "title": "The article's title",
+    "article_title": "The article's title from <article_title> tag",
     "label": "Optional label (could be a number for instance)",
     "doi": "DOI reference",
     "source": "Usually the journal name",
@@ -79,6 +81,7 @@ Citation.example = {
   "type": "article_citation",
   "label": "5",
   "title": "The genome of the blood fluke Schistosoma mansoni",
+  "article_title": "The genome of the blood fluke Schistosoma mansoni",
   "authors": [
     "M Berriman",
     "BJ Haas",

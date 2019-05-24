@@ -110,16 +110,22 @@ NlmToLensConverter.Prototype = function() {
   this.getName = function(nameEl) {
     if (!nameEl) return "N/A";
     var names = [];
+    var name = "";
 
     var surnameEl = nameEl.querySelector("surname");
     var givenNamesEl = nameEl.querySelector("given-names");
     var suffix = nameEl.querySelector("suffix");
 
-    if (givenNamesEl) names.push(givenNamesEl.textContent);
-    if (surnameEl) names.push(surnameEl.textContent);
-    if (suffix && suffix.textContent.trim() !== "") return [names.join(" "), suffix.textContent].join(", ");
+    if (givenNamesEl) names.push(givenNamesEl.textContent.trim());
+    if (surnameEl) names.push(surnameEl.textContent.trim());
 
-    return names.join(" ");
+    name = names.join(" ");
+
+    if (name != "" && suffix && suffix.textContent.trim() !== "") {
+      name = [name, suffix.textContent.trim()].join(", ");
+    }
+
+    return name;
   };
 
   this.toHtml = function(el) {
@@ -843,7 +849,10 @@ NlmToLensConverter.Prototype = function() {
     // Find xrefs within contrib elements
     _.each(refs, function(ref) {
       var c = ref.parentNode;
-      if (c !== contrib) result.push(this.getName(c.querySelector("name")));
+      if (c !== contrib) {
+        var name = this.getName(c.querySelector("name"));
+        if (name) result.push(name);
+      }
     }, this);
     return result;
   };
@@ -2330,6 +2339,7 @@ NlmToLensConverter.Prototype = function() {
         "source_id": ref.getAttribute("id"),
         "type": "citation",
         "title": "N/A",
+        "article_title": "N/A",
         "label": "",
         "authors": [],
         "doi": "",
@@ -2342,7 +2352,8 @@ NlmToLensConverter.Prototype = function() {
 
       var nameElements = personGroup.querySelectorAll("name");
       for (i = 0; i < nameElements.length; i++) {
-        citationNode.authors.push(this.getName(nameElements[i]));
+        var name = this.getName(nameElements[i]);
+        if (name) citationNode.authors.push(name);
       }
 
       // Consider collab elements (treat them as authors)
@@ -2357,6 +2368,7 @@ NlmToLensConverter.Prototype = function() {
       var articleTitle = citation.querySelector("article-title");
       if (articleTitle) {
         citationNode.title = this.annotatedText(state, articleTitle, [id, 'title']);
+        citationNode.article_title = citationNode.title;
       } else {
         var comment = citation.querySelector("comment");
         if (comment) {
@@ -2430,6 +2442,7 @@ this.mixedCitation = function(state, ref, citation) {
       "source_id": ref.getAttribute("id"),
       "type": "citation",
       "title": "N/A",
+      "article_title": "N/A",
       "label": "",
       "authors": [],
       "doi": "",
@@ -2442,7 +2455,8 @@ this.mixedCitation = function(state, ref, citation) {
 
     var nameElements = citation.querySelectorAll("string-name");
     for (i = 0; i < nameElements.length; i++) {
-      citationNode.authors.push(this.getName(nameElements[i]));
+      var name = this.getName(nameElements[i]);
+      if (name) citationNode.authors.push(name);
     }
 
     // Consider collab elements (treat them as authors)
@@ -2456,7 +2470,8 @@ this.mixedCitation = function(state, ref, citation) {
 
     var articleTitle = citation.querySelector("article-title");
     if (articleTitle) {
-      citationNode.title = this.annotatedText(state, articleTitle, [id, 'title']);
+      citationNode.article_title = this.annotatedText(state, articleTitle, [id, 'title']);
+      citationNode.title = citationNode.article_title;
     } else {
       var comment = citation.querySelector("comment");
       if (comment) {

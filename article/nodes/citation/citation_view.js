@@ -186,10 +186,13 @@ CitationView.Prototype = function() {
           }
         );
 
+        var titleQuery = '&as_q='+ encodeURIComponent(node.article_title) + "&as_occt=title";
+        var authorsQuery = (astring.astr) ? "&as_sauthors=" + encodeURIComponent(astring.astr) : '';
+
         frag.appendChild($$('span.googlescholar', {
           children: [
             $$('a', {
-              href: GSUrl + '&as_q='+ encodeURIComponent(node.article_title) + "&as_occt=title&as_sauthors=" + encodeURIComponent(astring.astr),
+              href: GSUrl + titleQuery + authorsQuery,
               target: '_new',
               text: 'GoogleScholar'
             })

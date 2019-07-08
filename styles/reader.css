@@ -195,8 +195,16 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   padding: 0px;
 }
 
+.article .resources .nodes > .content-node.publication-info {
+  border-bottom: unset;
+}
+
 .article .resources .nodes > .content-node > .content {
   border-top: none;
+}
+
+.article .resources .nodes > .content-node[data-id$=author_list].heading.level-3 > .content {
+    font-size: 20px;
 }
 
 /* Clickable header */
@@ -206,6 +214,9 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   position: relative;
 }
 
+.article .resources .content-node.contributor .resource-header div {
+    display: none;
+}
 /* TOC View
 ----------------------------------------------------------------------- */
 

@@ -651,6 +651,17 @@ NlmToLensConverter.Prototype = function() {
   this.contribGroup = function(state, contribGroup) {
     var i;
     var contribs = contribGroup.querySelectorAll("contrib");
+    if (contribs.length && !state.doc.nodes.document.authors.length) {
+      var h1 = {
+        "type" : "heading",
+        "id" : state.nextId("heading") + "_author_list",
+        "level" : 3,
+        "content" : "Authors"
+      };
+      state.doc.create(h1);
+      state.doc.show("info", h1.id);
+    }
+
     for (i = 0; i < contribs.length; i++) {
       this.contributor(state, contribs[i]);
     }

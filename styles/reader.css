@@ -865,3 +865,9 @@ TOC
 .footnote-reference.sm-expanded  >.footnote {
   display: block !important;
 }
+
+.content-node.footnote > .content.author_note > span.label {
+  float:left;
+  margin-right: 1em;
+  padding:0;
+}

@@ -13,7 +13,7 @@ var ContributorView = function(node, viewFactory, options) {
 
   // Mix-in
   options.focus = false;
-  
+
   ResourceView.call(this, options);
 };
 
@@ -61,12 +61,19 @@ ContributorView.Prototype = function() {
 
           return $$('.affiliation', {text: affText});
         } else {
-          if ( aff.label.length > 0 ) contribName.appendChild($$('span.label .annotation .cross_reference', {'data-id': aff.reference_id, text: aff.label}));
+          if ( aff.label.length > 0 ) {
+            contribName.appendChild($$('span.label .annotation .cross_reference',
+              {'data-id': aff.reference_id, text: aff.label}
+            ));
+          }
           return $$('span', {text: ''});
         }
       })
     }));
 
+    if(this.node.label) {
+      this.content.appendChild($$('span.label', {text: this.node.label}));
+    }
 
     // Present Address
     // -------
@@ -217,6 +224,13 @@ ContributorView.Prototype = function() {
 
     if (this.node.deceased) {
       this.content.appendChild($$('.label', {text: "* Deceased"}));
+    }
+
+   // footnote label
+    // -------
+
+    if (this.node.footnote) {
+      contribName.appendChild($$('span.label.footnote', {text: this.node.footnote}));
     }
 
   };

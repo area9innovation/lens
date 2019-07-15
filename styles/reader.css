@@ -837,7 +837,6 @@ TOC
 
 /* Footnote
 =============================== */
-
 .content-node.footnote {
   font-size: 13px;
   display: block !important;
@@ -845,6 +844,11 @@ TOC
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 20px;
+}
+
+.surface.content .nodes > .content-node.footnote {
+  border: none;
+  margin: 8px 0;
 }
 
 .footnote-reference > a {

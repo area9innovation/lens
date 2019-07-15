@@ -203,6 +203,10 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   border-top: none;
 }
 
+.article .resources .nodes > .content-node.contributor > .content {
+  padding-bottom: 8px;
+}
+
 .article .resources .nodes > .content-node[data-id$=author_list].heading.level-3 > .content {
     font-size: 20px;
 }

@@ -846,9 +846,18 @@ TOC
   padding: 20px;
 }
 
-.surface.content .nodes > .content-node.footnote {
+.surface.content .nodes > .content-node.footnote{
   border: none;
-  margin: 8px 0;
+  margin: 4px 0;
+  font-size:unset;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.article .resources .nodes > .content-node.footnote {
+  border: none;
+  margin: 4px 0;
+  font-size:unset;
 }
 
 .footnote-reference > a {
@@ -874,8 +883,11 @@ TOC
   display: block !important;
 }
 
+.content-node.footnote > .content.author_note {
+  padding-bottom: 0;
+}
+
 .content-node.footnote > .content.author_note > span.label {
   float:left;
-  margin-right: 1em;
-  padding:0;
+  padding: 0 5px;
 }

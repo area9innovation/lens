@@ -104,9 +104,6 @@ CoverView.Prototype = function() {
           
         }
 
-        this.content.appendChild($$('.published-on', {
-          html: items.join(' ')
-        }));
       }
     }
 

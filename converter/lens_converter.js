@@ -1339,10 +1339,11 @@ NlmToLensConverter.Prototype = function() {
 
     // with eLife there are abstracts having an object-id.
     // TODO: we should store that in the model instead of dropping it
-
+    state.sectionLevel++;
     nodes = nodes.concat(this.bodyNodes(state, util.dom.getChildren(abs), {
       ignore: ["title", "object-id"]
     }));
+    state.sectionLevel--;
 
     if (nodes.length > 0) {
       this.show(state, nodes);

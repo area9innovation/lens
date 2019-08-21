@@ -75,10 +75,13 @@ Article.Prototype = function() {
   };
 
   this.getTocNodes = function() {
+    var abstractSections = _.filter(this.get('abstract').getSections(), function(node) {
+      return node.includeInToc();
+    });
     var nodes = _.filter(this.get('content').getNodes(), function(node) {
       return node.includeInToc();
     });
-    return nodes;
+    return abstractSections.concat(nodes);
   };
 
 };

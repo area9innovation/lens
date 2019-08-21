@@ -1345,9 +1345,19 @@ NlmToLensConverter.Prototype = function() {
     }));
     state.sectionLevel--;
 
-    if (nodes.length > 0) {
-      this.show(state, nodes);
-    }
+    var abstract = {
+      id: "abstract",
+      type: "abstract",
+      sections: [],
+    };
+
+    _.each(nodes, function(node) {
+        abstract.sections.push(node.id);
+    }, this);
+
+    doc.create(abstract);
+    doc.show("content", abstract.id, 1);
+    doc.nodes.document.abstract = abstract;
   };
 
   // ### Article.Body

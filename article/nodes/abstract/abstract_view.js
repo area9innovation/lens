@@ -25,7 +25,6 @@ AbstractView.Prototype = function() {
     var sections = $$('.sections', {
       children: _.map(node.getSections(), function(contentPara) {
         var paraView = this.viewFactory.createView(contentPara);
-        console.log(paraView);
         var paraEl = paraView.render().el;
         this.content.appendChild(paraEl);
         return paraEl;

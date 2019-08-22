@@ -961,8 +961,9 @@ NlmToLensConverter.Prototype = function() {
               break;
             default:
               var fnLabel = fnElem.querySelector("label").textContent;
-              if (fnLabel) {
-                contribNode.footnote = fnLabel;
+              var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
+              if (fnLabel && fn) {
+                  contribNode.footnotes.push(fn.id);
               } else {
                 used = false;
               }
@@ -1080,8 +1081,8 @@ NlmToLensConverter.Prototype = function() {
 
     // Extract authors etc.
     this.extractAffilitations(state, article);
-    this.extractContributors(state, article);
     this.extractAuthorNotes(state, article);
+    this.extractContributors(state, article);
 
     // Same for the citations, also globally
     this.extractCitations(state, article);
@@ -1176,6 +1177,13 @@ NlmToLensConverter.Prototype = function() {
     }
   };
 
+  this.extractAuthorNotes = function(state, article) {
+    var authorNotes =  article.querySelectorAll("author-notes fn");
+    for (var i = 0; i < authorNotes.length; i++) {
+      this.footnote(state, authorNotes[i], "author_note");
+    }
+  };
+
   this.extractContributors = function(state, article) {
     // TODO: the spec says, that there may be any combination of
     // 'contrib-group', 'aff', 'aff-alternatives', and 'x'
@@ -1184,13 +1192,6 @@ NlmToLensConverter.Prototype = function() {
     _.each(contribGroups, function (contribGroup) {
       this_.contribGroup(state, contribGroup);
     });
-  };
-
-  this.extractAuthorNotes = function(state, article) {
-    var authorNotes =  article.querySelectorAll("author-notes fn");
-    for (var i = 0; i < authorNotes.length; i++) {
-      this.footnote(state, authorNotes[i], "author_note");
-    }
   };
 
 
@@ -2264,13 +2265,16 @@ NlmToLensConverter.Prototype = function() {
 
   this.footnote = function(state, footnoteElement, tag) {
     var doc = state.doc;
+    var fnId = state.nextId('fn');
+    var fnRef = state.nextId('footnote_reference');
     var footnote = {
       type: 'footnote',
-      id: state.nextId('fn'),
+      id: fnId,
       source_id: footnoteElement.getAttribute("id"),
       label: '',
       children: [],
-      tag: tag ? tag : ""
+      tag: tag ? tag : "",
+      reference_id: fnRef
     };
     var children = footnoteElement.children;
     var i = 0;
@@ -2289,10 +2293,19 @@ NlmToLensConverter.Prototype = function() {
       var nodes = this.paragraphGroup(state, children[i]);
       Array.prototype.push.apply(footnote.children, _.pluck(nodes, 'id'));
     }
+
     doc.create(footnote);
 
     if (tag && tag == 'author_note' && footnote.label != '') {
-      state.authorNotes.push(footnote.id);
+      state.authorNotes.push(fnId);
+      var anno = {
+        id: fnRef,
+        type: "footnote_reference",
+        path: [fnId , "label"],
+        range: [0, footnote.label.length],
+        target: fnId
+      };
+      doc.create(anno);
     }
 
     // leave a trace for the catch-all converter

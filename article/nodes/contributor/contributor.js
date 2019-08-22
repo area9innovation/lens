@@ -22,7 +22,7 @@ Contributor.type = {
     "role": "string",
     "contributor_type": "string",
     "affiliations": ["array", "affiliation"],
-    "footnote": "string",
+    "footnotes":  ["array", "footnote"],
     "present_address": ["string"],
     "fundings": ["array", "string"],
     "image": "string", // optional
@@ -50,7 +50,7 @@ Contributor.description = {
   "properties": {
     "name": "Full name",
     "affiliations": "A list of affiliation ids",
-    "footnote": "footnote label",
+    "footnotes": "A list of footnote ids",
     "present_address": "Present address of the contributor",
     "role": "Role of contributor (e.g. Author, Editor)",
     "fundings": "A list of funding descriptions",
@@ -74,7 +74,7 @@ Contributor.example = {
   "type": "contributor",
   "name": "John Doe",
   "affiliations": ["affiliation_1", "affiliation_2"],
-  "footnote": "*",
+  "footnotes": ["fn_1", "fn_2"],
   "role": "Author",
   "fundings": ["Funding Organisation 1"],
   "emails": ["a@b.com"],
@@ -88,6 +88,12 @@ Contributor.Prototype = function() {
   this.getAffiliations = function() {
     return _.map(this.properties.affiliations, function(affId) {
       return this.document.get(affId);
+    }, this);
+  };
+
+  this.getFootnotes = function() {
+    return _.map(this.properties.footnotes, function(fnId) {
+      return this.document.get(fnId);
     }, this);
   };
 

@@ -15,9 +15,9 @@ FootnoteView.Prototype = function() {
     CompositeView.prototype.render.call(this);
     if (  this.node.properties.tag == 'author_note') {
       this.content.classList.add("author_note");
-	    var header = $$('span.label', {text: this.node.label});
+      var header = $$('span.label', {text: this.node.label});
       $(this.content.children).wrapAll('<span class="note"></span>');
-	    this.content.insertBefore(header, this.content.firstChild);
+      this.content.insertBefore(header, this.content.firstChild);
     }
     return this;
   };

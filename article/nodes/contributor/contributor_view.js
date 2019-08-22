@@ -229,13 +229,20 @@ ContributorView.Prototype = function() {
    // footnote label
     // -------
 
-    if (this.node.footnote) {
-      contribName.appendChild($$('span.label.footnote', {text: this.node.footnote}));
+    if (this.node.footnotes.length > 0) {
+      this.content.appendChild($$('.footnotes', {
+        children: _.map(this.node.getFootnotes(), function(fn) {
+          if (fn.label.length > 0 ) {
+            contribName.appendChild($$('span.label .annotation .cross_reference',
+              {'data-id': fn.properties.reference_id, text: fn.label}
+            ));
+          }
+          return $$('span', {text: ''});
+        })
+      }))
     }
-
-  };
-
-};
+  }
+}
 
 ContributorView.Prototype.prototype = NodeView.prototype;
 ContributorView.prototype = new ContributorView.Prototype();

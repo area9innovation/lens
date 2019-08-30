@@ -1338,6 +1338,17 @@ NlmToLensConverter.Prototype = function() {
     doc.create(heading);
     nodes.push(heading);
 
+    _.each(util.dom.getChildren(abs), function(section) {
+      var titles = this.selectDirectChildren(section, "title");
+      var paragraphs = this.selectDirectChildren(section, "p");
+      if(paragraphs.length > 0) {
+        if (titles.length > 0) {
+          paragraphs[0].innerHTML = "<bold>" + titles[0].innerHTML + "</bold> " + paragraphs[0].innerHTML;
+        }
+      }
+    }, this);
+
+
     // with eLife there are abstracts having an object-id.
     // TODO: we should store that in the model instead of dropping it
     state.sectionLevel++;
@@ -1353,7 +1364,12 @@ NlmToLensConverter.Prototype = function() {
     };
 
     _.each(nodes, function(node) {
-        abstract.sections.push(node.id);
+        if(node.content == "Abstract") {
+          abstract.sections.push(node.id);
+        }
+        if(node.type == "paragraph") {
+          abstract.sections.push(node.id);
+        }
     }, this);
 
     doc.create(abstract);

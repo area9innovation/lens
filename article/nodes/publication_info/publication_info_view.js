@@ -49,21 +49,6 @@ PublicationInfoView.Prototype = function() {
       metaData.appendChild(articleTypeEl);
     }
 
-    // Subject
-    //
-
-    if (this.node.subjects && this.node.subjects.length > 0) {
-      var subjectEl = $$('.subject.container', {
-        children: [
-          $$('div.label', {text: "Subject"}),
-          $$('div.value', {
-            text: this.node.subjects.join(', ')
-          })
-        ]
-      });
-      metaData.appendChild(subjectEl);
-    }
-
     // Organisms
     //
 
@@ -107,6 +92,21 @@ PublicationInfoView.Prototype = function() {
         ]
       });
       metaData.appendChild(journalEl);
+    }
+
+    // Subject (heading)
+    //
+
+    if (this.node.subjects && this.node.subjects.length > 0) {
+      var subjectEl = $$('.subject.container', {
+        children: [
+          $$('div.label', {text: "Section"}),
+          $$('div.value', {
+            text: this.node.subjects.join(', ')
+          })
+        ]
+      });
+      metaData.appendChild(subjectEl);
     }
 
     // Publishing info

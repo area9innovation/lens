@@ -249,6 +249,16 @@ NlmToLensConverter.Prototype = function() {
     // <article-id pub-id-type="doi">10.7554/eLife.00003</article-id>
     var articleDOI = article.querySelector("article-id[pub-id-type=doi]");
 
+
+    // <subj-group subj-group-type="heading">
+    // <subject>Immunology</subject>
+    // </subj-group>
+    // <subj-group subj-group-type="heading">
+    // <subject>Microbiology and infectious disease</subject>
+    // </subj-group>
+
+    var subjects = articleMeta.querySelectorAll("subj-group[subj-group-type=heading] subject");
+
     // Related article if exists
     //
     // TODO: can't there be more than one?
@@ -291,7 +301,7 @@ NlmToLensConverter.Prototype = function() {
       // TODO: think about how we could provide good default implementations
       "keywords": [],
       "links": [],
-      "subjects": [],
+      "subjects": subjects && subjects.length > 0 ? _.pluck(subjects, "textContent") : [],
       "supplements": [],
       "history": [],
       // TODO: it seems messy to have this in the model

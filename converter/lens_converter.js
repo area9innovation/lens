@@ -1332,29 +1332,21 @@ NlmToLensConverter.Prototype = function() {
     var doc = state.doc;
     var nodes = [];
 
-    var title = abs.querySelector("title");
-
-    if (title && title.parentNode.tagName!=='abstract') {
-      title = undefined;
-    }
-
     var heading = {
       id: state.nextId("heading"),
       type: "heading",
       level: 1,
-      content: title ? title.textContent : "Abstract"
+      content: "Abstract"
     };
 
     doc.create(heading);
     nodes.push(heading);
 
-    _.each(util.dom.getChildren(abs), function(section) {
-      var titles = this.selectDirectChildren(section, "title");
-      var paragraphs = this.selectDirectChildren(section, "p");
-      if(paragraphs.length > 0) {
-        if (titles.length > 0) {
-          paragraphs[0].innerHTML = "<bold>" + titles[0].innerHTML + "</bold> " + paragraphs[0].innerHTML;
-        }
+    this.makeAbstractParagraph(abs);
+
+    _.each(util.dom.getChildren(abs), function(child) {
+      if (child.tagName == 'sec') {
+        this.makeAbstractParagraph(child);
       }
     }, this);
 
@@ -1385,6 +1377,17 @@ NlmToLensConverter.Prototype = function() {
     doc.create(abstract);
     doc.show("content", abstract.id, 1);
     doc.nodes.document.abstract = abstract;
+  };
+
+
+  this.makeAbstractParagraph = function(element) {
+      var paragraphs = this.selectDirectChildren(element, "p");
+      if (paragraphs.length > 0) {
+        var titles = this.selectDirectChildren(element, "title");
+        if (titles.length > 0) {
+          paragraphs[0].innerHTML = "<bold>" + titles[0].innerHTML + "</bold> " + paragraphs[0].innerHTML;
+        }
+      }
   };
 
   // ### Article.Body

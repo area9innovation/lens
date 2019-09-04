@@ -98,7 +98,7 @@ PublicationInfoView.Prototype = function() {
     //
 
     if (this.node.subjects && this.node.subjects.length > 0) {
-      var subjectEl = $$('.subject.container', {
+      var subjectEl = $$('.subject', {
         children: [
           $$('div.label', {text: "Section"}),
           $$('div.value', {

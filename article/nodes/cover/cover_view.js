@@ -31,30 +31,6 @@ CoverView.Prototype = function() {
     var pubInfo = this.node.document.get('publication_info');
 
 
-    // Render Subject(s) if available
-    // --------------
-    //
-
-    if (pubInfo) {
-      var subjects = pubInfo.subjects;
-      if (subjects) {
-        var subjectsEl
-        if (pubInfo.subject_link) {
-          subjectsEl = $$('.subjects', {
-            children: _.map(pubInfo.getSubjectLinks(), function(subject) {
-              return $$('a', {href: subject.url, text: subject.name})
-            })
-          })
-
-        } else {
-          subjectsEl = $$('.subjects', {
-            html: subjects.join(' ')
-          })
-        }
-        this.content.appendChild(subjectsEl);
-      }
-    }
-
     // Title View
     // --------------
     //

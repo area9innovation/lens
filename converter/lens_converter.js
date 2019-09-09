@@ -970,12 +970,15 @@ NlmToLensConverter.Prototype = function() {
               }
               break;
             default:
-              var fnLabel = fnElem.querySelector("label").textContent;
-              var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
-              if (fnLabel && fn) {
+              used = false;
+              var fnLabel = fnElem.querySelector("label");
+              if (fnLabel) {
+                var fnLabelText = fnLabel.textContent;
+                var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
+                if (fnLabelText && fn) {
                   contribNode.footnotes.push(fn.id);
-              } else {
-                used = false;
+                  used = true;
+                }
               }
           }
           if (used) state.used[fnId] = true;

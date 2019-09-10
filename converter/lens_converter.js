@@ -835,10 +835,10 @@ NlmToLensConverter.Prototype = function() {
 
     this.extractContributorProperties(state, contrib, contribNode);
 
-
     // HACK: for cases where no explicit xrefs are given per
     // contributor we assin all available affiliations
-    if (contribNode.affiliations.length === 0) {
+    // unless there is a footnote
+    if (contribNode.affiliations.length === 0 && contribNode.footnotes.length === 0) {
       contribNode.affiliations = state.affiliations;
     }
 
@@ -943,6 +943,7 @@ NlmToLensConverter.Prototype = function() {
       } else if (xref.getAttribute("ref-type") === "fn") {
         var fnId = xref.getAttribute("rid");
         var fnElem = state.xmlDoc.getElementById(fnId);
+        var authorNote = false;
         var used = true;
         if (fnElem) {
           var fnType = fnElem.getAttribute("fn-type");
@@ -958,28 +959,35 @@ NlmToLensConverter.Prototype = function() {
               break;
             case "equal":
               console.log("FIXME: isn't fnElem.getAttribute(id) === fnId?");
-              equalContribs = this._getEqualContribs(state, contrib, fnElem.getAttribute("id"));
+              // equal contribution is treated as simple author notes
+              // equalContribs = this._getEqualContribs(state, contrib, fnElem.getAttribute("id"));
+              authorNote = true;
               break;
             case "other":
               // HACK: sometimes equal contribs are encoded as 'other' plus special id
               console.log("FIXME: isn't fnElem.getAttribute(id) === fnId?");
               if (fnElem.getAttribute("id").indexOf("equal-contrib")>=0) {
-                equalContribs = this._getEqualContribs(state, contrib, fnElem.getAttribute("id"));
+                // equal contribution is treated as simple author notes
+                //equalContribs = this._getEqualContribs(state, contrib, fnElem.getAttribute("id"));
+                authorNote = true;
               } else {
                 used = false;
               }
               break;
             default:
+              authorNote = true;
               used = false;
-              var fnLabel = fnElem.querySelector("label");
-              if (fnLabel) {
-                var fnLabelText = fnLabel.textContent;
-                var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
-                if (fnLabelText && fn) {
-                  contribNode.footnotes.push(fn.id);
-                  used = true;
-                }
+          }
+          if (authorNote) {
+            var fnLabel = fnElem.querySelector("label");
+            if (fnLabel) {
+              var fnLabelText = fnLabel.textContent;
+              var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
+              if (fnLabelText && fn) {
+                contribNode.footnotes.push(fn.id);
+                used = true;
               }
+            }
           }
           if (used) state.used[fnId] = true;
         }

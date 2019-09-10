@@ -1,5 +1,6 @@
 .lens-article .content-node.abstract {
   background-color: rgba(35, 30, 30, 0.12);
+  z-index: 1;
 }
 
 .lens-article .content-node.abstract .content {

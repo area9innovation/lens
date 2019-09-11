@@ -155,11 +155,6 @@ ReaderView.Prototype = function() {
 
     frag.appendChild(contentViewHtml);
 
-    // Scrollbar cover
-    // This is only there to cover the content panel's scrollbar in Firefox.
-    var scrollbarCover = $$('.scrollbar-cover');
-    this.contentView.el.appendChild(scrollbarCover);
-
     this.el.appendChild(frag);
 
 

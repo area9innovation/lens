@@ -67,6 +67,9 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   /* Hide the content panel's scrollbar in Firefox */
   scrollbar-width: none;
 
+  /* Hide the content panel's scrollbar in MS Edge */
+  -ms-overflow-style: none;
+
   /*overflow: auto;*/
   /*height: 100%;*/
   -webkit-overflow-scrolling: touch;

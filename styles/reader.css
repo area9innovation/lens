@@ -583,15 +583,6 @@ span.annotation.formula_reference, span.publication_reference {
   background-color: rgba(0, 0, 0, 0);
 }
 
-.scrollbar-cover {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
-  width: 20px;
-  overflow: hidden;
-  background: #fff;
-}
 
 /* Disable native scrollbar for resources except TOC */
 

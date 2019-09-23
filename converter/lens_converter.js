@@ -1381,7 +1381,7 @@ NlmToLensConverter.Prototype = function() {
     };
 
     _.each(nodes, function(node) {
-        if (node.content == "Abstract" || node.content == title.textContent) {
+        if (node.content == heading.content) {
           abstract.sections.push(node.id);
         }
         if (node.type == "paragraph") {

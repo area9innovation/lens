@@ -1343,17 +1343,21 @@ NlmToLensConverter.Prototype = function() {
     var doc = state.doc;
     var nodes = [];
 
+    var title = abs.querySelector("title");
+
+    if (title && title.parentNode.tagName!=='abstract') {
+      title = undefined;
+    }
+
     var heading = {
       id: state.nextId("heading"),
       type: "heading",
       level: 1,
-      content: "Abstract"
+      content: title ? title.textContent : "Abstract"
     };
 
     doc.create(heading);
     nodes.push(heading);
-
-    this.makeAbstractParagraph(abs);
 
     _.each(util.dom.getChildren(abs), function(child) {
       if (child.tagName == 'sec') {
@@ -1377,10 +1381,10 @@ NlmToLensConverter.Prototype = function() {
     };
 
     _.each(nodes, function(node) {
-        if(node.content == "Abstract") {
+        if (node.content == "Abstract" || node.content == title.textContent) {
           abstract.sections.push(node.id);
         }
-        if(node.type == "paragraph") {
+        if (node.type == "paragraph") {
           abstract.sections.push(node.id);
         }
     }, this);

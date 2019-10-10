@@ -1384,7 +1384,8 @@ NlmToLensConverter.Prototype = function() {
         if (node.content == heading.content) {
           abstract.sections.push(node.id);
         }
-        if (node.type == "paragraph") {
+        // skip heading titles, they already added in paragraphs with  makeAbstractParagraph
+        if (node.type != "heading") {
           abstract.sections.push(node.id);
         }
     }, this);

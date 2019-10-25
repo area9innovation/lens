@@ -28,7 +28,8 @@ CoverView.Prototype = function() {
     NodeView.prototype.render.call(this);
 
     var node = this.node;
-    var pubInfo = this.node.document.get('publication_info');
+    var doc = this.node.document;
+    var pubInfo = doc.get('publication_info');
 
 
     // Title View
@@ -37,10 +38,26 @@ CoverView.Prototype = function() {
 
     var titleView = this.createTextPropertyView(['document', 'title'], { classes: 'title', elementType: 'div' });
     this.content.appendChild(titleView.render().el);
-    
-    if( this.node.getSubtitle() ) {
-      var subtitleView = this.createTextPropertyView(['document', 'subtitle'], { classes: 'subtitle', elementType: 'div' });
-      this.content.appendChild(subtitleView.render().el);
+    this.content.appendChild(titleView.render().el);
+
+    var subtitle = this.node.getSubtitle();
+    if( subtitle ) {
+      var subtitleView = this.createTextPropertyView(['document', 'subtitle', 'text'], { classes: 'subtitle', elementType: 'div' });
+      var subtitleEl = subtitleView.render().el;
+      this.content.appendChild(subtitleEl);
+      if (subtitle.notes.length > 0) {
+        this.content.appendChild($$('.footnotes', {
+          children: _.map(subtitle.notes, function(fnId) {
+            var fn = doc.getNodeBySourceId(fnId);
+            if (fn.label.length > 0 ) {
+              subtitleEl.appendChild($$('span.label .annotation .cross_reference .subtitle',
+                {'data-id': fn.properties.reference_id, text: fn.label}
+              ));
+            }
+            return $$('span', {text: ''});
+          })
+        }))
+      }
     }
 
     // Render Authors
@@ -77,7 +94,7 @@ CoverView.Prototype = function() {
           } else {
             items.unshift(articleType)
           }
-          
+
         }
 
       }

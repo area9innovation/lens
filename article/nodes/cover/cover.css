@@ -20,6 +20,14 @@
   padding-top: 10px;
 }
 
+.lens-article .content-node.cover .subtitle .label {
+    font-size: 12px;
+    padding: 0 2px 0 2px;
+    margin: 0 2px 0 2px;
+    text-align: center;
+}
+
+
 .lens-article .content-node.cover .subjects {
 
 }

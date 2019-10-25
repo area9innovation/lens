@@ -1289,9 +1289,15 @@ NlmToLensConverter.Prototype = function() {
 
     var articleSubtitle = titleGroup.querySelector("subtitle");
     if (articleSubtitle) {
-      doc.subtitle = this.annotatedText(state, articleSubtitle, ['document', 'subtitle'], {
+      doc.subtitle.text = this.annotatedText(state, articleSubtitle, ['document', 'subtitle', 'text'], {
         ignore: ['xref']
       });
+      var subtitleNotes =  articleSubtitle.querySelectorAll("xref[rid^='fn']");
+      var notes = [];
+      for (var i = 0; i < subtitleNotes.length; i++) {
+        notes.push(subtitleNotes[i].getAttribute('rid'));
+      }
+      doc.subtitle.notes = notes;
     }
   };
 

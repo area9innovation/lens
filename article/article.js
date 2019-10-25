@@ -32,7 +32,10 @@ var Article = function(options) {
       created_at: options.created_at,
       views: Article.views, // is views really needed on the instance level
       title: "",
-      subtitle: "",
+      subtitle: {
+        text: "",
+        notes: [] // footnote ids
+      },
       abstract: "",
       authors: []
     });

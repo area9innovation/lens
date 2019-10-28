@@ -11,7 +11,7 @@ var _labels = {
   "corrected": "corrected",
   "rev-recd": "revised",
   "rev-request": "returned for modification",
-  "published": "published",
+  "published": "first published",
   "default": "updated",
 };
 
@@ -114,7 +114,7 @@ PublicationInfoView.Prototype = function() {
 
     if (this.node.published_on) {
       var dayUnknown = false;
-      
+
       var parts = this.node.published_on.split('-');
       if ( parts.length < 3) {
         parts.push(1);
@@ -131,7 +131,7 @@ PublicationInfoView.Prototype = function() {
       if ( !dayUnknown ) {
         reorderedDate.push(pubDate[1]);
       }
-      
+
       var journalEl = $$('.publishing', {
         children: [
           $$('div.label', {text: "Published"}),

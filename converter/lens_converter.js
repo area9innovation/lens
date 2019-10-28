@@ -507,7 +507,12 @@ NlmToLensConverter.Prototype = function() {
   this.__ignoreCustomMetaNames = [];
   this.__ignoreCustomMetaNamesHeader = [];
 
+  this.__ignoreAllCustomMeta = false;
+
   this.extractCustomMetaGroup = function(state, article) {
+    if (this.__ignoreAllCustomMeta) {
+      return [];
+    }
     var nodeIds = [];
     var doc = state.doc;
 

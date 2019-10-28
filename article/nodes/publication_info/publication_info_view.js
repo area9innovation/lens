@@ -202,7 +202,7 @@ PublicationInfoView.Prototype = function() {
     if (this.node.published_on) {
       dateEntries.push({
         type: 'published',
-        date: this.node.published_on
+        date: this.node.first_published_on
       });
     }
 

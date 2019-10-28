@@ -12,6 +12,7 @@ PublicationInfo.type = {
   "properties": {
     // history: array of { type: 'string', date: 'string'}
     "history": [ "array", "object" ],
+    "first_published_on": "string",
     "published_on": "string",
     "journal": "string",
     "provider": "string",
@@ -40,7 +41,8 @@ PublicationInfo.description = {
   "properties": {
     "received_on": "Submission received",
     "accepted_on": "Paper accepted on",
-    "published_on": "Paper published on",
+    "first_published_on": "Paper first published on, mainly corresponds to <epub> tag",
+    "published_on": "Paper published on, mainly corresponds to <ppub>/<collection> tags",
     "history": "History of the submission cycle",
     "journal": "The Journal",
     "provider": "Who is hosting this article",
@@ -56,6 +58,7 @@ PublicationInfo.description = {
 
 PublicationInfo.example = {
   "id": "publication_info",
+  "first_published_on": "2012-10-12",
   "published_on": "2012-11-13",
   "history": [
     { "type": "received", "date": "2012-06-20" },

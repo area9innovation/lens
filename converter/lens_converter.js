@@ -214,15 +214,27 @@ NlmToLensConverter.Prototype = function() {
   this.extractDate = function(dateEl) {
     if (!dateEl) return null;
 
-    var year = dateEl.querySelector("year");
+    var year  = dateEl.querySelector("year");
     var month = dateEl.querySelector("month");
-    var day = dateEl.querySelector("day");
+    var day   = dateEl.querySelector("day");
 
-    var res = [year.textContent];
-    if (month) res.push(this.normalizeMonth(month.textContent));
-    if (day) res.push(day.textContent);
-
-    return res.join("-");
+    var res = [ year.textContent ];
+    if (month) {
+      var monthNum = this.normalizeMonth(month.textContent);
+      if (monthNum) {
+        res.push(monthNum);
+        if (day)
+          res.push(day.textContent);
+      } else {
+        // non-standard month is treated like season
+        res.push(month.textContent);
+      }
+    } else {
+      var season = dateEl.querySelector("season");
+      if (season)
+        res.push(season.textContent);
+    }
+    return res.join("/");
   };
 
   this.normalizeMonth = function(month) {
@@ -237,7 +249,6 @@ NlmToLensConverter.Prototype = function() {
     var doc = state.doc;
 
     var articleMeta = article.querySelector("article-meta");
-    var pubDate = articleMeta.querySelector("pub-date");
     var history = articleMeta.querySelectorAll("history date");
 
     // Journal title
@@ -271,10 +282,10 @@ NlmToLensConverter.Prototype = function() {
     var fundingInfo = this.extractFundingInfo(state, article);
 
     var volumeEl = articleMeta.querySelector("volume");
-    var issueEl = articleMeta.querySelector("issue");
+    var issueEl  = articleMeta.querySelector("issue");
 
-    var volume = volumeEl?volumeEl.textContent:'';
-    var issue = issueEl?issueEl.textContent:'';
+    var volume = volumeEl ? volumeEl.textContent : '';
+    var issue  = issueEl  ? issueEl.textContent : '';
 
     var fpage = '';
     var fpageEl = articleMeta.querySelector("fpage");
@@ -282,13 +293,16 @@ NlmToLensConverter.Prototype = function() {
       fpage = articleMeta.querySelector("fpage").textContent;
     }
 
+    var pubDates = this.extractPublicationDates(article, volume);
+
     // Create PublicationInfo node
     // ---------------
 
     var pubInfoNode = {
       "id": "publication_info",
       "type": "publication_info",
-      "published_on": this.extractDate(pubDate),
+      "first_published_on": pubDates.first_published_on,
+      "published_on": pubDates.published_on,
       "journal": journalTitle ? journalTitle.textContent : "",
       "related_article": relatedArticle ? relatedArticle.getAttribute("xlink:href") : "",
       "doi": articleDOI ? articleDOI.textContent : "",
@@ -325,6 +339,43 @@ NlmToLensConverter.Prototype = function() {
     doc.show("info", pubInfoNode.id, 0);
 
     this.enhancePublicationInfo(state, pubInfoNode);
+  };
+
+  this.extractPublicationDates = function(article, volume) {
+      var dates = article.querySelectorAll("pub-date");
+      if (!dates.length) {
+        return {
+          published_on : null,
+          first_published_on : null
+        };
+      }
+      var epub       = article.querySelector("pub-date[pub-type=epub]"),
+          ppub       = article.querySelector("pub-date[pub-type=ppub]"),
+          epub_ppub  = article.querySelector("pub-date[pub-type=epub-ppub]"),
+          collection = article.querySelector("pub-date[pub-type=collection]"),
+          def        = article.querySelector("pub-date:not([pub-type])");
+
+      var pap = volume && volume.toLowerCase() == "publish ahead of print",
+          pubDate = null,
+          firstPubDate = null;
+
+      if (!epub && epub_ppub) epub = epub_ppub;
+      if (!ppub && epub_ppub) ppub = epub_ppub;
+
+      if (epub)            firstPubDate = epub
+      else if (ppub)       firstPubDate = ppub
+      else if (collection) firstPubDate = collection
+      else if (def)         firstPubDate = def;
+
+      if (pap)             pubDate = firstPubDate
+      else if (collection) pubDate = collection
+      else if (ppub)       pubDate = ppub
+      else if (def)        pubDate = def;
+
+      return {
+        first_published_on : this.extractDate(firstPubDate),
+        published_on : this.extractDate(pubDate)
+      };
   };
 
   this.extractArticleInfo = function(state, article) {
@@ -1330,6 +1381,7 @@ NlmToLensConverter.Prototype = function() {
         day = parseInt(value, 10);
       } else if (type === "month") {
         month = this.normalizeMonth(value);
+        month = month ? month : 1;
       } else if (type === "year") {
         year = parseInt(value, 10);
       }

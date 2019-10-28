@@ -17,14 +17,24 @@ var MONTH_MAPPING = {
 
 var util = {};
 
+function getMonthOrSeason(str) {
+  // if month contains non-proper-numeric, we consider it season and show as is.
+  var key = str.replace(/^0/, "");
+  if (MONTH_MAPPING.hasOwnProperty(key)) {
+    return MONTH_MAPPING[key];
+  } else {
+    return str;
+  }
+}
+
 util.formatDate = function (pubDate) {
   if (!pubDate) {
     return "";
   }
-  var parts = pubDate.split("-");
+  var parts = pubDate.split("/");
   var partCount = parts.length;
   var year  = partCount > 0 ? parts[0] : "";
-  var month = partCount > 1 ? MONTH_MAPPING[parts[1].replace(/^0/, "")] : "";
+  var month = partCount > 1 ? getMonthOrSeason(parts[1]) : "";
   var day   = partCount > 2 ? parts[2] : "";
   var dateParts = [];
   if (partCount >= 3) {
@@ -38,9 +48,9 @@ util.formatDate = function (pubDate) {
 };
 
 util.monthSymToNum = function (sym){
-  var num = 1;
+  var num = null;
   _.find(MONTH_MAPPING, function(ms, idx){
-    if(ms==sym){
+    if(ms == sym){
       num = idx;
       return true;
     }

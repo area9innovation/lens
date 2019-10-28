@@ -113,30 +113,28 @@ PublicationInfoView.Prototype = function() {
     //
 
     if (this.node.published_on) {
-      var dayUnknown = false;
+      var info = this.node.published_info;
 
-      var parts = this.node.published_on.split('-');
-      if ( parts.length < 3) {
-        parts.push(1);
-        dayUnknown = true;
+      var pubInfoParts = [];
+      if (info.volume) {
+        pubInfoParts.push(info.volume);
+        if (info.issue) {
+          pubInfoParts.push('(' + info.issue + ')' + (info.fpage ? ':' : ''));
+          if (info.fpage) pubInfoParts.push(info.fpage);
+        }
       }
 
-      var localDate = new Date(parts[0], parts[1]-1, parts[2]);
-      var pubDate = localDate.toDateString().slice(4, 16).replace(/\b0+/g, '').split(' ');
-      var pubInfo = [ this.node.published_info.volume, '(' +this.node.published_info.issue + '):', this.node.published_info.fpage].join(' ');
+      var date = articleUtil.formatDate(this.node.published_on);
 
-      var reorderedDate = [];
-      reorderedDate.push(pubDate[2]);
-      reorderedDate.push(pubDate[0]);
-      if ( !dayUnknown ) {
-        reorderedDate.push(pubDate[1]);
-      }
+      var textParts = [];
+      if (date) textParts.push(date);
+      if (pubInfoParts.length) textParts.push(pubInfoParts.join(' '));
 
       var journalEl = $$('.publishing', {
         children: [
           $$('div.label', {text: "Published"}),
           $$('div.value', {
-            children: [$$('span', { text: reorderedDate.join(' ') + '; ' + pubInfo })]
+            children: [$$('span', { text: textParts.join('; ')})]
           })
         ]
       });

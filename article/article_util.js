@@ -19,18 +19,19 @@ var util = {};
 
 util.formatDate = function (pubDate) {
   var parts = pubDate.split("-");
-  if (parts.length >= 3) {
-    // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
-    // Note: months are 0-based, which are stripped using a regexp
-    var localDate = new Date(parts[0], parts[1]-1, parts[2]);
-    return localDate.toDateString().slice(4, 16).replace(/\b0+/g, '')
+  var partCount = parts.length;
+  var year  = partCount > 0 ? parts[0] : "";
+  var month = partCount > 1 ? MONTH_MAPPING[parts[1].replace(/^0/, "")] : "";
+  var day   = partCount > 2 ? parts[2] : "";
+  var dateParts = [];
+  if (partCount >= 3) {
+    dateParts = [month, day, year];
   } else if (parts.length === 2) {
-    var month = parts[1].replace(/^0/, "");
-    var year = parts[0];
-    return MONTH_MAPPING[month]+" "+year;
-  } else {
-    return year;
+    dateParts = [month, year];
+  } else if (parts.length === 1) {
+    dateParts = [year];
   }
+  return dateParts.join(" ").replace(/\b0+/g, '');
 };
 
 util.monthSymToNum = function (sym){

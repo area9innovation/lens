@@ -18,6 +18,9 @@ var MONTH_MAPPING = {
 var util = {};
 
 util.formatDate = function (pubDate) {
+  if (!pubDate) {
+    return "";
+  }
   var parts = pubDate.split("-");
   var partCount = parts.length;
   var year  = partCount > 0 ? parts[0] : "";

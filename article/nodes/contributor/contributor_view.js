@@ -4,6 +4,7 @@ var _ = require("underscore");
 var NodeView = require("../node").View;
 var $$ = require("../../../substance/application").$$;
 var ResourceView = require('../../resource_view');
+var articleUtil = require("../../article_util");
 
 // Lens.Contributor.View
 // ==========================================================================
@@ -179,7 +180,7 @@ ContributorView.Prototype = function() {
         $$('.contrib-data', {
           children: [
             $$('span.contrib-label', {text: 'ORCID: '}),
-            $$('a.orcid', { href: this.node.orcid, text: this.node.orcid })
+            $$('a.orcid', { href: this.node.orcid, text: articleUtil.extractOrcidId(this.node.orcid) })
           ]
         })
       );

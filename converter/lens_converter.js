@@ -869,10 +869,15 @@ NlmToLensConverter.Prototype = function() {
     // -----------------
     //
     // <uri content-type="orcid" xlink:href="http://orcid.org/0000-0002-7361-560X"/>
-
+    // or
+    // <contrib-id authenticated="false" contrib-id-type="orcid">http://orcid.org/0000-0002-8808-1137</contrib-id>
     var orcidURI = contrib.querySelector("uri[content-type=orcid]");
     if (orcidURI) {
       contribNode.orcid = orcidURI.getAttribute("xlink:href");
+    } else {
+      orcidURI = contrib.querySelector("contrib-id[contrib-id-type=orcid]");
+      if (orcidURI)
+        contribNode.orcid = orcidURI.textContent;
     }
 
     // Extracting equal contributions

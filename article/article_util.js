@@ -60,4 +60,14 @@ util.monthSymToNum = function (sym){
   return num;
 };
 
+util.extractOrcidId = function(orcid_url) {
+    // http://orcid.org/0000-0002-8808-1137
+    var orcid_id = orcid_url;
+    var matches = orcid_url.match(/[\d]{4}-[\d]{4}-[\d]{4}-[\d]{4}/);
+    if (matches && matches.length) {
+      orcid_id = matches[0];
+    }
+    return orcid_id;
+}
+
 module.exports = util;

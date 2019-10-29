@@ -4,7 +4,7 @@ var figuresPanel = new ContainerPanel({
   type: 'resource',
   name: 'figures',
   container: 'figures',
-  title: 'Figures',
+  title: 'Figures & Tables',
   icon: 'fa-picture-o',
   references: ['figure_reference'],
   zoom: true,

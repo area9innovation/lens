@@ -28,6 +28,7 @@ PublicationInfo.type = {
     "subject_link": "string",
     "article_type_link": "string",
     "published_info": "object",
+    "is_pap" : "boolean"
   }
 };
 
@@ -51,7 +52,8 @@ PublicationInfo.description = {
     "research_organisms": "Research Organisms",
     "subjects": "Article Subjects",
     "doi": "Article DOI",
-    "related_article": "DOI of related article if there is any"
+    "related_article": "DOI of related article if there is any",
+    "is_pap" : " if this is a Publish Ahead of Print article"
   }
 };
 

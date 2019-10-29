@@ -245,6 +245,10 @@ NlmToLensConverter.Prototype = function() {
     return monthNum;
   };
 
+  function isPAParticle(volume) {
+    return volume && volume.toLowerCase() == 'publish ahead of print';
+  }
+
   this.extractPublicationInfo = function(state, article) {
     var doc = state.doc;
 
@@ -286,6 +290,7 @@ NlmToLensConverter.Prototype = function() {
 
     var volume = volumeEl ? volumeEl.textContent : '';
     var issue  = issueEl  ? issueEl.textContent : '';
+    var isPAP = isPAParticle(volume);
 
     var fpage = '';
     var fpageEl = articleMeta.querySelector("fpage");
@@ -293,7 +298,7 @@ NlmToLensConverter.Prototype = function() {
       fpage = articleMeta.querySelector("fpage").textContent;
     }
 
-    var pubDates = this.extractPublicationDates(article, volume);
+    var pubDates = this.extractPublicationDates(article, isPAP);
 
     // Create PublicationInfo node
     // ---------------
@@ -324,6 +329,7 @@ NlmToLensConverter.Prototype = function() {
       // TODO: this is in the schema, but seems to be unused
       "provider": "",
       "published_info": {volume: volume, issue: issue, fpage: fpage },
+      "is_pap" : isPAP
     };
 
     for (var i = 0; i < history.length; i++) {
@@ -341,7 +347,7 @@ NlmToLensConverter.Prototype = function() {
     this.enhancePublicationInfo(state, pubInfoNode);
   };
 
-  this.extractPublicationDates = function(article, volume) {
+  this.extractPublicationDates = function(article, isPAP) {
       var dates = article.querySelectorAll("pub-date");
       if (!dates.length) {
         return {
@@ -355,8 +361,7 @@ NlmToLensConverter.Prototype = function() {
           collection = article.querySelector("pub-date[pub-type=collection]"),
           def        = article.querySelector("pub-date:not([pub-type])");
 
-      var pap = volume && volume.toLowerCase() == "publish ahead of print",
-          pubDate = null,
+      var pubDate = null,
           firstPubDate = null;
 
       if (!epub && epub_ppub) epub = epub_ppub;
@@ -367,7 +372,7 @@ NlmToLensConverter.Prototype = function() {
       else if (collection) firstPubDate = collection
       else if (def)         firstPubDate = def;
 
-      if (pap)             pubDate = firstPubDate
+      if (isPAP)           pubDate = firstPubDate
       else if (collection) pubDate = collection
       else if (ppub)       pubDate = ppub
       else if (def)        pubDate = def;

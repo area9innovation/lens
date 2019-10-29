@@ -127,7 +127,7 @@ PublicationInfoView.Prototype = function() {
       var date = articleUtil.formatDate(this.node.published_on);
 
       var textParts = [];
-      if (date) textParts.push(date);
+      if (date && !this.node.is_pap) textParts.push(date);
       if (pubInfoParts.length) textParts.push(pubInfoParts.join(' '));
 
       var journalEl = $$('.publishing', {

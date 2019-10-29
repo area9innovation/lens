@@ -179,7 +179,7 @@ ContributorView.Prototype = function() {
       this.content.appendChild(
         $$('.contrib-data', {
           children: [
-            $$('span.contrib-label', {text: 'ORCID: '}),
+            $$('img.orcid', {}),
             $$('a.orcid', { href: this.node.orcid, text: articleUtil.extractOrcidId(this.node.orcid) })
           ]
         })

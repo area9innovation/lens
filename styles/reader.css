@@ -213,6 +213,17 @@ out (on iOS 5.1), or flicker (on iOS 6). */
   padding-bottom: 8px;
 }
 
+.article .contrib-data img.orcid {
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.2em;
+}
+
+.article .contrib-data a.orcid {
+  vertical-align: middle;
+}
+
 .article .resources .nodes > .content-node[data-id$=author_list].heading.level-3 > .content {
     font-size: 20px;
 }

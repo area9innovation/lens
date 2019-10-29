@@ -36,15 +36,15 @@ util.formatDate = function (pubDate) {
   var year  = partCount > 0 ? parts[0] : "";
   var month = partCount > 1 ? getMonthOrSeason(parts[1]) : "";
   var day   = partCount > 2 ? parts[2] : "";
-  var dateParts = [];
+  var date = "";
   if (partCount >= 3) {
-    dateParts = [month, day, year];
+    date = month + " " + day + ", " + year;
   } else if (parts.length === 2) {
-    dateParts = [month, year];
+    date = month + " " + year;
   } else if (parts.length === 1) {
-    dateParts = [year];
+    date = year;
   }
-  return dateParts.join(" ").replace(/\b0+/g, '');
+  return date.replace(/\b0+/g, '');
 };
 
 util.monthSymToNum = function (sym){

@@ -180,7 +180,7 @@ ContributorView.Prototype = function() {
         $$('.contrib-data', {
           children: [
             $$('img.orcid', {}),
-            $$('a.orcid', { href: this.node.orcid, text: articleUtil.extractOrcidId(this.node.orcid) })
+            $$('a.orcid', { href: this.node.orcid, text: this.node.orcid, target: '_blank' })
           ]
         })
       );

@@ -140,6 +140,7 @@ CitationView.Prototype = function() {
 
       // TODO: Add display citations urls
       // -------
+/*
 
       if (node.citation_urls.length > 0) {
         var citationUrlsEl = $$('.citation-urls');
@@ -154,7 +155,7 @@ CitationView.Prototype = function() {
 
         frag.appendChild(citationUrlsEl);
       }
-
+*/
       if (node.pmid) {
         frag.appendChild($$('span.pubmed', {
           children: [

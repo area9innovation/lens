@@ -525,6 +525,10 @@ span.annotation.formula_reference, span.publication_reference {
   cursor: pointer;
 }
 
+.content-node.citation .link {
+    word-break: break-all;
+}
+
 /* Hover states */
 .content-node .figure_reference:hover { background-color: rgba(145, 187, 4, 0.35); }
 .content-node .citation_reference:hover { background-color: rgba(11, 157, 217, 0.30); }

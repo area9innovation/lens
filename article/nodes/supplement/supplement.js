@@ -7,7 +7,7 @@ var Document = require('../../../substance/document');
 //
 
 var Supplement = function(node, doc) {
-  Document.Composite.call(this, node, doc);
+  Document.Node.call(this, node, doc);
 };
 
 // Type definition
@@ -82,7 +82,7 @@ Supplement.Prototype = function() {
   };
 };
 
-Supplement.Prototype.prototype = Document.Composite.prototype;
+Supplement.Prototype.prototype = Document.Node.prototype;
 Supplement.prototype = new Supplement.Prototype();
 Supplement.prototype.constructor = Supplement;
 

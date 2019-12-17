@@ -5,7 +5,7 @@ var figuresPanel = new ContainerPanel({
   name: 'figures',
   container: 'figures',
   title: 'Figures & Tables',
-  icon: 'fa-picture-o',
+  icon: 'fa-image',
   references: ['figure_reference'],
   zoom: true,
 });

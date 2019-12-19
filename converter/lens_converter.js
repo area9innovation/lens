@@ -141,6 +141,17 @@ NlmToLensConverter.Prototype = function() {
     return html;
   };
 
+  this.selectDirectChild = function(scopeEl, selector) {
+    // Note: if the ':scope' pseudo class was supported by more browsers
+    // it would be the correct selector based solution.
+    // However, for now we do simple filtering.
+    var el = scopeEl.querySelector(selector);
+    if (el && el.parentNode === scopeEl) {
+        return el;
+    }
+    return null;
+  };
+
   this.selectDirectChildren = function(scopeEl, selector) {
     // Note: if the ':scope' pseudo class was supported by more browsers
     // it would be the correct selector based solution.
@@ -719,9 +730,12 @@ NlmToLensConverter.Prototype = function() {
 
   // Note: Substance.Article supports only one author.
   // We use the first author found in the contribGroup for the 'creator' property.
-  this.contribGroup = function(state, contribGroup) {
+  // 'topLevel' is for nested contrib groups. Only contributors from top level group
+  // are authors shown in article title section
+
+  this.contribGroup = function(state, contribGroup, topLevel) {
     var i;
-    var contribs = contribGroup.querySelectorAll("contrib");
+    var contribs = this.selectDirectChildren(contribGroup, "contrib");
     if (contribs.length && !state.doc.nodes.document.authors.length) {
       var h1 = {
         "type" : "heading",
@@ -734,11 +748,11 @@ NlmToLensConverter.Prototype = function() {
     }
 
     for (i = 0; i < contribs.length; i++) {
-      this.contributor(state, contribs[i]);
+      this.contributor(state, contribs[i], topLevel);
     }
     // Extract on-behalf-of element and stick it to the document
     var doc = state.doc;
-    var onBehalfOf = contribGroup.querySelector("on-behalf-of");
+    var onBehalfOf = this.selectDirectChild(contribGroup,"on-behalf-of");
     if (onBehalfOf) doc.on_behalf_of = onBehalfOf.textContent.trim();
   };
 
@@ -812,7 +826,7 @@ NlmToLensConverter.Prototype = function() {
     }
   };
 
-  this.contributor = function(state, contrib) {
+  this.contributor = function(state, contrib, topLevel) {
     var doc = state.doc;
 
     var id = state.nextId("contributor");
@@ -842,13 +856,13 @@ NlmToLensConverter.Prototype = function() {
     contribNode["contributor_type"] = this._contribTypeMapping[contribType];
 
     // Extract role
-    var role = contrib.querySelector("role");
+    var role = this.selectDirectChild(contrib, "role");
     if (role) {
       contribNode["role"] = role.textContent;
     }
 
     // Search for author bio and author image
-    var bio = contrib.querySelector("bio");
+    var bio = this.selectDirectChild(contrib, "bio");
     if (bio) {
       _.each(util.dom.getChildren(bio), function(par) {
         var graphic = par.querySelector("graphic");
@@ -876,30 +890,30 @@ NlmToLensConverter.Prototype = function() {
     // <uri content-type="orcid" xlink:href="http://orcid.org/0000-0002-7361-560X"/>
     // or
     // <contrib-id authenticated="false" contrib-id-type="orcid">http://orcid.org/0000-0002-8808-1137</contrib-id>
-    var orcidURI = contrib.querySelector("uri[content-type=orcid]");
+    var orcidURI = this.selectDirectChild(contrib, "uri[content-type=orcid]");
     if (orcidURI) {
       contribNode.orcid = orcidURI.getAttribute("xlink:href");
     } else {
-      orcidURI = contrib.querySelector("contrib-id[contrib-id-type=orcid]");
+      orcidURI = this.selectDirectChild(contrib, "contrib-id[contrib-id-type=orcid]");
       if (orcidURI)
         contribNode.orcid = orcidURI.textContent;
     }
 
     // Extracting equal contributions
-    var nameEl = contrib.querySelector("name");
+    var collab = this.selectDirectChild(contrib, "collab");
+    var nameEl = this.selectDirectChild(contrib, "name");
     if (nameEl) {
       contribNode.name = this.getName(nameEl);
-    } else {
-      var collab = contrib.querySelector("collab");
+    } else if (collab) {
       // Assuming this is an author group
-      if (collab) {
-        contribNode.name = collab.textContent;
-      } else {
+        contribNode.name = $($(collab).contents().get(0)).text();
+    } else {
         contribNode.name = "N/A";
-      }
     }
 
-    this.extractContributorProperties(state, contrib, contribNode);
+    var collabContribGroup = collab && this.selectDirectChild(collab, "contrib-group");
+
+    this.extractContributorProperties(state, collab ? collab : contrib, contribNode);
 
     // HACK: for cases where no explicit xrefs are given per
     // contributor we assin all available affiliations
@@ -918,17 +932,22 @@ NlmToLensConverter.Prototype = function() {
       });
     }
 
-    if (contrib.getAttribute("contrib-type") === "author") {
+    var isAuthor = contrib.getAttribute("contrib-type") === "author";
+    if (isAuthor && topLevel) {
       doc.nodes.document.authors.push(id);
     }
 
-    var degrees = contrib.querySelector("degrees");
+    var degrees = this.selectDirectChild(contrib, "degrees");
     if (degrees) {
       contribNode.degrees = degrees.textContent;
     }
 
     doc.create(contribNode);
     doc.show("info", contribNode.id);
+
+    if (collabContribGroup) {
+      this.contribGroup(state, collabContribGroup, false);
+    }
   };
 
   this._getEqualContribs = function (state, contrib, contribId) {
@@ -953,7 +972,7 @@ NlmToLensConverter.Prototype = function() {
     var compInterests = [];
 
     // extract affiliations stored as xrefs
-    var xrefs = contrib.querySelectorAll("xref");
+    var xrefs = this.selectDirectChildren(contrib, "xref");
     _.each(xrefs, function(xref) {
       if (xref.getAttribute("ref-type") === "aff") {
         var affId = xref.getAttribute("rid");
@@ -1075,7 +1094,7 @@ NlmToLensConverter.Prototype = function() {
     }
 
     contribNode.competing_interests = compInterests;
-    var memberList = contrib.querySelector("xref[ref-type=other]");
+    var memberList = this.selectDirectChild(contrib, "xref[ref-type=other]");
 
     if (memberList) {
       var memberListId = memberList.getAttribute("rid");
@@ -1275,9 +1294,9 @@ NlmToLensConverter.Prototype = function() {
     // TODO: the spec says, that there may be any combination of
     // 'contrib-group', 'aff', 'aff-alternatives', and 'x'
     var this_ =  this;
-    var contribGroups = article.querySelectorAll("article-meta contrib-group");
+    var contribGroups = article.querySelectorAll("article-meta > contrib-group");
     _.each(contribGroups, function (contribGroup) {
-      this_.contribGroup(state, contribGroup);
+      this_.contribGroup(state, contribGroup, true);
     });
   };
 

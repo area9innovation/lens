@@ -906,7 +906,7 @@ NlmToLensConverter.Prototype = function() {
       contribNode.name = this.getName(nameEl);
     } else if (collab) {
       // Assuming this is an author group
-        contribNode.name = $($(collab).contents().get(0)).text();
+        contribNode.name = $($(collab).contents().get(0)).text().trim();
     } else {
         contribNode.name = "N/A";
     }

@@ -112,6 +112,7 @@ LensController.Prototype = function() {
 
 
   this.openReader = function(panel, focussedNode, fullscreen) {
+    window.dev.trace("openReader - LensController");
     var that = this;
 
     // The article view state

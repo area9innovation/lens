@@ -46,6 +46,7 @@ LensView.Prototype = function() {
   //
 
   this.onStateChanged = function() {
+    window.dev.trace("onStateChanged");
     var state = this.controller.state;
     if (state.context === "reader") {
       this.openReader();
@@ -55,6 +56,7 @@ LensView.Prototype = function() {
   };
 
   this.startLoading = function(msg) {
+    window.dev.trace("startLoading");
     if (!msg) msg = "Loading article";
     $('.spinner-wrapper .message').html(msg);
     $('body').addClass('loading');
@@ -77,6 +79,7 @@ LensView.Prototype = function() {
   //
 
   this.openReader = function() {
+    window.dev.trace("openReader - lens_view");
     var view = this.controller.reader.createView();
     var that = this;
 

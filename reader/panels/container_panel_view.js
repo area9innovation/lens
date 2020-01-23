@@ -8,6 +8,7 @@ var getRelativeBoundingRect = require('../../substance/util/getRelativeBoundingR
 
 // TODO: try to get rid of DocumentController and use the Container node instead
 var ContainerPanelView = function( panelCtrl, viewFactory, config ) {
+  window.dev.trace("ContainerPanelView");
   PanelView.call(this, panelCtrl, config);
 
   this.surface = new Surface( panelCtrl.docCtrl, {
@@ -32,6 +33,7 @@ var ContainerPanelView = function( panelCtrl, viewFactory, config ) {
 ContainerPanelView.Prototype = function() {
 
   this.render = function() {
+    window.dev.trace("render - ContainerPanelView");
     // Hide the whole tab if there is no content
     if (this.getContainer().getLength() === 0) {
       this.hideToggle();

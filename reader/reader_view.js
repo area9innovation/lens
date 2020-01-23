@@ -11,6 +11,7 @@ var $$ = require("../substance/application").$$;
 //
 
 var ReaderView = function(readerCtrl) {
+  window.dev.trace("ReaderView");
   View.call(this);
 
   // Controllers
@@ -110,6 +111,7 @@ ReaderView.Prototype = function() {
   //
 
   this.render = function() {
+    window.dev.trace("render - reader_view");
     var frag = document.createDocumentFragment();
 
     // Prepare doc view
@@ -208,6 +210,7 @@ ReaderView.Prototype = function() {
   // Implicit panel switches happen when someone clicks a figure reference
 
   this.switchPanel = function(panel) {
+    window.dev.trace("switchPanel");
     this.readerCtrl.switchPanel(panel);
     // keep this so that it gets opened when leaving another panel (toggling reference)
     this.lastPanel = panel;
@@ -220,6 +223,7 @@ ReaderView.Prototype = function() {
   // Search for readerCtrl.modifyState occurences
 
   this.updateState = function() {
+    window.dev.trace("updateState");
     var self = this;
     var state = this.readerCtrl.state;
 
@@ -357,6 +361,7 @@ ReaderView.Prototype = function() {
     // - e.g. when an image completed loading
 
     var handcarWorker = function() {
+      window.dev.trace("handcarWorker");
       var imageFillin = this;
       var img = document.createElement('img');
       var deferred = $.Deferred();
@@ -372,7 +377,7 @@ ReaderView.Prototype = function() {
 
       $(img).one('load', deferred.resolve);
 
-      img.src = this.dataset.src;      
+      img.src = this.dataset.src;
     };
 
     if ( focussedPanelView && state.focussedNode ) {
@@ -383,6 +388,7 @@ ReaderView.Prototype = function() {
   };
 
   this.updateScrollbars = function() {
+    window.dev.trace("updateScrollbars");
     var state = this.readerCtrl.state;
     // var currentPanelView = state.panel === "content" ? this.contentView : this.panelViews[state.panel];
     this.contentView.scrollbar.update();
@@ -394,6 +400,7 @@ ReaderView.Prototype = function() {
   };
 
   this.showPanel = function(name) {
+    window.dev.trace("showPanel");
     if (this.panelViews[name]) {
       this.panelViews[name].activate();
       this.el.dataset.context = name;
@@ -412,6 +419,7 @@ ReaderView.Prototype = function() {
   //
 
   this.onToggleResource = function(panel, id, element) {
+    window.dev.trace("onToggleResource");
     if ( element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted_last')
         ||
         !element.classList.contains('highlighted_iterator') && element.classList.contains('highlighted') ) {
@@ -443,9 +451,10 @@ ReaderView.Prototype = function() {
   // --------
 
   this.onToggleResourceReference = function(panel, id, element) {
+    window.dev.trace("onToggleResourceReference");
     $(element).removeClass('highlighted_last highlighted_next');
     this.clearHighlightedIterators();
-    
+
     if (element.classList.contains('highlighted')) {
       this.readerCtrl.modifyState({
         panel: this.lastPanel,
@@ -464,6 +473,7 @@ ReaderView.Prototype = function() {
   };
 
   this.onToggleFullscreen = function(panel, id) {
+    window.dev.trace("onToggleFullscreen");
     var fullscreen = !this.readerCtrl.state.fullscreen;
     this.readerCtrl.modifyState({
       panel: panel,

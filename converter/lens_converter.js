@@ -851,6 +851,16 @@ NlmToLensConverter.Prototype = function() {
 
     // Extract contrib type
     var contribType = contrib.getAttribute("contrib-type");
+    if (!contribType) {
+      return;
+    }
+
+    // do not show some types
+    const ignoredContribTypes = ["author non-byline"];
+    var skip = ignoredContribTypes.some(function(ignored) { return contribType == ignored; });
+    if (skip) {
+      return;
+    }
 
     // Assign human readable version
     contribNode["contributor_type"] = this._contribTypeMapping[contribType];
@@ -932,7 +942,7 @@ NlmToLensConverter.Prototype = function() {
       });
     }
 
-    var isAuthor = contrib.getAttribute("contrib-type") === "author";
+    var isAuthor = contribType === "author";
     if (isAuthor && topLevel) {
       doc.nodes.document.authors.push(id);
     }

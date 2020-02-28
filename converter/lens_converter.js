@@ -925,10 +925,10 @@ NlmToLensConverter.Prototype = function() {
 
     this.extractContributorProperties(state, collab ? collab : contrib, contribNode);
 
-    // HACK: for cases where no explicit xrefs are given per
+    // HACK (disabled for now): for cases where no explicit xrefs are given per
     // contributor we assin all available affiliations
     // unless there is a footnote
-    if (contribNode.affiliations.length === 0 && contribNode.footnotes.length === 0) {
+    if (false && contribNode.affiliations.length === 0 && contribNode.footnotes.length === 0) {
       contribNode.affiliations = state.affiliations;
     }
 

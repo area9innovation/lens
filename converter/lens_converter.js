@@ -1351,7 +1351,34 @@ NlmToLensConverter.Prototype = function() {
       if (fnEl.__converted__) continue;
       this.footnote(state, fnEl);
     }
-  };
+    // references for subtitle notes if not yet
+    if (state.doc.subtitle.notes.length) {
+      state.doc.subtitle.notes.forEach(function(sourceId) {
+        var footnote  = doc.getNodeBySourceId(sourceId);
+        if (footnote) {
+          if (footnote.properties.tag == '') {
+            var id = footnote.properties.id;
+            doc['nodes'][id]['properties']['tag'] = 'author_note';
+          }
+          var fnReference = Object.values(doc.nodes).find(function(node) {
+            return node.properties
+                    && node.properties.id
+                    && node.properties.id == footnote.properties.reference_id
+          });
+          if (!fnReference) {
+            var anno = {
+              id: footnote.properties.reference_id,
+              type: "footnote_reference",
+              path: [footnote.id , "label"],
+              range: [0, footnote.label.length],
+              target: footnote.id
+            };
+            doc.create(anno);
+          }
+        }
+      });
+    }
+  }
 
   this.extractCitations = function(state, xmlDoc) {
     var refList = xmlDoc.querySelector("ref-list");
@@ -2443,7 +2470,7 @@ NlmToLensConverter.Prototype = function() {
 
     doc.create(footnote);
 
-    if (tag && tag == 'author_note' && footnote.label != '') {
+    if (footnote.tag == 'author_note' && footnote.label != '') {
       state.authorNotes.push(fnId);
       var anno = {
         id: fnRef,

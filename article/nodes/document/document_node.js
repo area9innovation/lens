@@ -16,9 +16,10 @@ DocumentNode.type = {
     "title": "string",
     "subtitle": {
         "text": "string",
-        "notes": ["array", "int"]
+        "notes": ["array", "string"]
     },
     "authors": ["array", "contributor"],
+    "authorNotes" : ["array", "string"],
     "on_behalf_of": "string",
     "abstract": "string"
   }

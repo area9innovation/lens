@@ -1296,7 +1296,7 @@ NlmToLensConverter.Prototype = function() {
   this.extractAuthorNotes = function(state, article) {
     var authorNotes =  article.querySelectorAll("author-notes fn");
     for (var i = 0; i < authorNotes.length; i++) {
-      this.footnote(state, authorNotes[i], "author_note");
+      state.doc.authorNotes.push(authorNotes[i].getAttribute('id'));
     }
   };
 
@@ -1351,33 +1351,36 @@ NlmToLensConverter.Prototype = function() {
       if (fnEl.__converted__) continue;
       this.footnote(state, fnEl);
     }
-    // references for subtitle notes if not yet
-    if (state.doc.subtitle.notes.length) {
-      state.doc.subtitle.notes.forEach(function(sourceId) {
-        var footnote  = doc.getNodeBySourceId(sourceId);
-        if (footnote) {
-          if (footnote.properties.tag == '') {
-            var id = footnote.properties.id;
-            doc['nodes'][id]['properties']['tag'] = 'author_note';
-          }
-          var fnReference = Object.values(doc.nodes).find(function(node) {
-            return node.properties
-                    && node.properties.id
-                    && node.properties.id == footnote.properties.reference_id
-          });
-          if (!fnReference) {
-            var anno = {
-              id: footnote.properties.reference_id,
-              type: "footnote_reference",
-              path: [footnote.id , "label"],
-              range: [0, footnote.label.length],
-              target: footnote.id
-            };
-            doc.create(anno);
-          }
-        }
+    this.makeFootnoteReferences(state);
+  }
+
+  this.makeFootnoteReferences = function(state) {
+    var doc = state.doc;
+    var notes = doc.authorNotes.concat(doc.subtitle.notes);
+    notes.forEach(function(sourceId) {
+      var footnote = doc.getNodeBySourceId(sourceId);
+      if (!footnote || !footnote.properties || footnote.properties.label == '') {
+        return;
+      }
+      doc['nodes'][footnote.properties.id]['properties']['tag'] = 'author_note';
+      var refIndex = Object.keys(doc.nodes).findIndex(function(key) {
+        var node = doc.nodes[key];
+        return node.properties
+                && node.properties.id
+                && node.properties.id == footnote.properties.reference_id
       });
-    }
+      if (refIndex == -1) {
+        var anno = {
+          id: footnote.properties.reference_id,
+          type: "footnote_reference",
+          path: [footnote.properties.id , "label"],
+          range: [0, footnote.properties.label.length],
+          target: footnote.properties.id
+        };
+        doc.create(anno);
+        state.bottomNotes.push(footnote.properties.id);
+      }
+    });
   }
 
   this.extractCitations = function(state, xmlDoc) {
@@ -1415,11 +1418,9 @@ NlmToLensConverter.Prototype = function() {
         ignore: ['xref']
       });
       var subtitleNotes =  articleSubtitle.querySelectorAll("xref[rid^='fn']");
-      var notes = [];
       for (var i = 0; i < subtitleNotes.length; i++) {
-        notes.push(subtitleNotes[i].getAttribute('rid'));
+        doc.subtitle.notes.push(subtitleNotes[i].getAttribute('rid'));
       }
-      doc.subtitle.notes = notes;
     }
   };
 
@@ -2470,18 +2471,6 @@ NlmToLensConverter.Prototype = function() {
 
     doc.create(footnote);
 
-    if (footnote.tag == 'author_note' && footnote.label != '') {
-      state.authorNotes.push(fnId);
-      var anno = {
-        id: fnRef,
-        type: "footnote_reference",
-        path: [fnId , "label"],
-        range: [0, footnote.label.length],
-        target: fnId
-      };
-      doc.create(anno);
-    }
-
     // leave a trace for the catch-all converter
     // to know that this has been converted already
     footnoteElement.__converted__ = true;
@@ -3237,8 +3226,8 @@ NlmToLensConverter.State = function(converter, xmlDoc, doc) {
   // Tracks all available affiliations
   this.affiliations = [];
 
-  //Track author notes
-  this.authorNotes = [];
+  //Track author and subtitle notes
+  this.bottomNotes = [];
 
   // an id generator for different types
   var ids = {};

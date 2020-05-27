@@ -37,7 +37,8 @@ var Article = function(options) {
         notes: [] // footnote ids
       },
       abstract: "",
-      authors: []
+      authors: [],
+      authorNotes: [] // footnote ids
     });
 
     // Create views on the doc
@@ -338,6 +339,14 @@ Object.defineProperties(Article.prototype, {
     },
     set: function(subtitle) {
       this.get("document").subtitle = subtitle;
+    }
+  },
+  authorNotes: {
+    get: function () {
+      return this.get("document").authorNotes;
+    },
+    set: function(authorNotes) {
+      this.get("document").authorNotes = authorNotes;
     }
   },
   abstract: {

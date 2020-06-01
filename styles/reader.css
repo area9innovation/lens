@@ -907,11 +907,24 @@ TOC
   display: block !important;
 }
 
-.content-node.footnote > .content.author_note {
-  padding-bottom: 0;
+.content-node.footnote.article-note {
+    padding: 0;
+    border: unset;
+    font-size: 16px;
+    margin: 20px 0 0 0;
 }
 
-.content-node.footnote > .content.author_note > span.label {
+.content-node.footnote > .content.author-note > span.label {
   float:left;
   padding: 0 5px;
+}
+
+.content-node.footnote > .content.article-note > span.label {
+  float:left;
+  padding: 0 5px;
+  width: auto;
+}
+
+.content-node.footnote .content.article-note .content-node {
+  padding: 0;
 }

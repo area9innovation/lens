@@ -412,10 +412,12 @@ NlmToLensConverter.Prototype = function() {
     nodes = nodes.concat(this.extractCustomMetaGroup(state, article));
     // Acknowledgments
     nodes = nodes.concat(this.extractAcknowledgements(state, article));
-    // License and Copyright
-    nodes = nodes.concat(this.extractCopyrightAndLicense(state, article));
     // Notes (<note> elements)
     nodes = nodes.concat(this.extractNotes(state, article));
+    // License and Copyright
+    nodes = nodes.concat(this.extractCopyrightAndLicense(state, article));
+    // Custom notes - datasharing, disclosure, etc.
+    nodes = nodes.concat(this.extractCustomNotes(state, article));
 
     articleInfo.children = nodes;
     doc.create(articleInfo);
@@ -560,10 +562,19 @@ NlmToLensConverter.Prototype = function() {
   };
 
   //
-  // Extracts notes that should be shown in article info
+  // Extracts notes (non-authorship footnotes) that should be shown in article info
   // ------------------------------------------
   //
   this.extractNotes = function(state, article) {
+    /* jshint unused:false */
+    return [];
+  };
+
+  //
+  // Extracts custom notes (disclosure, datasharing, etc.) that should be shown in article info
+  // ------------------------------------------
+  //
+  this.extractCustomNotes = function(state, article) {
     /* jshint unused:false */
     return [];
   };
@@ -1209,7 +1220,7 @@ NlmToLensConverter.Prototype = function() {
     // Extract ArticleMeta
     this.extractArticleMeta(state, article);
 
-    // Populate Publication Info node
+    // Populate Publication Info node. Should go after articleMeta to have subtitle notes in state
     this.extractPublicationInfo(state, article);
 
     var body = article.querySelector("body");
@@ -1295,9 +1306,12 @@ NlmToLensConverter.Prototype = function() {
 
   this.extractAuthorNotes = function(state, article) {
     var authorNotes =  article.querySelectorAll("author-notes fn");
-    for (var i = 0; i < authorNotes.length; i++) {
-      state.doc.authorNotes.push(authorNotes[i].getAttribute('id'));
-    }
+    authorNotes.forEach(function(note) {
+      var fn = this.footnote(state, note, 'author-note');
+      if (fn) {
+        state.doc.authorNotes.push(fn.id);
+      }
+    }, this);
   };
 
   this.extractContributors = function(state, article) {
@@ -1351,10 +1365,10 @@ NlmToLensConverter.Prototype = function() {
       if (fnEl.__converted__) continue;
       this.footnote(state, fnEl);
     }
-    this.makeFootnoteReferences(state);
+    this.makeNoteReferences(state);
   }
 
-  this.makeFootnoteReferences = function(state) {
+  this.makeNoteReferences = function(state) {
     var doc = state.doc;
     var notes = doc.authorNotes.concat(doc.subtitle.notes);
     notes.forEach(function(sourceId) {
@@ -1362,7 +1376,6 @@ NlmToLensConverter.Prototype = function() {
       if (!footnote || !footnote.properties || footnote.properties.label == '') {
         return;
       }
-      doc['nodes'][footnote.properties.id]['properties']['tag'] = 'author_note';
       var refIndex = Object.keys(doc.nodes).findIndex(function(key) {
         var node = doc.nodes[key];
         return node.properties
@@ -1378,7 +1391,6 @@ NlmToLensConverter.Prototype = function() {
           target: footnote.properties.id
         };
         doc.create(anno);
-        state.bottomNotes.push(footnote.properties.id);
       }
     });
   }
@@ -3225,9 +3237,6 @@ NlmToLensConverter.State = function(converter, xmlDoc, doc) {
 
   // Tracks all available affiliations
   this.affiliations = [];
-
-  //Track author and subtitle notes
-  this.bottomNotes = [];
 
   // an id generator for different types
   var ids = {};

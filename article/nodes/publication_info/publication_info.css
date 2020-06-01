@@ -42,3 +42,7 @@
   padding-top: 10px;
 }
 
+.article .resources .nodes > .content-node.publication-info .content-node[data-id=articleinfo] .content-node.footnote.article-note .content-node {
+  padding-top: 0;
+}
+

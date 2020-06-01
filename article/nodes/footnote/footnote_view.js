@@ -11,10 +11,16 @@ var FootnoteView = function(node, viewFactory) {
 };
 
 FootnoteView.Prototype = function() {
+  this.labeledNoteTags = [
+    'author-note',
+    'article-note'
+  ];
   this.render = function() {
     CompositeView.prototype.render.call(this);
-    if (  this.node.properties.tag == 'author_note') {
-      this.content.classList.add("author_note");
+    var tag = this.node.properties.tag;
+    if (this.labeledNoteTags.includes(tag)) {
+      this.$el.context.classList.add(tag);
+      this.content.classList.add(tag);
       var header = $$('span.label', {text: this.node.label});
       $(this.content.children).wrapAll('<span class="note"></span>');
       this.content.insertBefore(header, this.content.firstChild);

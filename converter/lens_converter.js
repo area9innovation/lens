@@ -1307,11 +1307,8 @@ NlmToLensConverter.Prototype = function() {
   this.extractAuthorNotes = function(state, article) {
     var authorNotes =  article.querySelectorAll("author-notes fn");
     authorNotes.forEach(function(note) {
-      var fn = this.footnote(state, note, 'author-note');
-      if (fn) {
-        state.doc.authorNotes.push(fn.id);
-      }
-    }, this);
+      state.doc.authorNotes.push(note.getAttribute('id'));
+    });
   };
 
   this.extractContributors = function(state, article) {
@@ -1430,9 +1427,9 @@ NlmToLensConverter.Prototype = function() {
         ignore: ['xref']
       });
       var subtitleNotes =  articleSubtitle.querySelectorAll("xref[rid^='fn']");
-      for (var i = 0; i < subtitleNotes.length; i++) {
-        doc.subtitle.notes.push(subtitleNotes[i].getAttribute('rid'));
-      }
+      subtitleNotes.forEach(function(note) {
+        doc.subtitle.notes.push(note.getAttribute('rid'));
+      });
     }
   };
 

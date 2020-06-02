@@ -1089,6 +1089,9 @@ NlmToLensConverter.Prototype = function() {
             if (fnLabel) {
               var fnLabelText = fnLabel.textContent;
               var fn = state.doc.getNodeBySourceId(fnElem.getAttribute("id"));
+              if (!fn) {
+                fn = this.footnote(state, fnElem, 'author-note');
+              }
               if (fnLabelText && fn) {
                 contribNode.footnotes.push(fn.id);
                 used = true;

@@ -305,8 +305,11 @@ NlmToLensConverter.Prototype = function() {
 
     var fpage = '';
     var fpageEl = articleMeta.querySelector("fpage");
+    if ( !fpageEl && !isPAP) {
+      fpageEl = articleMeta.querySelector("elocation-id");
+    }
     if ( fpageEl ) {
-      fpage = articleMeta.querySelector("fpage").textContent;
+      fpage = fpageEl.textContent;
     }
 
     var pubDates = this.extractPublicationDates(article, isPAP);

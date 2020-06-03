@@ -3023,6 +3023,9 @@ this.mixedCitation = function(state, ref, citation) {
         else if (!breakOnUnknown) {
           if (state.top().ignore.indexOf(type) < 0) {
             annotatedText = this._getAnnotationText(state, el, type, charPos);
+            if (el.nodeName === 'list-item') {
+              annotatedText += state.doc.linebreak;
+            }
             plainText += annotatedText;
             charPos += annotatedText.length;
           }

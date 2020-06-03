@@ -90,8 +90,17 @@ TextPropertyView.renderAnnotatedText = function(doc, path, el, viewFactory) {
   var annotationViews = [];
   var fragmenter = new Fragmenter();
   fragmenter.onText = function(context, text) {
-    context.appendChild(window.document.createTextNode(text));
-  };
+    var pieces = text.split('<br>');
+    pieces.forEach(function(piece, index) {
+      if (piece.trim() === '') {
+        return;
+      }
+      if (index) {
+        context.appendChild(document.createElement("br"));
+      }
+      context.appendChild(window.document.createTextNode(piece));
+    });
+  }
   fragmenter.onEnter = function(entry, parentContext) {
     var anno = doc.get(entry.id);
     var annotationView = viewFactory.createView(anno);

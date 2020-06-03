@@ -44,7 +44,8 @@
   font-size: 12px;
   border: 1px solid lightgrey;
   /* Enable white-space: nowrap; if author controls wrapping (<br> in HTML)
-  /* white-space: nowrap; */ 
+  /* white-space: nowrap; */
+  vertical-align: top;
 }
 
 .lens-article .content-node.html-table .footers {

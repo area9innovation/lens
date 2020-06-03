@@ -1554,31 +1554,10 @@ NlmToLensConverter.Prototype = function() {
 
   // ### Article.Body
   //
-  this.isAppendixHeadingNode = function(node) {
-    return node.type == 'heading' && node.content.trim().toLowerCase() == 'appendix';
-  }
-
-  this.insertAcknoledgementNodes = function(state, nodes) {
-    var doc = state.doc;
-    if (!doc.acknowledgementNodes.length) {
-      return nodes;
-    }
-    var appendixIndex = nodes.findIndex(this.isAppendixHeadingNode, this);
-    if (appendixIndex == -1) {
-      return nodes.concat(doc.acknowledgementNodes);
-    } else {
-      var appendix = nodes.splice(appendixIndex);
-      return nodes.splice(0, appendixIndex).concat(doc.acknowledgementNodes).concat(appendix);
-    }
-  }
-
-
   this.body = function(state, body) {
     var doc = state.doc;
     var nodes = this.bodyNodes(state, util.dom.getChildren(body));
-    if (doc.acknowledgementNodes.length) {
-      nodes = this.insertAcknoledgementNodes(state, nodes);
-    }
+    nodes = nodes.concat(doc.acknowledgementNodes);
     if (nodes.length > 0) {
       this.show(state, nodes);
     }

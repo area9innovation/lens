@@ -413,14 +413,15 @@ NlmToLensConverter.Prototype = function() {
     nodes = nodes.concat(this.extractDatasets(state, article));
     // Includes meta information (such as impact statement for eLife)
     nodes = nodes.concat(this.extractCustomMetaGroup(state, article));
-    // Acknowledgments
-    nodes = nodes.concat(this.extractAcknowledgements(state, article));
     // Notes (<note> elements)
     nodes = nodes.concat(this.extractNotes(state, article));
     // License and Copyright
     nodes = nodes.concat(this.extractCopyrightAndLicense(state, article));
     // Custom notes - datasharing, disclosure, etc.
     nodes = nodes.concat(this.extractCustomNotes(state, article));
+
+    // Keep acknowledgments aside to insert thenm into the body before appendix
+    doc.acknowledgementNodes = this.extractAcknowledgements(state, article);
 
     articleInfo.children = nodes;
     doc.create(articleInfo);
@@ -543,12 +544,12 @@ NlmToLensConverter.Prototype = function() {
         var header = {
           "type" : "heading",
           "id" : state.nextId("heading"),
-          "level" : 3,
+          "level" : 1,
           "content" : title ? this.capitalized(title.textContent.toLowerCase(), "all") : "Acknowledgements"
         };
 
         doc.create(header);
-        nodes.push(header.id);
+        nodes.push(header);
 
         // There may be multiple paragraphs per ack element
         var pars = this.bodyNodes(state, util.dom.getChildren(ack), {
@@ -556,7 +557,7 @@ NlmToLensConverter.Prototype = function() {
         });
 
         _.each(pars, function(par) {
-          nodes.push(par.id);
+          nodes.push(par);
         });
       }, this);
     }
@@ -1553,10 +1554,31 @@ NlmToLensConverter.Prototype = function() {
 
   // ### Article.Body
   //
+  this.isAppendixHeadingNode = function(node) {
+    return node.type == 'heading' && node.content.trim().toLowerCase() == 'appendix';
+  }
+
+  this.insertAcknoledgementNodes = function(state, nodes) {
+    var doc = state.doc;
+    if (!doc.acknowledgementNodes.length) {
+      return nodes;
+    }
+    var appendixIndex = nodes.findIndex(this.isAppendixHeadingNode, this);
+    if (appendixIndex == -1) {
+      return nodes.concat(doc.acknowledgementNodes);
+    } else {
+      var appendix = nodes.splice(appendixIndex);
+      return nodes.splice(0, appendixIndex).concat(doc.acknowledgementNodes).concat(appendix);
+    }
+  }
+
 
   this.body = function(state, body) {
     var doc = state.doc;
     var nodes = this.bodyNodes(state, util.dom.getChildren(body));
+    if (doc.acknowledgementNodes.length) {
+      nodes = this.insertAcknoledgementNodes(state, nodes);
+    }
     if (nodes.length > 0) {
       this.show(state, nodes);
     }

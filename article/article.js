@@ -34,11 +34,12 @@ var Article = function(options) {
       title: "",
       subtitle: {
         text: "",
-        notes: [] // footnote ids
+        notes: [] // ids from footnote elements
       },
       abstract: "",
       authors: [],
-      authorNotes: [] // footnote ids
+      authorNotes: [], // id from footnote element
+      acknowledgementNodes: [] // we need it to insert acknoledgements into the body
     });
 
     // Create views on the doc
@@ -347,6 +348,14 @@ Object.defineProperties(Article.prototype, {
     },
     set: function(authorNotes) {
       this.get("document").authorNotes = authorNotes;
+    }
+  },
+  acknowledgementNodes: {
+    get: function () {
+      return this.get("document").acknowledgementNodes;
+    },
+    set: function(acknowledgementNodes) {
+      this.get("document").acknowledgementNodes = acknowledgementNodes;
     }
   },
   abstract: {

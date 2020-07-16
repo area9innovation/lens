@@ -2981,8 +2981,10 @@ this.mixedCitation = function(state, ref, citation) {
   // As annotations are nested this is a bit more involved and meant for
   // internal use only.
   //
-  this._annotatedText = function(state, iterator, options) {
+  this._annotatedText = function(state, iterator, options, parentNode) {
+    var parentNodeName = parentNode ? parentNode.nodeName : "";
     var plainText = "";
+    var linebreak = '<br>';
 
     var charPos = (options.offset === undefined) ? 0 : options.offset;
     var nested = !!options.nested;
@@ -3023,8 +3025,12 @@ this.mixedCitation = function(state, ref, citation) {
         else if (!breakOnUnknown) {
           if (state.top().ignore.indexOf(type) < 0) {
             annotatedText = this._getAnnotationText(state, el, type, charPos);
+            // workaround to better show lists in tables
             if (el.nodeName === 'list-item') {
-              annotatedText += state.doc.linebreak;
+              annotatedText += linebreak;
+            }
+            if (parentNodeName === 'list-item' &&  el.nodeName === 'label') {
+              annotatedText += ' ';
             }
             plainText += annotatedText;
             charPos += annotatedText.length;
@@ -3058,7 +3064,7 @@ this.mixedCitation = function(state, ref, citation) {
     // recurse into the annotation element to collect nested annotations
     // and the contained plain text
     var childIterator = new util.dom.ChildNodeIterator(el);
-    var annotatedText = this._annotatedText(state, childIterator, { offset: charPos, nested: true });
+    var annotatedText = this._annotatedText(state, childIterator, { offset: charPos, nested: true }, el);
     return annotatedText;
   };
 

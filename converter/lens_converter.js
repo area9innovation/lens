@@ -2982,14 +2982,14 @@ this.mixedCitation = function(state, ref, citation) {
   // As annotations are nested this is a bit more involved and meant for
   // internal use only.
   //
-  this._annotatedText = function(state, iterator, options, parentNode) {
-    var parentNodeName = parentNode ? parentNode.nodeName : "";
+  this._annotatedText = function(state, iterator, options) {
     var plainText = "";
     var linebreak = '<br>';
 
     var charPos = (options.offset === undefined) ? 0 : options.offset;
     var nested = !!options.nested;
     var breakOnUnknown = !!options.breakOnUnknown;
+    var listType = (options.list_type === undefined) ? 0 : options.list_type;
 
     while(iterator.hasNext()) {
       var el = iterator.next();
@@ -3025,12 +3025,20 @@ this.mixedCitation = function(state, ref, citation) {
         // Unsupported...
         else if (!breakOnUnknown) {
           if (state.top().ignore.indexOf(type) < 0) {
-            annotatedText = this._getAnnotationText(state, el, type, charPos);
-            // workaround to better show lists in tables
+            if (el.nodeName === 'list') {
+              var type = el.getAttribute('list-type');
+              if (type) {
+                options['list_type'] = type;
+              }
+            }
+            annotatedText = this._getAnnotationText(state, el, type, charPos, options);
             if (el.nodeName === 'list-item') {
+              if (listType === 'bullet') {
+                annotatedText = '\u2022 ' + annotatedText;
+              }
               annotatedText += linebreak;
             }
-            if (parentNodeName === 'list-item' &&  el.nodeName === 'label') {
+            if (el.parentNode.nodeName === 'list-item' &&  el.nodeName === 'label') {
               annotatedText += ' ';
             }
             plainText += annotatedText;
@@ -3061,11 +3069,12 @@ this.mixedCitation = function(state, ref, citation) {
 
   this._annotationTextHandler = {};
 
-  this._getAnnotationText = function(state, el, type, charPos) {
+  this._getAnnotationText = function(state, el, type, charPos, options) {
     // recurse into the annotation element to collect nested annotations
     // and the contained plain text
     var childIterator = new util.dom.ChildNodeIterator(el);
-    var annotatedText = this._annotatedText(state, childIterator, { offset: charPos, nested: true }, el);
+    options = Object.assign({}, options || {}, { offset: charPos, nested: true });
+    var annotatedText = this._annotatedText(state, childIterator, options);
     return annotatedText;
   };
 

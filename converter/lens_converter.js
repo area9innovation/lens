@@ -2985,6 +2985,7 @@ this.mixedCitation = function(state, ref, citation) {
   this._annotatedText = function(state, iterator, options) {
     var plainText = "";
     var linebreak = '<br>';
+    var bulletChar = '\u2022';
 
     var charPos = (options.offset === undefined) ? 0 : options.offset;
     var nested = !!options.nested;
@@ -3034,7 +3035,7 @@ this.mixedCitation = function(state, ref, citation) {
             annotatedText = this._getAnnotationText(state, el, type, charPos, options);
             if (el.nodeName === 'list-item') {
               if (listType === 'bullet') {
-                annotatedText = '\u2022 ' + annotatedText;
+                annotatedText = bulletChar + ' ' + annotatedText;
               }
               annotatedText += linebreak;
             }

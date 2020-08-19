@@ -55,6 +55,19 @@ ListView.Prototype = function() {
       if (child instanceof List) {
         var nestedListEl = childView.render().el;
         if( lastEl ) {
+          if (lastEl.nodeName.toLowerCase() == 'li') {
+            if (lastEl.parentElement.classList.contains('nested-level-1')) {
+              nestedListEl.classList.add('nested-level-2');
+            } else if (lastEl.parentElement.classList.contains('nested-level-2')) {
+              nestedListEl.classList.add('nested-level-3');
+            } else if (lastEl.parentElement.classList.contains('nested-level-3')) {
+              nestedListEl.classList.add('nested-level-4');
+            } else if (lastEl.parentElement.classList.contains('nested-level-4')) {
+              nestedListEl.classList.add('nested-level-5');
+            } else {
+              nestedListEl.classList.add('nested-level-1');
+            }
+          }
           lastEl.appendChild(nestedListEl);
         }
       } else {

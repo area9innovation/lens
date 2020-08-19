@@ -39,6 +39,24 @@
   font-size: 17px;
 }
 
+.content-node.list.nested-level-1 {
+  margin-left: 16px;
+}
+
+.content-node.list.nested-level-2 {
+  margin-left: 32px;
+}
+
+.content-node.list.nested-level-3 {
+  margin-left: 48px;
+}
+.content-node.list.nested-level-4 {
+  margin-left: 64px;
+}
+.content-node.list.nested-level-5 {
+  margin-left: 80px;
+}
+
 ul.simple {
   list-style-type: none;
 }
@@ -49,6 +67,7 @@ ul.simple li .label {
   float: left;
   left: -40px;
   width: 0;
+  white-space: nowrap;
 }
 
 ul ul {

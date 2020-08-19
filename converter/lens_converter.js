@@ -2007,7 +2007,7 @@ NlmToLensConverter.Prototype = function() {
       "type": "list",
       "items": [],
       "list_type": "simple",
-      "labels": [],
+      "labels": []
     };
 
     var listType = this.listTypesMap[list.getAttribute("list-type")];
@@ -2019,7 +2019,7 @@ NlmToLensConverter.Prototype = function() {
     for (var i = 0; i < listItems.length; i++) {
       var listItem = listItems[i];
 
-      var label = listItem.querySelector("label");
+      var label = this.selectDirectChild(listItem, "label");
       listNode.labels.push(label ? label.textContent : null );
 
       // Note: we do not care much about what is served as items

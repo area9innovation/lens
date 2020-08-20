@@ -2329,9 +2329,9 @@ NlmToLensConverter.Prototype = function() {
     };
 
     // Note: using a DOM div element to create HTML
-    var table = tableWrap.querySelector("table");
-    if (table) {
-      tableNode.table = this.tableToTable(state, table, [tableNode.id, 'annotated_text', 0], tableNode.annotated_text);
+    var tables = tableWrap.querySelectorAll("table");
+    if (tables.length) {
+      tableNode.table = this.tablesToTable(state, tables, tableNode);
     }
 
     var image = tableWrap.querySelector("graphic");
@@ -2356,6 +2356,20 @@ NlmToLensConverter.Prototype = function() {
       console.error('caption node not found for', tableWrap);
     }
   };
+
+  this.tablesToTable = function(state, tableEls, tableNode) {
+    var table;
+    tableEls.forEach(function(tableEl){
+       var t = this.tableToTable(state, tableEl, [tableNode.id, 'annotated_text', 0], tableNode.annotated_text);
+       var nodes = t.childrens || [];
+       table = {
+          name: table ? table.name : t.name,
+          attributes: table ? table.attributes : t.attributes,
+          childrens : table ? table.childrens.concat(nodes) : nodes
+       }
+    }, this);
+    return table;
+  }
 
   this.tableToTable = function(state, el, path, at) {
     var this_ = this;

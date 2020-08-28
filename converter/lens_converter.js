@@ -3053,11 +3053,15 @@ this.mixedCitation = function(state, ref, citation) {
 
             var prefix = '';
             if (el.nodeName === 'list-item') {
-              if (listType === 'bullet') {
+              var withLabel = !!this.selectDirectChild(el, 'label');
+              if (listType === 'bullet' && !withLabel) {
                 prefix = bulletChar;
               }
               if (listType === 'order' && options.list_order) {
-                prefix = (options.list_order++) + '.';
+                if (!withLabel) {
+                  prefix = options.list_order + '.';
+                }
+                options.list_order++;
               }
             }
             if (prefix !== '') {

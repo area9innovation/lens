@@ -3004,7 +3004,7 @@ this.mixedCitation = function(state, ref, citation) {
     var charPos = (options.offset === undefined) ? 0 : options.offset;
     var nested = !!options.nested;
     var breakOnUnknown = !!options.breakOnUnknown;
-    var listType = (options.list_type === undefined) ? 0 : options.list_type;
+    var listType = (options.list_type === undefined) ? '' : options.list_type;
 
     while(iterator.hasNext()) {
       var el = iterator.next();
@@ -3040,22 +3040,41 @@ this.mixedCitation = function(state, ref, citation) {
         // Unsupported...
         else if (!breakOnUnknown) {
           if (state.top().ignore.indexOf(type) < 0) {
+            // assume that table stuff goes here
             if (el.nodeName === 'list') {
               var type = el.getAttribute('list-type');
               if (type) {
                 options['list_type'] = type;
+                if (type === 'order') {
+                  options['list_order'] = 1;
+                }
               }
             }
-            annotatedText = this._getAnnotationText(state, el, type, charPos, options);
+
+            var prefix = '';
             if (el.nodeName === 'list-item') {
               if (listType === 'bullet') {
-                annotatedText = bulletChar + ' ' + annotatedText;
+                prefix = bulletChar;
               }
-              annotatedText += linebreak;
+              if (listType === 'order' && options.list_order) {
+                prefix = (options.list_order++) + '.';
+              }
+            }
+            if (prefix !== '') {
+              prefix += ' ';
+            }
+
+            annotatedText = this._getAnnotationText(state, el, type, charPos, options);
+
+            var suffix = '';
+            if (el.nodeName === 'list-item') {
+              suffix = linebreak;
             }
             if (el.parentNode.nodeName === 'list-item' &&  el.nodeName === 'label') {
-              annotatedText += ' ';
+              suffix = ' ';
             }
+
+            annotatedText = prefix + annotatedText + suffix;
             plainText += annotatedText;
             charPos += annotatedText.length;
           }

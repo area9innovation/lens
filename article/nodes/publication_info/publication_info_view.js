@@ -145,7 +145,7 @@ PublicationInfoView.Prototype = function() {
     //
 
     if (this.node.doi) {
-      var doiEl = $$('.doi.container', {
+      var doiEl = $$('.doi', {
         children: [
           $$('div.label', {text: "DOI"}),
           $$('div.value', {
@@ -159,16 +159,18 @@ PublicationInfoView.Prototype = function() {
     // Related Article
     //
 
-    if (this.node.related_article) {
-      var relatedArticleEl = $$('.related-article.container', {
-        children: [
-          $$('div.label', {text: "Related Article"}),
-          $$('div.value', {
-            children: [$$('a', {href: this.node.related_article, text: this.node.related_article})]
-          })
-        ]
+    if (this.node.related_articles.length) {
+      this.node.related_articles.forEach(function(ra) {
+        var relatedArticleEl = $$('.related-article', {
+          children: [
+            $$('div.label', {text: "Related Article"}),
+            $$('div.value', {
+              children: [$$('a', {href: ra.href, text: ra.text, target: "_blank"})]
+            })
+          ]
+        });
+        metaData.appendChild(relatedArticleEl);
       });
-      metaData.appendChild(relatedArticleEl);
     }
 
     var historyEl = this.describePublicationHistory();

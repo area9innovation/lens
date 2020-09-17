@@ -11,8 +11,8 @@
   width: 100%;
 }
 
-.lens-article .content-node.publication-info .meta-data > .container {
-  margin-bottom: 10px;
+.lens-article .content-node.publication-info .meta-data > .dates {
+  margin-top: 10px;
 }
 
 .lens-article .content-node.publication-info .label {

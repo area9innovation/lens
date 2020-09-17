@@ -260,6 +260,29 @@ NlmToLensConverter.Prototype = function() {
     return volume && volume.toLowerCase() == 'publish ahead of print';
   }
 
+  this.extractRelatedArticles = function(article) {
+    // Related articles if exists
+    var relatedArticles = article.querySelectorAll("related-article");
+    var result = [];
+    for (var i = 0; i < relatedArticles.length; i++) {
+      var ra = relatedArticles[i];
+      var type = ra.getAttribute("ext-link-type");
+      var doiType = type && type == "doi";
+      var href =  ra.getAttribute("xlink:href");
+      if (!href) {
+        continue;
+      }
+      var text = href;
+      var link = href;
+      if (doiType) {
+        var readerLink = ra.getAttribute("reader_link");
+        link = readerLink ? readerLink : ("http://dx.doi.org/" + href);
+      }
+      result.push({href : link, text : text});
+    }
+    return result;
+  }
+
   this.extractPublicationInfo = function(state, article) {
     var doc = state.doc;
 
@@ -284,11 +307,6 @@ NlmToLensConverter.Prototype = function() {
     // </subj-group>
 
     var subjects = articleMeta.querySelectorAll("subj-group[subj-group-type=heading] subject");
-
-    // Related article if exists
-    //
-    // TODO: can't there be more than one?
-    var relatedArticle = article.querySelector("related-article");
 
     // Article information
     var articleInfo = this.extractArticleInfo(state, article);
@@ -323,7 +341,7 @@ NlmToLensConverter.Prototype = function() {
       "first_published_on": pubDates.first_published_on,
       "published_on": pubDates.published_on,
       "journal": journalTitle ? journalTitle.textContent : "",
-      "related_article": relatedArticle ? relatedArticle.getAttribute("xlink:href") : "",
+      "related_articles": this.extractRelatedArticles(article),
       "doi": articleDOI ? articleDOI.textContent : "",
       "article_info": articleInfo.id,
       "funding_info": fundingInfo,

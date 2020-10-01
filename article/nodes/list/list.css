@@ -70,6 +70,10 @@ ul.simple li .label {
   white-space: nowrap;
 }
 
+.list[class*='nested-level'] ul.simple li .label {
+  left: -16px;
+}
+
 ul ul {
   padding-left: 0px;
 }

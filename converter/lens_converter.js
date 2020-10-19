@@ -2099,6 +2099,15 @@ NlmToLensConverter.Prototype = function() {
     var caption = figureGroup.querySelector('caption');
     if (caption) {
       var captionNode = this.caption(state, caption);
+      if (captionNode && !captionNode.children.length) {
+        var t1 = {
+          "type": "text",
+          "id" : state.nextId("text"),
+          "content": ""
+        };
+        doc.create(t1);
+        captionNode.children.push(t1.id);
+      }
       if (captionNode) figureGroupNode.caption = captionNode.id;
     }
 

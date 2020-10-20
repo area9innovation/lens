@@ -18,6 +18,10 @@ var TextView = function(node, viewFactory, options) {
 
   this.$el.addClass('text');
 
+  if (node.getLength() === 0) {
+    this.$el.addClass("text-empty");
+  }
+
   if (options.classes) {
     this.$el.addClass(options.classes);
   }

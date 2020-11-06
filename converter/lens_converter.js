@@ -3144,7 +3144,7 @@ this.mixedCitation = function(state, ref, citation) {
   };
 
   this._annotationTextHandler['ext-link'] = function(state, el, type, charPos) {
-    var annotatedText = this._getAnnotationText(state, el, charPos);
+    var annotatedText = this._getAnnotationText(state, el, type, charPos);
     // Shorten label for URL links (i.e. if label === url )
     if (false && type === 'ext-link' && el.getAttribute('xlink:href') === annotatedText.trim()) {
       annotatedText = this.shortenLinkLabel(state, annotatedText);

@@ -2150,22 +2150,36 @@ NlmToLensConverter.Prototype = function() {
       figureNode.label = this.annotatedText(state, labelEl, [figureNode.id, 'label']);
     }
 
-    // Add a caption if available
-    var caption = figure.querySelector("caption");
-    if (caption) {
-      var captionNode = this.caption(state, caption);
-      if (captionNode && !captionNode.children.length) {
-        var t1 = {
-          "type": "text",
-          "id" : state.nextId("text"),
-          "content": ""
-        };
-        doc.create(t1);
-        captionNode.children.push(t1.id);
-      }
-      if (captionNode) figureNode.caption = captionNode.id;
+    // Add a caption, if not available then create it
+    var caption = figure.querySelector("caption"),
+      captionNode;
+
+    if (caption) captionNode = this.caption(state, caption);
+    else {
+      captionNode = {
+        "id": state.nextId("caption"),
+        "source_id": "",
+        "type": "caption",
+        "title": "",
+        "children": []
+      };
+
+      doc.create(captionNode);
     }
 
+    if (captionNode && !captionNode.children.length) {
+      var t1 = {
+        "type": "text",
+        "id" : state.nextId("text"),
+        "content": ""
+      };
+      doc.create(t1);
+      captionNode.children.push(t1.id);
+    }
+
+    if (captionNode) figureNode.caption = captionNode.id;
+
+    //
     var attrib = figure.querySelector("attrib");
     if (attrib) {
       figureNode.attrib = attrib.textContent;

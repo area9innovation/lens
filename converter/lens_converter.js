@@ -945,6 +945,7 @@ NlmToLensConverter.Prototype = function() {
     // Extracting equal contributions
     var collab = this.selectDirectChild(contrib, "collab");
     var collabContribGroup = collab && this.selectDirectChild(collab, "contrib-group");
+    var collabHasTags = collab && util.dom.getChildren(collab).length;
 
     var nameEl = this.selectDirectChild(contrib, "name");
 
@@ -957,7 +958,8 @@ NlmToLensConverter.Prototype = function() {
         contribNode.name = "N/A";
     }
 
-    this.extractContributorProperties(state, collabContribGroup ? collab : contrib, contribNode);
+    var propertyHolder = collabContribGroup || collabHasTags ? collab : contrib;
+    this.extractContributorProperties(state, propertyHolder, contribNode);
 
     // HACK (disabled for now): for cases where no explicit xrefs are given per
     // contributor we assin all available affiliations

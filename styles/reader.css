@@ -582,7 +582,7 @@ span.annotation.formula_reference, span.publication_reference {
 }
 
 .surface.content .nodes > .content-node.quote {
-  padding-left: 64px;
+  padding-left: 80px;
 }
 /* For the resources panel
 ----------------------------------------------------------------------- */

@@ -12,7 +12,7 @@ Figure.type = {
   "properties": {
     "source_id": "string",
     "label": "string",
-    "url": "string",
+    "urls": "array",
     "caption": "caption",
     "position": "string", // 'float': default;figure goes into figure panel | 'anchor': figure is rendered in-flow
     "attrib": "string",
@@ -35,7 +35,7 @@ Figure.description = {
   ],
   "properties": {
     "label": "Label used as header for the figure cards",
-    "url": "Image url",
+    "urls": "Image urls",
     "caption": "A reference to a caption node that describes the figure",
     "attrib": "Figure attribution"
   }
@@ -48,7 +48,7 @@ Figure.description = {
 Figure.example = {
   "id": "figure_1",
   "label": "Figure 1",
-  "url": "http://example.com/fig1.png",
+  "urls": ["http://example.com/fig1.png"],
   "caption": "caption_1"
 };
 

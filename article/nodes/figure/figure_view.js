@@ -12,7 +12,7 @@ var NodeView = require("../node").View;
 var FigureView = function(node, viewFactory, options) {
   CompositeView.call(this, node, viewFactory);
 
-  
+
   // Mix-in
   ResourceView.call(this, options);
 };
@@ -32,32 +32,36 @@ FigureView.Prototype = function() {
     this.options.focus = this.node.referenced;
 
     NodeView.prototype.render.call(this);
-    
+
     if ( this.node.referenced ) {
       this.renderHeader();
     }
-    
+
     this.renderBody();
     return this;
   };
 
   this.renderBody = function() {
+    dev.trace("render figure original");
+
     if ( !this.node.referenced ) {
       this.content.appendChild($$('.label', {text: this.node.label}));
     }
 
-    if (this.node.url) {
-      // Add graphic (img element)
-      var imgEl = $$('.image-wrapper', {
-        children: [
-          $$("a", {
-            href: this.node.url,
-            target: "_blank",
-            children: [$$("span", {"data-src": this.node.url, "data-id": this.node.id})]
-          })
-        ]
-      });
-      this.content.appendChild(imgEl);
+    if (this.node.urls.length) {
+      this.node.urls.forEach(function(url) {
+        // Add graphic (img element)
+        var imgEl = $$('.image-wrapper', {
+          children: [
+            $$("a", {
+              href: url,
+              target: "_blank",
+              children: [$$("span", {"data-src": url, "data-id": this.node.id})]
+            })
+          ]
+        });
+        this.content.appendChild(imgEl);
+      }, this);
     }
     this.renderChildren();
     // Attrib

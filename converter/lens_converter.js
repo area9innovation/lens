@@ -2136,7 +2136,7 @@ NlmToLensConverter.Prototype = function() {
       "id": state.nextId("figure"),
       "source_id": figure.getAttribute("id"),
       "label": "",
-      "url": "",
+      "urls": [],
       "caption": null,
       referenced:
         (state.xmlDoc.querySelectorAll('fig xref[rid='+ figure.getAttribute('id') +']').length
@@ -3228,10 +3228,12 @@ this.mixedCitation = function(state, ref, citation) {
 
   // Implements resolving of relative urls
   this.enhanceFigure = function(state, node, element) {
-    var graphic = element.querySelector("graphic");
-    if( graphic ) {
-      var url = graphic.getAttribute("xlink:href");
-      node.url = this.resolveURL(state, url);
+    var graphics = element.querySelectorAll("graphic");
+    if( graphics.length ) {
+      graphics.forEach(function(graphic) {
+        var url = graphic.getAttribute("xlink:href");
+        node.urls.push(this.resolveURL(state, url));
+      }, this);
     } else {
       console.log('PL error: fig without graphic');
     }

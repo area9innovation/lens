@@ -256,7 +256,7 @@ NlmToLensConverter.Prototype = function() {
     return monthNum;
   };
 
-  function isPAParticle(volume) {
+  this.isPAParticle = function (volume) {
     return volume && volume.toLowerCase() == 'publish ahead of print';
   }
 
@@ -319,7 +319,7 @@ NlmToLensConverter.Prototype = function() {
 
     var volume = volumeEl ? volumeEl.textContent : '';
     var issue  = issueEl  ? issueEl.textContent : '';
-    var isPAP = isPAParticle(volume);
+    var isPAP = this.isPAParticle(volume);
 
     var fpage = '';
     var fpageEl = articleMeta.querySelector("fpage");

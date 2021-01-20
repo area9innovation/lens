@@ -25,6 +25,7 @@ CoverView.Prototype = function() {
   //   .doi
 
   this.render = function() {
+    dev.trace("render - Cover");
     NodeView.prototype.render.call(this);
 
     var node = this.node;
@@ -49,7 +50,7 @@ CoverView.Prototype = function() {
         this.content.appendChild($$('.footnotes', {
           children: _.map(subtitle.notes, function(fnId) {
             var fn = doc.getNodeBySourceId(fnId);
-            if (fn.label.length > 0 ) {
+            if (fn && fn.label.length > 0 ) {
               subtitleEl.appendChild($$('span.label .annotation .cross_reference .subtitle',
                 {'data-id': fn.properties.reference_id, text: fn.label}
               ));
@@ -90,13 +91,11 @@ CoverView.Prototype = function() {
         if (articleType) {
           if (pubInfo.article_type_link) {
             var linkData = pubInfo.getArticleTypeLink()
-            items.unshift('<a href="'+linkData.url+'">'+linkData.name+'</a>')
+            items.unshift('<a href="' + linkData.url + '">' + linkData.name + '</a>')
           } else {
             items.unshift(articleType)
           }
-
         }
-
       }
     }
 
@@ -119,9 +118,9 @@ CoverView.Prototype = function() {
           }));
 
         } else {
-          linksEl.appendChild($$('a.'+link.type, {
+          linksEl.appendChild($$('a.' + link.type, {
             href: link.url,
-            html: '<i class="fa fa-external-link-square"></i> '+ link.name,
+            html: '<i class="fa fa-external-link-square"></i> ' + link.name,
             target: '_blank'
           }));
         }

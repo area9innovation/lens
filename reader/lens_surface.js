@@ -26,6 +26,7 @@ var LensSurface = function(docCtrl, options) {
 LensSurface.Prototype = function() {
 
   this.render = function() {
+    dev.trace("render - LensSurface");
     this.$nodes.html(this.build());
     return this;
   };
@@ -35,6 +36,7 @@ LensSurface.Prototype = function() {
   };
 
   this.build = function() {
+    dev.trace("LensSurface - build");
     var frag = document.createDocumentFragment();
     _.each(this.nodes, function(nodeView) {
       nodeView.dispose();
@@ -42,6 +44,7 @@ LensSurface.Prototype = function() {
     this.nodes = {};
     var docNodes = this.docCtrl.container.getTopLevelNodes();
     _.each(docNodes, function(n) {
+      dev.trace("LensSurface - render node - " + (n.properties.type || ""));
       var view = this.renderNodeView(n);
       this.nodes[n.id] = view;
       frag.appendChild(view.el);
@@ -50,6 +53,7 @@ LensSurface.Prototype = function() {
   };
 
   this.renderNodeView = function(n) {
+    dev.trace("LensSurface - renderNodeView");
     var view = this.viewFactory.createView(n, { topLevel: true });
     view.render();
     return view;

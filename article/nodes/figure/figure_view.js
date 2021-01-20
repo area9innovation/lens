@@ -33,7 +33,7 @@ FigureView.Prototype = function() {
 
     NodeView.prototype.render.call(this);
 
-    if ( this.node.referenced ) {
+    if ( true || this.node.referenced ) {
       this.renderHeader();
     }
 
@@ -43,11 +43,11 @@ FigureView.Prototype = function() {
 
   this.renderBody = function() {
     dev.trace("render figure original");
-
+/*
     if ( !this.node.referenced ) {
       this.content.appendChild($$('.label', {text: this.node.label}));
     }
-
+*/
     if (this.node.urls.length) {
       this.node.urls.forEach(function(url) {
         // Add graphic (img element)

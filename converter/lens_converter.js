@@ -433,6 +433,8 @@ NlmToLensConverter.Prototype = function() {
     nodes = nodes.concat(this.extractCustomMetaGroup(state, article));
     // Notes (<note> elements)
     nodes = nodes.concat(this.extractNotes(state, article));
+    // Keywords
+    nodes = nodes.concat(this.extractKeywords(state, article));
     // License and Copyright
     nodes = nodes.concat(this.extractCopyrightAndLicense(state, article));
     // Custom notes - datasharing, disclosure, etc.
@@ -588,6 +590,11 @@ NlmToLensConverter.Prototype = function() {
   // ------------------------------------------
   //
   this.extractNotes = function(state, article) {
+    /* jshint unused:false */
+    return [];
+  };
+
+  this.extractKeywords = function(state, article) {
     /* jshint unused:false */
     return [];
   };

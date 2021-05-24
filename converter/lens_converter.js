@@ -115,14 +115,29 @@ NlmToLensConverter.Prototype = function() {
     var surnameEl = nameEl.querySelector("surname");
     var givenNamesEl = nameEl.querySelector("given-names");
     var suffix = nameEl.querySelector("suffix");
+    var prefix = nameEl.querySelector("prefix");
 
     if (givenNamesEl) names.push(givenNamesEl.textContent.trim());
     if (surnameEl) names.push(surnameEl.textContent.trim());
 
     name = names.join(" ");
 
-    if (name != "" && suffix && suffix.textContent.trim() !== "") {
-      name = [name, suffix.textContent.trim()].join(", ");
+    if (name === "") {
+      return name;
+    }
+
+    if (prefix) {
+      prefix = prefix.textContent.trim();
+      if (prefix !== "") {
+        name = prefix + " " + name;
+      }
+    }
+
+    if (suffix) {
+      suffix = suffix.textContent.trim();
+      if (suffix !== "") {
+        name = name + ", " + suffix;
+      }
     }
 
     return name;

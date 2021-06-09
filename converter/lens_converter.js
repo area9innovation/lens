@@ -2069,6 +2069,10 @@ NlmToLensConverter.Prototype = function() {
       // They will be extract as sibling items
       var nodes = this.bodyNodes(state, util.dom.getChildren(listItem), {ignore: ["label"]});
       for (var j = 0; j < nodes.length; j++) {
+        if (j > 0) {
+          // length of labels have to be same as length of nodes, otherwise labels are shown wrong
+          listNode.labels.push(null);
+        }
         listNode.items.push(nodes[j].id);
       }
     }

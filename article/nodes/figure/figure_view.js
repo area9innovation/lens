@@ -49,6 +49,10 @@ FigureView.Prototype = function() {
     }
 */
     if (this.node.urls.length) {
+      var u = new URL(location),
+        hash = u.hash.replace(/^.+\//, ''),
+        topics = u.searchParams.get('topics').split(/\+/);
+
       this.node.urls.forEach(function(url) {
         // Add graphic (img element)
         var imgEl = $$('.image-wrapper', {
@@ -60,6 +64,18 @@ FigureView.Prototype = function() {
             })
           ]
         });
+
+        if (hash == this.node.id) {
+          var u = new URL(url),
+            p = u.searchParams,
+            id = p.get('id'),
+            name = p.get('name');
+
+          imgEl.classList.add('jbjs_tracking');
+          imgEl.setAttribute('jbjs_tracking_type', 'image');
+          imgEl.setAttribute('jbjs_tracking_data', JSON.stringify({ id, name, topics }));
+        }
+
         this.content.appendChild(imgEl);
       }, this);
     }

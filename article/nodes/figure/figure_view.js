@@ -49,9 +49,11 @@ FigureView.Prototype = function() {
     }
 */
     if (this.node.urls.length) {
-      var u = new URL(location),
-        hash = u.hash.replace(/^.+\//, ''),
-        topics = u.searchParams.get('topics').split(/\+/);
+      var url = new URL(location),
+        hash = url.hash.replace(/^.+\//, ''),
+        urlParams = url.searchParams,
+        rsuiteId = urlParams.get('rsuite_id'),
+        topics = urlParams.get('topics').split(/\+/);
 
       this.node.urls.forEach(function(url) {
         // Add graphic (img element)
@@ -66,14 +68,13 @@ FigureView.Prototype = function() {
         });
 
         if (hash == this.node.id) {
-          var u = new URL(url),
-            p = u.searchParams,
-            id = p.get('id'),
-            name = p.get('name');
+          var urlParams = (new URL(url)).searchParams,
+            id = urlParams.get('id'),
+            name = urlParams.get('name');
 
           imgEl.classList.add('jbjs_tracking');
           imgEl.setAttribute('jbjs_tracking_type', 'image');
-          imgEl.setAttribute('jbjs_tracking_data', JSON.stringify({ id, name, topics }));
+          imgEl.setAttribute('jbjs_tracking_data', JSON.stringify({ id, name, rsuiteId, topics }));
         }
 
         this.content.appendChild(imgEl);

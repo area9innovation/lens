@@ -25,18 +25,37 @@ SupplementView.Prototype = function() {
     var file;
 
     if( this.node.url ) {
-          file = $$('div.file', {
-          children: [
-            $$('span', {html: this.node.getHeader() }),
-            $$('a', {
-              href: this.node.url,
-              html: (this.node.icon?'<img src="' + this.node.icon + '"/>':'<i class="fa fa-download"/>') + ' Download',
-              target: '_blank',
-            })
-          ]
-        });
+      var topics = (new URL(location)).searchParams.get('topics').split(/\+/),
+        urlParams = (new URL(this.node.url)).searchParams,
+        id = urlParams.get('rsuite_id'),
+        type = urlParams.get('type'),
+        subtype = urlParams.get('subtype');
+
+      type = type === 'supplement'
+        ? type
+        : (type === 'pdf'
+          ? (subtype === 'disclosure'
+            ? subtype
+            : 'article'
+          )
+          : 'unknown'
+        );
+
+      file = $$('div.file', {
+        children: [
+          $$('span', {html: this.node.getHeader() }),
+          $$('a', {
+            class: 'jbjs_tracking',
+            jbjs_tracking_type: 'pdf',
+            jbjs_tracking_data: JSON.stringify({ id, type, topics }),
+            href: this.node.url,
+            html: (this.node.icon?'<img src="' + this.node.icon + '"/>':'<i class="fa fa-download"/>') + ' Download',
+            target: '_blank',
+          })
+        ]
+      });
     } else {
-        file = $$('div.file', {
+      file = $$('div.file', {
         children: [
           $$('span', {html: this.node.getHeader() }),
         ]

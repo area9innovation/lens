@@ -25,11 +25,13 @@ SupplementView.Prototype = function() {
     var file;
 
     if( this.node.url ) {
-      var topics = (new URL(location)).searchParams.get('topics').split(/\+/),
+      var topics = (new URL(location)).searchParams.get('topics'),
         urlParams = (new URL(this.node.url)).searchParams,
         id = urlParams.get('rsuite_id'),
         type = urlParams.get('type'),
         subtype = urlParams.get('subtype');
+
+      topics = topics ? topics.split(/\+/) : [];
 
       type = type === 'supplement'
         ? type

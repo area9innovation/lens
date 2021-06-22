@@ -53,7 +53,9 @@ FigureView.Prototype = function() {
         hash = url.hash.replace(/^.+\//, ''),
         urlParams = url.searchParams,
         rsuiteId = urlParams.get('rsuite_id'),
-        topics = urlParams.get('topics').split(/\+/);
+        topics = urlParams.get('topics');
+
+      topics = topics ? topics.split(/\+/) : [];
 
       this.node.urls.forEach(function(url) {
         // Add graphic (img element)

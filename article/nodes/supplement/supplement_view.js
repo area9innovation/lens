@@ -33,22 +33,19 @@ SupplementView.Prototype = function() {
 
       topics = topics ? topics.split(/\+/) : [];
 
-      type = type === 'supplement'
-        ? type
-        : (type === 'pdf'
-          ? (subtype === 'disclosure'
-            ? subtype
-            : 'article'
-          )
-          : 'unknown'
-        );
+      switch (type) {
+        case 'supplement': break;
+        case 'pdf':
+        case 'zip': type = subtype === 'disclosure' ? subtype : 'article'; break;
+        default: type = 'unknown';
+      }
 
       file = $$('div.file', {
         children: [
           $$('span', {html: this.node.getHeader() }),
           $$('a', {
             class: 'jbjs_tracking',
-            jbjs_tracking_type: 'pdf',
+            jbjs_tracking_type: 'download',
             jbjs_tracking_data: JSON.stringify({ id, type, topics }),
             href: this.node.url,
             html: (this.node.icon?'<img src="' + this.node.icon + '"/>':'<i class="fa fa-download"/>') + ' Download',

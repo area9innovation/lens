@@ -31,7 +31,7 @@ SupplementView.Prototype = function() {
         topics = urlParams.get('topics'),
         id = urlParams.get('rsuite_id');
 
-      urlParams = (new URL(this.node.url)).searchParams;
+      urlParams = (new URL(this.node.url, window.location)).searchParams;
 
       var type = urlParams.get('type'),
         subtype = urlParams.get('subtype');

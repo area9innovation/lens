@@ -27,10 +27,6 @@
   background: #eee;
 }
 
-.lens-article .content-node.html-table thead td {
-  font-weight: bold;
-}
-
 /* Table sub tags */
 .lens-article .content-node.html-table table sub {
   vertical-align: baseline;
@@ -39,13 +35,18 @@
   font-size: 11px;
 }
 
-.lens-article .content-node.html-table table td {
+.lens-article .content-node.html-table table td, th {
   padding: 5px;
   font-size: 12px;
   border: 1px solid lightgrey;
   /* Enable white-space: nowrap; if author controls wrapping (<br> in HTML)
   /* white-space: nowrap; */
   vertical-align: top;
+}
+
+.lens-article .content-node.html-table table thead td, th {
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .lens-article .content-node.html-table .footers {

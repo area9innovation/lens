@@ -22,6 +22,8 @@ SupplementView.Prototype = function() {
   _.extend(this, ResourceView.prototype);
 
   this.renderBody = function() {
+    dev.trace("SupplementView - renderBody");
+
     var file;
 
     if( this.node.url ) {

@@ -18,10 +18,11 @@ AbstractView.Prototype = function() {
   // --------
 
   this.render = function() {
+    dev.trace("AbstractView - render");
     NodeView.prototype.render.call(this);
 
     var node = this.node;
-    
+
     var sections = $$('.sections', {
       children: _.map(node.getSections(), function(contentPara) {
         var paraView = this.viewFactory.createView(contentPara);

@@ -26,6 +26,7 @@ var PublicationInfoView = function(node, viewFactory) {
 PublicationInfoView.Prototype = function() {
 
   this.render = function() {
+    dev.trace("PublicationInfoView - render");
     NodeView.prototype.render.call(this);
 
     // Display article meta information

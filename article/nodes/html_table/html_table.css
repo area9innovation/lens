@@ -21,6 +21,7 @@
   border-spacing: 0;
   margin-bottom: 20px;
   margin: 0 auto;
+  border: 1px solid lightgrey;
 }
 
 .lens-article .content-node.html-table thead tr {
